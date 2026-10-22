@@ -1,0 +1,58 @@
+# Fuente única de la calculadora de costos. Editar aquí y correr: make cost
+# Precios: lista USD, región us-central1, consultados 2026-10-22 (ver 'fuente').
+# `make cost-refresh` reemplaza 'precio' con la API Cloud Billing Catalog cuando 'sku_regex' coincide.
+moneda: USD
+region: us-central1
+fecha_precios: "2026-10-22"
+
+precios:
+  gcs_standard_gb_mes:    {servicio: Cloud Storage, unidad: GB-mes, precio: 0.020, gratis: 0, sku_regex: "^Standard Storage US Regional$|^Standard Storage Iowa", fuente: "https://cloud.google.com/storage/pricing"}
+  gcs_nearline_gb_mes:    {servicio: Cloud Storage, unidad: GB-mes, precio: 0.010, gratis: 0, sku_regex: "^Nearline Storage Iowa", fuente: "https://cloud.google.com/storage/pricing"}
+  bq_storage_gib_mes:     {servicio: BigQuery, unidad: GiB-mes, precio: 0.020, gratis: 10, sku_regex: "^Active Logical Storage \\(us-central1\\)", fuente: "https://cloud.google.com/bigquery/pricing"}
+  bq_query_tib:           {servicio: BigQuery, unidad: TiB escaneado, precio: 6.25, gratis: 1, sku_regex: "^Analysis \\(us-central1\\)", fuente: "https://cloud.google.com/bigquery/pricing"}
+  pubsub_tib:             {servicio: Cloud Pub/Sub, unidad: TiB, precio: 40, gratis: 0.009765625, sku_regex: "^Message Delivery Basic", fuente: "https://cloud.google.com/pubsub/pricing"}
+  pubsub_bq_sub_tib:      {servicio: Cloud Pub/Sub, unidad: TiB, precio: 50, gratis: 0, sku_regex: "BigQuery subscription", fuente: "https://cloud.google.com/pubsub/pricing"}
+  dataflow_vcpu_h:        {servicio: Dataflow, unidad: vCPU-hora (streaming), precio: 0.069, gratis: 0, sku_regex: "^Streaming vCPU Time .*Iowa", fuente: "https://cloud.google.com/dataflow/pricing"}
+  dataflow_mem_gb_h:      {servicio: Dataflow, unidad: GB-hora, precio: 0.003557, gratis: 0, sku_regex: "^Streaming RAM Time .*Iowa", fuente: "https://cloud.google.com/dataflow/pricing"}
+  dataproc_dcu_h:         {servicio: Serverless for Apache Spark, unidad: DCU-hora, precio: 0.06, gratis: 0, sku_regex: "^Data Compute Unit.*Iowa", fuente: "https://cloud.google.com/dataproc-serverless/pricing"}
+  cloudrun_vcpu_s:        {servicio: Cloud Run, unidad: vCPU-segundo, precio: 0.000024, gratis: 180000, sku_regex: "^CPU Allocation Time \\(tier 1\\)", fuente: "https://cloud.google.com/run/pricing"}
+  cloudrun_gib_s:         {servicio: Cloud Run, unidad: GiB-segundo, precio: 0.0000025, gratis: 360000, sku_regex: "^Memory Allocation Time \\(tier 1\\)", fuente: "https://cloud.google.com/run/pricing"}
+  cloudrun_req_millon:    {servicio: Cloud Run, unidad: millón de requests, precio: 0.40, gratis: 2, sku_regex: "^Requests$", fuente: "https://cloud.google.com/run/pricing"}
+  cloudsql_micro_h:       {servicio: Cloud SQL, unidad: hora db-f1-micro, precio: 0.015, gratis: 0, sku_regex: "Micro instance in Americas", fuente: "https://cloud.google.com/sql/pricing (verificar; shared-core sin SLA)"}
+  cloudsql_small_h:       {servicio: Cloud SQL, unidad: hora db-g1-small, precio: 0.035, gratis: 0, sku_regex: "Small instance in Americas", fuente: "https://cloud.google.com/sql/pricing"}
+  cloudsql_ssd_gb_mes:    {servicio: Cloud SQL, unidad: GB-mes SSD, precio: 0.17, gratis: 0, sku_regex: "Storage PD SSD in Americas", fuente: "https://cloud.google.com/sql/pricing"}
+  gemini_in_mtok:         {servicio: Vertex AI Gemini 2.5 Flash-Lite, unidad: millón tokens entrada, precio: 0.10, gratis: 0, sku_regex: "Gemini 2.5 Flash Lite.*Input.*Text", fuente: "https://cloud.google.com/vertex-ai/generative-ai/pricing"}
+  gemini_out_mtok:        {servicio: Vertex AI Gemini 2.5 Flash-Lite, unidad: millón tokens salida, precio: 0.40, gratis: 0, sku_regex: "Gemini 2.5 Flash Lite.*Output.*Text", fuente: "https://cloud.google.com/vertex-ai/generative-ai/pricing"}
+  artifact_gb_mes:        {servicio: Artifact Registry, unidad: GB-mes, precio: 0.10, gratis: 0.5, sku_regex: "^Artifact Registry Storage", fuente: "https://cloud.google.com/artifact-registry/pricing"}
+
+# Uso mensual por escenario. Volúmenes de negocio medidos en data/raw (H&M):
+#   31,788,324 líneas de venta | 9,080,179 pedidos (cliente-día) | 734 días | ~377k pedidos/mes | pico jun-2019 = 1.44x promedio
+escenarios:
+  dev:
+    descripcion: "Desarrollo del curso (1 mes): carga histórica, pipelines batch, pruebas"
+    pedidos_mes: 5000
+    uso: {gcs_standard_gb_mes: 40, gcs_nearline_gb_mes: 0, bq_storage_gib_mes: 12, bq_query_tib: 0.8, pubsub_tib: 0.001, pubsub_bq_sub_tib: 0.001,
+          dataflow_vcpu_h: 0, dataflow_mem_gb_h: 0, dataproc_dcu_h: 16, cloudrun_vcpu_s: 40000, cloudrun_gib_s: 20000, cloudrun_req_millon: 0.05,
+          cloudsql_micro_h: 200, cloudsql_small_h: 0, cloudsql_ssd_gb_mes: 10, gemini_in_mtok: 3, gemini_out_mtok: 0.5, artifact_gb_mes: 2}
+  demo:
+    descripcion: "Mes de sustentación: replay streaming con Dataflow encendido 24 h"
+    pedidos_mes: 20000
+    uso: {gcs_standard_gb_mes: 12, gcs_nearline_gb_mes: 30, bq_storage_gib_mes: 15, bq_query_tib: 1.0, pubsub_tib: 0.002, pubsub_bq_sub_tib: 0.002,
+          dataflow_vcpu_h: 48, dataflow_mem_gb_h: 180, dataproc_dcu_h: 8, cloudrun_vcpu_s: 60000, cloudrun_gib_s: 30000, cloudrun_req_millon: 0.1,
+          cloudsql_micro_h: 120, cloudsql_small_h: 0, cloudsql_ssd_gb_mes: 10, gemini_in_mtok: 5, gemini_out_mtok: 1, artifact_gb_mes: 2}
+  produccion:
+    descripcion: "Operación mensual a escala H&M (~377k pedidos/mes, 3.5 líneas/pedido)"
+    pedidos_mes: 377000
+    uso: {gcs_standard_gb_mes: 60, gcs_nearline_gb_mes: 30, bq_storage_gib_mes: 60, bq_query_tib: 8, pubsub_tib: 0.03, pubsub_bq_sub_tib: 0.03,
+          dataflow_vcpu_h: 1460, dataflow_mem_gb_h: 5475, dataproc_dcu_h: 60, cloudrun_vcpu_s: 1500000, cloudrun_gib_s: 750000, cloudrun_req_millon: 6,
+          cloudsql_micro_h: 0, cloudsql_small_h: 730, cloudsql_ssd_gb_mes: 20, gemini_in_mtok: 300, gemini_out_mtok: 40, artifact_gb_mes: 3}
+  pico_black_friday:
+    descripcion: "Mes pico (5x eventos/tráfico): autoscaling Dataflow y Cloud Run"
+    pedidos_mes: 1885000
+    uso: {gcs_standard_gb_mes: 70, gcs_nearline_gb_mes: 30, bq_storage_gib_mes: 80, bq_query_tib: 20, pubsub_tib: 0.15, pubsub_bq_sub_tib: 0.15,
+          dataflow_vcpu_h: 4380, dataflow_mem_gb_h: 16425, dataproc_dcu_h: 120, cloudrun_vcpu_s: 7500000, cloudrun_gib_s: 3750000, cloudrun_req_millon: 30,
+          cloudsql_micro_h: 0, cloudsql_small_h: 730, cloudsql_ssd_gb_mes: 25, gemini_in_mtok: 1500, gemini_out_mtok: 200, artifact_gb_mes: 3}
+
+# Año 1 = combinación de meses por escenario
+anio1: {produccion: 11, pico_black_friday: 1}
+curso: {dev: 1, demo: 1}

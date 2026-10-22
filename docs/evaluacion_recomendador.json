@@ -1,0 +1,12 @@
+{
+  "ventana_lectura": "2020-07-22 a 2020-09-22",
+  "test": "2020-09-16 a 2020-09-22",
+  "clientes_test": 68984,
+  "clientes_cold_start": 26447,
+  "lineas_entrenamiento": 2233033,
+  "map@12": {
+    "A_popularidad": 0.00875,
+    "B_recompra_mas_popularidad": 0.02622
+  },
+  "uplift_B_vs_A": 1.997
+}

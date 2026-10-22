@@ -1,0 +1,9 @@
+# Desarrollo local, pruebas y CI (la imagen de la API usa api/requirements.txt)
+pyyaml==6.0.2
+openpyxl==3.1.5
+google-cloud-pubsub==2.27.1
+fastapi==0.115.6
+uvicorn==0.32.1
+sqlalchemy==2.0.36
+httpx==0.28.1
+# Pipelines (opcionales en local): pyspark==3.5.3  apache-beam[gcp]==2.61.0

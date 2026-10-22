@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Retail Assistant · Demo</title>
+<style>
+  :root { --ink:#1f2937; --muted:#6b7280; --line:#e5e7eb; --bg:#f8fafc; --accent:#1f3864; --ok:#15803d; --warn:#b45309; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui, Arial, sans-serif; color:var(--ink); background:var(--bg); }
+  header { background:var(--accent); color:#fff; padding:14px 20px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
+  header h1 { margin:0; font-size:18px; }
+  .demo { background:#fff7ed; color:var(--warn); border-bottom:1px solid #fed7aa; padding:8px 20px; font-size:13px; }
+  main { display:grid; grid-template-columns: 2fr 1fr; gap:16px; padding:16px 20px; max-width:1200px; margin:auto; }
+  @media (max-width: 860px) { main { grid-template-columns: 1fr; } }
+  section { background:#fff; border:1px solid var(--line); border-radius:10px; padding:14px; }
+  h2 { font-size:15px; margin:0 0 10px; }
+  .row { display:flex; gap:8px; }
+  input[type=text], select { flex:1; padding:9px 10px; border:1px solid var(--line); border-radius:8px; font-size:14px; }
+  button { padding:9px 14px; border:0; border-radius:8px; background:var(--accent); color:#fff; cursor:pointer; font-size:14px; }
+  button.sec { background:#e5e7eb; color:var(--ink); }
+  button:disabled { opacity:.5; cursor:not-allowed; }
+  .grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap:10px; margin-top:12px; }
+  .card { border:1px solid var(--line); border-radius:8px; overflow:hidden; display:flex; flex-direction:column; }
+  .card img { width:100%; aspect-ratio:3/4; object-fit:cover; background:#eef2f7; }
+  .card .b { padding:8px; font-size:12px; display:flex; flex-direction:column; gap:4px; flex:1; }
+  .card .p { font-weight:600; font-size:14px; }
+  .muted { color:var(--muted); font-size:12px; }
+  .msg { background:#eef2f7; border-radius:8px; padding:10px; margin-top:10px; font-size:14px; }
+  ul { padding-left:18px; margin:6px 0; font-size:13px; }
+  .total { font-weight:700; margin:8px 0; }
+  .ok { color:var(--ok); } .err { color:#b91c1c; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Retail Intelligence · Asistente de compras</h1>
+  <label class="muted" style="color:#dbeafe">Usuario
+    <select id="user"><option>demo</option><option>demo2</option></select>
+  </label>
+</header>
+<div class="demo">Demostración académica: catálogo y popularidad reales de H&amp;M; precios, stock y saldo son simulados. No se cobra dinero real.</div>
+<main>
+  <div>
+    <section>
+      <h2>Asistente</h2>
+      <div class="row">
+        <input id="q" type="text" placeholder="Ej.: necesito algo para mi bebé" value="necesito algo para mi bebé">
+        <button id="ask">Preguntar</button>
+      </div>
+      <div id="answer"></div>
+      <div id="products" class="grid"></div>
+    </section>
+    <section style="margin-top:16px">
+      <h2>Recomendado para ti</h2>
+      <div id="reco" class="grid"></div>
+    </section>
+  </div>
+  <div>
+    <section>
+      <h2>Carrito</h2>
+      <ul id="cart"></ul>
+      <div class="total" id="total"></div>
+      <label style="font-size:13px"><input type="checkbox" id="confirm"> Confirmo la compra con saldo simulado</label>
+      <div class="row" style="margin-top:8px"><button id="buy">Comprar</button></div>
+      <div id="buyMsg" class="muted"></div>
+    </section>
+    <section style="margin-top:16px">
+      <h2>Saldo demo</h2>
+      <div class="total" id="bal"></div>
+      <div class="row"><button class="sec" id="topup">Recargar (admin)</button></div>
+      <h2 style="margin-top:14px">Pedidos</h2>
+      <ul id="orders"></ul>
+    </section>
+  </div>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+const money = c => "$" + (c / 100).toFixed(2);
+let pendingKey = null;  // misma clave si el usuario reintenta: no hay doble cobro
+
+async function api(path, opts = {}) {
+  const r = await fetch(path, { ...opts, headers: { "Content-Type": "application/json", "X-User-Id": $("user").value, ...(opts.headers || {}) } });
+  const body = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(body.detail || r.statusText);
+  return body;
+}
+function cards(el, items) {
+  el.innerHTML = "";
+  for (const p of items) {
+    const d = document.createElement("div");
+    d.className = "card";
+    d.innerHTML = `<img alt="" loading="lazy" src="/api/v1/catalog/products/${p.article_id}/image" onerror="this.style.visibility='hidden'">
+      <div class="b"><div>${p.prod_name}</div><div class="muted">${p.product_type || ""} · ${p.colour || ""}</div>
+      <div class="p">${money(p.price_cents)}</div><button class="sec">Agregar</button></div>`;
+    d.querySelector("button").onclick = () => add(p.article_id);
+    el.appendChild(d);
+  }
+}
+async function add(id) { await api("/api/v1/cart/items", { method: "POST", body: JSON.stringify({ article_id: id, qty: 1 }) }); refresh(); }
+async function del(id) { await api("/api/v1/cart/items/" + id, { method: "DELETE" }); refresh(); }
+async function refresh() {
+  const c = await api("/api/v1/cart");
+  $("cart").innerHTML = c.items.map(i => `<li>${i.prod_name} ×${i.qty} — ${money(i.subtotal_cents)} <a href="#" data-id="${i.article_id}">quitar</a></li>`).join("") || "<li class='muted'>vacío</li>";
+  $("cart").querySelectorAll("a").forEach(a => a.onclick = e => { e.preventDefault(); del(a.dataset.id); });
+  $("total").textContent = "Total: " + money(c.total_cents);
+  const w = await api("/api/v1/wallet");
+  $("bal").textContent = money(w.saldo_cents);
+  const o = await api("/api/v1/orders");
+  $("orders").innerHTML = o.items.map(x => `<li>${String(x.created_at).slice(0, 16)} — ${money(x.total_cents)}</li>`).join("") || "<li class='muted'>sin pedidos</li>";
+}
+$("ask").onclick = async () => {
+  $("answer").innerHTML = "<div class='msg muted'>Buscando…</div>";
+  try {
+    const r = await api("/api/v1/assistant/message", { method: "POST", body: JSON.stringify({ mensaje: $("q").value }) });
+    $("answer").innerHTML = `<div class="msg">${r.respuesta}<div class="muted">Modo: ${r.modo}. Nada se compra sin tu confirmación.</div>
+      ${r.carrito_propuesto.length ? '<button id="useCart" style="margin-top:8px">Agregar los 3 sugeridos al carrito</button>' : ""}</div>`;
+    cards($("products"), r.productos);
+    const b = $("useCart");
+    if (b) b.onclick = async () => { for (const it of r.carrito_propuesto) await add(it.article_id); };
+  } catch (e) { $("answer").innerHTML = `<div class="msg err">${e.message}</div>`; }
+};
+$("buy").onclick = async () => {
+  if (!$("confirm").checked) { $("buyMsg").innerHTML = "<span class='err'>Marca la confirmación para comprar.</span>"; return; }
+  pendingKey = pendingKey || crypto.randomUUID();
+  $("buy").disabled = true;
+  try {
+    const r = await api("/api/v1/checkout", { method: "POST", body: JSON.stringify({ confirmar: true, idempotency_key: pendingKey }) });
+    $("buyMsg").innerHTML = `<span class="ok">Pedido ${r.order_id.slice(0, 8)} por ${money(r.total_cents)}</span>`;
+    pendingKey = null; $("confirm").checked = false;
+  } catch (e) { $("buyMsg").innerHTML = `<span class="err">${e.message}</span>`; if (!/Saldo|Stock|vacío/.test(e.message)) return; pendingKey = null; }
+  finally { $("buy").disabled = false; refresh(); }
+};
+$("topup").onclick = async () => {
+  const t = prompt("Token de administrador para recarga demo:");
+  if (!t) return;
+  try { await api("/api/v1/wallet/demo-topups", { method: "POST", headers: { "X-Admin-Token": t }, body: JSON.stringify({ amount_cents: 20000 }) }); refresh(); }
+  catch (e) { alert(e.message); }
+};
+$("user").onchange = () => { refresh(); loadReco(); };
+async function loadReco() { const r = await api("/api/v1/recommendations", { method: "POST", body: JSON.stringify({ k: 8 }) }); cards($("reco"), r.items); }
+refresh(); loadReco();
+</script>
+</body>
+</html>

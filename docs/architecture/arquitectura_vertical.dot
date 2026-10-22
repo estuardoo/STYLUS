@@ -1,0 +1,59 @@
+digraph G {
+  rankdir=TB; splines=spline; nodesep=0.25; ranksep=0.9; newrank=true; compound=true;
+  graph [fontname="Arial", fontsize=13, bgcolor="white", pad=0.3];
+  node  [fontname="Arial", fontsize=11, shape=box, style="rounded,filled", fillcolor="#FFFFFF", color="#5B6B7F", penwidth=1.2, margin="0.15,0.08"];
+  edge  [fontname="Arial", fontsize=9, color="#5B6B7F", arrowsize=0.7];
+
+  subgraph cluster_src { label="1. FUENTES"; style="rounded,filled"; fillcolor="#EEF2F7"; color="#C9D3E0";
+    hm   [label="H&M Kaggle (batch)\narticles · customers\ntransactions 31.8M · 105k imágenes"];
+    app  [label="Web / App tienda\n(clics, carrito, búsqueda)"];
+  }
+  subgraph cluster_ing { label="2. INGESTA"; style="rounded,filled"; fillcolor="#E8F1FB"; color="#B9D3EE";
+    up   [label="upload_raw.py\ngcloud storage rsync\n+ manifiesto SHA-256"];
+    rep  [label="Replay 2026\n(Cloud Run Job)"];
+    ps   [label="Pub/Sub\nretail-events\n+ DLQ", fillcolor="#D6E8FA"];
+  }
+  subgraph cluster_sto { label="3. ALMACENAMIENTO (Medallion)"; style="rounded,filled"; fillcolor="#EAF6EC"; color="#BFE0C5";
+    raw  [label="GCS raw = BRONZE\ninmutable · versionado", fillcolor="#F3E3D3"];
+    lake [label="GCS lake\nSILVER / GOLD Parquet", fillcolor="#E5E5E5"];
+    bq   [label="BigQuery\nretail_bronze · silver\ngold (estrella) · ops", fillcolor="#D7EFDB"];
+    sql  [label="Cloud SQL Postgres\ncarrito · pedidos · wallet", fillcolor="#FFFFFF"];
+  }
+  subgraph cluster_cmp { label="4. CÓMPUTO"; style="rounded,filled"; fillcolor="#FDF3E3"; color="#F0D9B0";
+    sp   [label="Serverless Spark\n(Dataproc) batch\nlimpieza · Parquet"];
+    df   [label="Dataflow (Beam)\nstreaming · ventanas\ndedup · late data"];
+    bsql [label="BigQuery SQL\nGold · KPIs"];
+    rec  [label="Recomendador\npopularidad + contenido\n(BigQuery ML / Python)"];
+  }
+  subgraph cluster_exp { label="5. EXPOSICIÓN"; style="rounded,filled"; fillcolor="#F4ECF8"; color="#D9C6E6";
+    api  [label="FastAPI · Cloud Run\n/catalog /recommendations\n/assistant /cart /checkout"];
+    gem  [label="Vertex AI\nGemini 2.5 Flash-Lite\n(asistente)", fillcolor="#EADCF3"];
+    web  [label="Web tienda\n(Cloud Run)"];
+    lk   [label="Looker Studio\ngerencial + operativo"];
+  }
+
+  hm -> up -> raw;
+  app -> ps; rep -> ps;
+  raw -> sp -> lake;
+  lake -> bq;
+  raw -> bq [style=dashed, xlabel="tablas externas"];
+  ps -> bq  [xlabel="suscripción BQ"];
+  ps -> df;
+  df -> bq [constraint=false];
+  bq -> bsql; bq -> rec;
+  bsql -> bq [constraint=false, style=dotted];
+  rec -> api; bsql -> lk; bsql -> api;
+  sql -> api [dir=both];
+  gem -> api [dir=both];
+  api -> web;
+  web -> app [style=dashed, constraint=false, xlabel="eventos"];
+  {rank=same; hm; app}
+  {rank=same; up; rep; ps}
+  {rank=same; raw; sql}
+  {rank=same; sp; df}
+  {rank=same; bsql; rec}
+  {rank=same; api; gem}
+  {rank=same; web; lk}
+  ops [shape=note, fillcolor="#FFFBEA", color="#D8C27A", label="Transversal: Terraform + GitHub Actions (WIF) · IAM mínimo · Secret Manager\nCloud Logging/Monitoring · Budget alerts + billing export → costo por pedido"];
+  lk -> ops [style=invis];
+}

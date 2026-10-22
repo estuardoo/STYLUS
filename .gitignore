@@ -1,0 +1,42 @@
+# Datos: nunca a GitHub (viven en data/ local y en GCS privado)
+data/
+*.csv
+*.parquet
+*.zip
+*.gz
+*.part
+*.jpg
+
+# Secretos
+.env
+.secrets/
+*credenciales*
+*.json.key
+sa-*.json
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+.terraform.lock.hcl
+
+# Python / SO
+__pycache__/
+*.pyc
+.venv/
+.DS_Store
+Thumbs.db
+
+# Salidas regenerables y temporales
+cost/output/
+_to_delete/
+docs/_generadores/*.toc.json
+~$*
+
+# Generados locales
+*.db
+*.db-journal
+data/silver/
+tfplan
