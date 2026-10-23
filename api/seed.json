@@ -1,0 +1,34 @@
+{
+  "users": [
+    {
+      "nombre": "Usuario demo",
+      "saldo_inicial_cents": 20000,
+      "user_id": "demo"
+    },
+    {
+      "nombre": "Usuario demo 2",
+      "saldo_inicial_cents": 0,
+      "user_id": "demo2"
+    },
+    {
+      "nombre": "Estuardo Oliver",
+      "saldo_inicial_cents": 20000,
+      "user_id": "estuardo"
+    },
+    {
+      "nombre": "Winston Quispe",
+      "saldo_inicial_cents": 20000,
+      "user_id": "winston"
+    },
+    {
+      "nombre": "Nicole Arenas",
+      "saldo_inicial_cents": 20000,
+      "user_id": "nicole"
+    },
+    {
+      "nombre": "Gianmarco Mejia",
+      "saldo_inicial_cents": 20000,
+      "user_id": "gianmarco"
+    }
+  ]
+}

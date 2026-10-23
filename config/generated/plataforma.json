@@ -1,0 +1,3114 @@
+{
+  "app_users": [
+    {
+      "nombre": "Usuario demo",
+      "saldo_inicial_cents": 20000,
+      "user_id": "demo"
+    },
+    {
+      "nombre": "Usuario demo 2",
+      "saldo_inicial_cents": 0,
+      "user_id": "demo2"
+    },
+    {
+      "nombre": "Estuardo Oliver",
+      "saldo_inicial_cents": 20000,
+      "user_id": "estuardo"
+    },
+    {
+      "nombre": "Winston Quispe",
+      "saldo_inicial_cents": 20000,
+      "user_id": "winston"
+    },
+    {
+      "nombre": "Nicole Arenas",
+      "saldo_inicial_cents": 20000,
+      "user_id": "nicole"
+    },
+    {
+      "nombre": "Gianmarco Mejia",
+      "saldo_inicial_cents": 20000,
+      "user_id": "gianmarco"
+    }
+  ],
+  "columns": [
+    {
+      "columna": "article_id",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "product_code",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "prod_name",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "product_type_no",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "product_type_name",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "product_group_name",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "graphical_appearance_no",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "graphical_appearance_name",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "colour_group_code",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "colour_group_name",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "perceived_colour_value_id",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "perceived_colour_value_name",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "perceived_colour_master_id",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "perceived_colour_master_name",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "department_no",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "department_name",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "index_code",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "index_name",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "index_group_no",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "index_group_name",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "section_no",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "section_name",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "garment_group_no",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "garment_group_name",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "detail_desc",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "customer_id",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_customers",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "FN",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_customers",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "Active",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_customers",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "club_member_status",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_customers",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "fashion_news_frequency",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_customers",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "age",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_customers",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "postal_code",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_customers",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "t_dat",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_transactions",
+      "tipo": "DATE"
+    },
+    {
+      "columna": "customer_id",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_transactions",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "article_id",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_transactions",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "price",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_transactions",
+      "tipo": "FLOAT64"
+    },
+    {
+      "columna": "sales_channel_id",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "ext_transactions",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "t_dat",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "transactions",
+      "tipo": "DATE"
+    },
+    {
+      "columna": "customer_id",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "transactions",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "article_id",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "transactions",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "price",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "transactions",
+      "tipo": "FLOAT64"
+    },
+    {
+      "columna": "sales_channel_id",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "transactions",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "_ingested_at",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "transactions",
+      "tipo": "TIMESTAMP"
+    },
+    {
+      "columna": "_source_system",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "transactions",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "subscription_name",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "events_raw",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "message_id",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "events_raw",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "publish_time",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "events_raw",
+      "tipo": "TIMESTAMP"
+    },
+    {
+      "columna": "data",
+      "dataset": "bronze",
+      "descripcion": "JSON del evento",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "events_raw",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "attributes",
+      "dataset": "bronze",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "events_raw",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "article_id",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "product_code",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "prod_name",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "product_type_no",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "articles",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "product_type_name",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "product_group_name",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "graphical_appearance_no",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "articles",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "graphical_appearance_name",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "colour_group_code",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "articles",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "colour_group_name",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "perceived_colour_value_id",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "articles",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "perceived_colour_value_name",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "perceived_colour_master_id",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "articles",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "perceived_colour_master_name",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "department_no",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "articles",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "department_name",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "index_code",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "index_name",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "index_group_no",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "articles",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "index_group_name",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "section_no",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "articles",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "section_name",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "garment_group_no",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "articles",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "garment_group_name",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "detail_desc",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "articles",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "_ingested_at",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "articles",
+      "tipo": "TIMESTAMP"
+    },
+    {
+      "columna": "customer_id",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "customers",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "club_member_status",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "customers",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "fashion_news_frequency",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "customers",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "age",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "customers",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "postal_code",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "customers",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "fn",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "customers",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "active",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "customers",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "age_band",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "customers",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "_ingested_at",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "customers",
+      "tipo": "TIMESTAMP"
+    },
+    {
+      "columna": "article_id",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "transactions",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "t_dat",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "transactions",
+      "tipo": "DATE"
+    },
+    {
+      "columna": "customer_id",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "transactions",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "price",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "transactions",
+      "tipo": "FLOAT64"
+    },
+    {
+      "columna": "sales_channel_id",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "transactions",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "_source_system",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "transactions",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "_ingested_at",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "transactions",
+      "tipo": "TIMESTAMP"
+    },
+    {
+      "columna": "event_id",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_events",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "event_type",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_events",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "event_time",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_events",
+      "tipo": "TIMESTAMP"
+    },
+    {
+      "columna": "source_t_dat",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_events",
+      "tipo": "DATE"
+    },
+    {
+      "columna": "customer_id",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_events",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "article_id",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_events",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "price",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_events",
+      "tipo": "FLOAT64"
+    },
+    {
+      "columna": "qty",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_events",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "sales_channel_id",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_events",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "order_id",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_events",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "source_system",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_events",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "is_synthetic",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_events",
+      "tipo": "BOOL"
+    },
+    {
+      "columna": "simulation_run_id",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_events",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "publish_time",
+      "dataset": "silver",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_events",
+      "tipo": "TIMESTAMP"
+    },
+    {
+      "columna": "date_key",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "dim_date",
+      "tipo": "DATE"
+    },
+    {
+      "columna": "anio",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "dim_date",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "mes",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "dim_date",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "anio_mes",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "dim_date",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "semana_iso",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "dim_date",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "dia_semana",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "dim_date",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "fin_de_semana",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "dim_date",
+      "tipo": "BOOL"
+    },
+    {
+      "columna": "sales_channel_id",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "dim_channel",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "canal",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "dim_channel",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "nota",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "dim_channel",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "article_id",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "dim_article",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "product_code",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "dim_article",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "prod_name",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "dim_article",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "product_type_name",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "dim_article",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "product_group_name",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "dim_article",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "colour_group_name",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "dim_article",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "perceived_colour_master_name",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "dim_article",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "department_name",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "dim_article",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "index_name",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "dim_article",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "index_group_name",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "dim_article",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "section_name",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "dim_article",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "garment_group_name",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "dim_article",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "detail_desc",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "dim_article",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "customer_id",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "dim_customer",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "age",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "dim_customer",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "age_band",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "dim_customer",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "club_member_status",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "dim_customer",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "fashion_news_frequency",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "dim_customer",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "fn",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "dim_customer",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "active",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "dim_customer",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "sale_date",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "fact_sales",
+      "tipo": "DATE"
+    },
+    {
+      "columna": "customer_id",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "fact_sales",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "article_id",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "fact_sales",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "sales_channel_id",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "fact_sales",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "qty",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "fact_sales",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "price",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "fact_sales",
+      "tipo": "FLOAT64"
+    },
+    {
+      "columna": "source",
+      "dataset": "gold",
+      "descripcion": "hm_hist | hm_transactions_replay | web_demo",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "fact_sales",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "is_synthetic",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "fact_sales",
+      "tipo": "BOOL"
+    },
+    {
+      "columna": "order_id",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "fact_sales",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "order_id",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "fact_orders",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "order_date",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "fact_orders",
+      "tipo": "DATE"
+    },
+    {
+      "columna": "customer_id",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "fact_orders",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "sales_channel_id",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "fact_orders",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "source",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "fact_orders",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "is_synthetic",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "fact_orders",
+      "tipo": "BOOL"
+    },
+    {
+      "columna": "lineas",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "fact_orders",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "unidades",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "fact_orders",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "importe",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "fact_orders",
+      "tipo": "FLOAT64"
+    },
+    {
+      "columna": "index_group_name",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "reco_popular",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "article_id",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "reco_popular",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "ventas_7d",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "reco_popular",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "rank_grupo",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "reco_popular",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "article_id",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_catalog_serving",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "prod_name",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_catalog_serving",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "product_type",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_catalog_serving",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "product_group",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_catalog_serving",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "index_group",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_catalog_serving",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "section",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_catalog_serving",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "colour",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_catalog_serving",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "detail_desc",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_catalog_serving",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "price_cents",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_catalog_serving",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "popularity",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_catalog_serving",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "anio_mes",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_ventas_mensuales",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "canal",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_ventas_mensuales",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "source",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_ventas_mensuales",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "is_synthetic",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_ventas_mensuales",
+      "tipo": "BOOL"
+    },
+    {
+      "columna": "pedidos",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_ventas_mensuales",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "unidades",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_ventas_mensuales",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "importe",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_ventas_mensuales",
+      "tipo": "FLOAT64"
+    },
+    {
+      "columna": "ticket_medio",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_ventas_mensuales",
+      "tipo": "FLOAT64"
+    },
+    {
+      "columna": "anio_mes",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_top_articulos",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "index_group_name",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_top_articulos",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "product_type_name",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_top_articulos",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "prod_name",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_top_articulos",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "article_id",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_top_articulos",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "lineas",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_top_articulos",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "importe",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_top_articulos",
+      "tipo": "FLOAT64"
+    },
+    {
+      "columna": "age_band",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_recurrencia_clientes",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "clientes",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_recurrencia_clientes",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "pedidos",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_recurrencia_clientes",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "pedidos_por_cliente",
+      "dataset": "gold",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_recurrencia_clientes",
+      "tipo": "FLOAT64"
+    },
+    {
+      "columna": "window_start",
+      "dataset": "ops",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "stream_metrics_1m",
+      "tipo": "TIMESTAMP"
+    },
+    {
+      "columna": "window_end",
+      "dataset": "ops",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "stream_metrics_1m",
+      "tipo": "TIMESTAMP"
+    },
+    {
+      "columna": "eventos",
+      "dataset": "ops",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "stream_metrics_1m",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "compras",
+      "dataset": "ops",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "stream_metrics_1m",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "importe",
+      "dataset": "ops",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "stream_metrics_1m",
+      "tipo": "FLOAT64"
+    },
+    {
+      "columna": "lag_p50_s",
+      "dataset": "ops",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "stream_metrics_1m",
+      "tipo": "FLOAT64"
+    },
+    {
+      "columna": "lag_p95_s",
+      "dataset": "ops",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "stream_metrics_1m",
+      "tipo": "FLOAT64"
+    },
+    {
+      "columna": "emitido",
+      "dataset": "ops",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "stream_metrics_1m",
+      "tipo": "TIMESTAMP"
+    },
+    {
+      "columna": "recibido",
+      "dataset": "ops",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "stream_dlq",
+      "tipo": "TIMESTAMP"
+    },
+    {
+      "columna": "error",
+      "dataset": "ops",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "stream_dlq",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "payload",
+      "dataset": "ops",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "stream_dlq",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "minuto",
+      "dataset": "ops",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_stream_salud",
+      "tipo": "TIMESTAMP"
+    },
+    {
+      "columna": "source_system",
+      "dataset": "ops",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_stream_salud",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "eventos",
+      "dataset": "ops",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_stream_salud",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "eventos_unicos",
+      "dataset": "ops",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_stream_salud",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "duplicados",
+      "dataset": "ops",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_stream_salud",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "mes",
+      "dataset": "ops",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_costo_real_mensual",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "servicio",
+      "dataset": "ops",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_costo_real_mensual",
+      "tipo": "STRING"
+    },
+    {
+      "columna": "usd_neto",
+      "dataset": "ops",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_costo_real_mensual",
+      "tipo": "FLOAT64"
+    },
+    {
+      "columna": "usd_total_mes",
+      "dataset": "ops",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_costo_real_mensual",
+      "tipo": "FLOAT64"
+    },
+    {
+      "columna": "pedidos",
+      "dataset": "ops",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_costo_real_mensual",
+      "tipo": "INT64"
+    },
+    {
+      "columna": "usd_por_pedido",
+      "dataset": "ops",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "bigquery",
+      "tabla": "v_costo_real_mensual",
+      "tipo": "FLOAT64"
+    },
+    {
+      "columna": "user_id",
+      "dataset": "retail",
+      "descripcion": "PK",
+      "modo": "REQUIRED",
+      "motor": "cloudsql",
+      "tabla": "users",
+      "tipo": "TEXT"
+    },
+    {
+      "columna": "nombre",
+      "dataset": "retail",
+      "descripcion": "",
+      "modo": "REQUIRED",
+      "motor": "cloudsql",
+      "tabla": "users",
+      "tipo": "TEXT"
+    },
+    {
+      "columna": "created_at",
+      "dataset": "retail",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "cloudsql",
+      "tabla": "users",
+      "tipo": "TIMESTAMP"
+    },
+    {
+      "columna": "article_id",
+      "dataset": "retail",
+      "descripcion": "PK",
+      "modo": "REQUIRED",
+      "motor": "cloudsql",
+      "tabla": "articles",
+      "tipo": "TEXT"
+    },
+    {
+      "columna": "prod_name",
+      "dataset": "retail",
+      "descripcion": "",
+      "modo": "REQUIRED",
+      "motor": "cloudsql",
+      "tabla": "articles",
+      "tipo": "TEXT"
+    },
+    {
+      "columna": "product_type",
+      "dataset": "retail",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "cloudsql",
+      "tabla": "articles",
+      "tipo": "TEXT"
+    },
+    {
+      "columna": "product_group",
+      "dataset": "retail",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "cloudsql",
+      "tabla": "articles",
+      "tipo": "TEXT"
+    },
+    {
+      "columna": "index_group",
+      "dataset": "retail",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "cloudsql",
+      "tabla": "articles",
+      "tipo": "TEXT"
+    },
+    {
+      "columna": "section",
+      "dataset": "retail",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "cloudsql",
+      "tabla": "articles",
+      "tipo": "TEXT"
+    },
+    {
+      "columna": "colour",
+      "dataset": "retail",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "cloudsql",
+      "tabla": "articles",
+      "tipo": "TEXT"
+    },
+    {
+      "columna": "detail_desc",
+      "dataset": "retail",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "cloudsql",
+      "tabla": "articles",
+      "tipo": "TEXT"
+    },
+    {
+      "columna": "price_cents",
+      "dataset": "retail",
+      "descripcion": "Precio demo sintético",
+      "modo": "REQUIRED",
+      "motor": "cloudsql",
+      "tabla": "articles",
+      "tipo": "INTEGER"
+    },
+    {
+      "columna": "popularity",
+      "dataset": "retail",
+      "descripcion": "Ventas reales 28 días",
+      "modo": "REQUIRED",
+      "motor": "cloudsql",
+      "tabla": "articles",
+      "tipo": "INTEGER"
+    },
+    {
+      "columna": "stock",
+      "dataset": "retail",
+      "descripcion": "Stock simulado",
+      "modo": "REQUIRED",
+      "motor": "cloudsql",
+      "tabla": "articles",
+      "tipo": "INTEGER"
+    },
+    {
+      "columna": "user_id",
+      "dataset": "retail",
+      "descripcion": "",
+      "modo": "REQUIRED",
+      "motor": "cloudsql",
+      "tabla": "cart_items",
+      "tipo": "TEXT"
+    },
+    {
+      "columna": "article_id",
+      "dataset": "retail",
+      "descripcion": "",
+      "modo": "REQUIRED",
+      "motor": "cloudsql",
+      "tabla": "cart_items",
+      "tipo": "TEXT"
+    },
+    {
+      "columna": "qty",
+      "dataset": "retail",
+      "descripcion": "1 a 10",
+      "modo": "REQUIRED",
+      "motor": "cloudsql",
+      "tabla": "cart_items",
+      "tipo": "INTEGER"
+    },
+    {
+      "columna": "order_id",
+      "dataset": "retail",
+      "descripcion": "PK",
+      "modo": "REQUIRED",
+      "motor": "cloudsql",
+      "tabla": "orders",
+      "tipo": "TEXT"
+    },
+    {
+      "columna": "user_id",
+      "dataset": "retail",
+      "descripcion": "",
+      "modo": "REQUIRED",
+      "motor": "cloudsql",
+      "tabla": "orders",
+      "tipo": "TEXT"
+    },
+    {
+      "columna": "total_cents",
+      "dataset": "retail",
+      "descripcion": "",
+      "modo": "REQUIRED",
+      "motor": "cloudsql",
+      "tabla": "orders",
+      "tipo": "INTEGER"
+    },
+    {
+      "columna": "idempotency_key",
+      "dataset": "retail",
+      "descripcion": "Única: evita doble cobro",
+      "modo": "REQUIRED",
+      "motor": "cloudsql",
+      "tabla": "orders",
+      "tipo": "TEXT"
+    },
+    {
+      "columna": "created_at",
+      "dataset": "retail",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "cloudsql",
+      "tabla": "orders",
+      "tipo": "TIMESTAMP"
+    },
+    {
+      "columna": "order_id",
+      "dataset": "retail",
+      "descripcion": "",
+      "modo": "REQUIRED",
+      "motor": "cloudsql",
+      "tabla": "order_lines",
+      "tipo": "TEXT"
+    },
+    {
+      "columna": "article_id",
+      "dataset": "retail",
+      "descripcion": "",
+      "modo": "REQUIRED",
+      "motor": "cloudsql",
+      "tabla": "order_lines",
+      "tipo": "TEXT"
+    },
+    {
+      "columna": "qty",
+      "dataset": "retail",
+      "descripcion": "",
+      "modo": "REQUIRED",
+      "motor": "cloudsql",
+      "tabla": "order_lines",
+      "tipo": "INTEGER"
+    },
+    {
+      "columna": "price_cents",
+      "dataset": "retail",
+      "descripcion": "",
+      "modo": "REQUIRED",
+      "motor": "cloudsql",
+      "tabla": "order_lines",
+      "tipo": "INTEGER"
+    },
+    {
+      "columna": "entry_id",
+      "dataset": "retail",
+      "descripcion": "PK",
+      "modo": "REQUIRED",
+      "motor": "cloudsql",
+      "tabla": "wallet_ledger",
+      "tipo": "TEXT"
+    },
+    {
+      "columna": "user_id",
+      "dataset": "retail",
+      "descripcion": "",
+      "modo": "REQUIRED",
+      "motor": "cloudsql",
+      "tabla": "wallet_ledger",
+      "tipo": "TEXT"
+    },
+    {
+      "columna": "amount_cents",
+      "dataset": "retail",
+      "descripcion": "",
+      "modo": "REQUIRED",
+      "motor": "cloudsql",
+      "tabla": "wallet_ledger",
+      "tipo": "INTEGER"
+    },
+    {
+      "columna": "kind",
+      "dataset": "retail",
+      "descripcion": "demo_topup | purchase",
+      "modo": "REQUIRED",
+      "motor": "cloudsql",
+      "tabla": "wallet_ledger",
+      "tipo": "TEXT"
+    },
+    {
+      "columna": "ref",
+      "dataset": "retail",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "cloudsql",
+      "tabla": "wallet_ledger",
+      "tipo": "TEXT"
+    },
+    {
+      "columna": "created_at",
+      "dataset": "retail",
+      "descripcion": "",
+      "modo": "NULLABLE",
+      "motor": "cloudsql",
+      "tabla": "wallet_ledger",
+      "tipo": "TIMESTAMP"
+    }
+  ],
+  "derived": {
+    "bucket_lake": "tu-proyecto-gcp-retail-lake",
+    "bucket_raw": "tu-proyecto-gcp-retail-raw",
+    "bucket_tfstate": "tu-proyecto-gcp-tfstate",
+    "datasets": {
+      "bronze": "retail_bronze",
+      "gold": "retail_gold",
+      "ops": "retail_ops",
+      "silver": "retail_silver"
+    },
+    "image_repo": "us-central1-docker.pkg.dev/tu-proyecto-gcp/retail/retail-api",
+    "sa_emails": {
+      "api": "sa-retail-api@tu-proyecto-gcp.iam.gserviceaccount.com",
+      "deployer": "sa-retail-deployer@tu-proyecto-gcp.iam.gserviceaccount.com",
+      "ingest": "sa-retail-ingest@tu-proyecto-gcp.iam.gserviceaccount.com",
+      "pipeline": "sa-retail-pipeline@tu-proyecto-gcp.iam.gserviceaccount.com"
+    },
+    "tfstate_prefix": "retail/dev"
+  },
+  "iam": [
+    {
+      "member": "sa:ingest",
+      "motivo": "Escribir Bronze",
+      "role": "roles/storage.objectAdmin",
+      "scope": "bucket:raw"
+    },
+    {
+      "member": "sa:ingest",
+      "motivo": "Publicar eventos",
+      "role": "roles/pubsub.publisher",
+      "scope": "topic:events"
+    },
+    {
+      "member": "sa:pipeline",
+      "motivo": "Ejecutar Serverless Spark",
+      "role": "roles/dataproc.worker",
+      "scope": "project"
+    },
+    {
+      "member": "sa:pipeline",
+      "motivo": "Ejecutar workers de Dataflow",
+      "role": "roles/dataflow.worker",
+      "scope": "project"
+    },
+    {
+      "member": "sa:pipeline",
+      "motivo": "Ejecutar consultas y cargas",
+      "role": "roles/bigquery.jobUser",
+      "scope": "project"
+    },
+    {
+      "member": "sa:pipeline",
+      "motivo": "Leer Bronze",
+      "role": "roles/storage.objectViewer",
+      "scope": "bucket:raw"
+    },
+    {
+      "member": "sa:pipeline",
+      "motivo": "Escribir Silver/Gold y temporales",
+      "role": "roles/storage.objectAdmin",
+      "scope": "bucket:lake"
+    },
+    {
+      "member": "sa:pipeline",
+      "motivo": "Escribir Silver",
+      "role": "roles/bigquery.dataEditor",
+      "scope": "dataset:silver"
+    },
+    {
+      "member": "sa:pipeline",
+      "motivo": "Escribir Gold",
+      "role": "roles/bigquery.dataEditor",
+      "scope": "dataset:gold"
+    },
+    {
+      "member": "sa:pipeline",
+      "motivo": "Métricas de streaming y DLQ",
+      "role": "roles/bigquery.dataEditor",
+      "scope": "dataset:ops"
+    },
+    {
+      "member": "sa:pipeline",
+      "motivo": "Consumir eventos",
+      "role": "roles/pubsub.subscriber",
+      "scope": "subscription:dataflow"
+    },
+    {
+      "member": "sa:pipeline",
+      "motivo": "Dataflow consulta la suscripción",
+      "role": "roles/pubsub.viewer",
+      "scope": "subscription:dataflow"
+    },
+    {
+      "member": "sa:api",
+      "motivo": "Consultar el catálogo Gold",
+      "role": "roles/bigquery.jobUser",
+      "scope": "project"
+    },
+    {
+      "member": "sa:api",
+      "motivo": "Leer Gold",
+      "role": "roles/bigquery.dataViewer",
+      "scope": "dataset:gold"
+    },
+    {
+      "member": "sa:api",
+      "motivo": "Invocar Gemini",
+      "role": "roles/aiplatform.user",
+      "scope": "project"
+    },
+    {
+      "member": "sa:api",
+      "motivo": "Conectarse a Cloud SQL",
+      "role": "roles/cloudsql.client",
+      "scope": "project"
+    },
+    {
+      "member": "sa:api",
+      "motivo": "Leer URL de base y token admin",
+      "role": "roles/secretmanager.secretAccessor",
+      "scope": "project"
+    },
+    {
+      "member": "sa:api",
+      "motivo": "Publicar compras de la web",
+      "role": "roles/pubsub.publisher",
+      "scope": "topic:events"
+    },
+    {
+      "member": "sa:api",
+      "motivo": "Servir imágenes H&M",
+      "role": "roles/storage.objectViewer",
+      "scope": "bucket:raw"
+    },
+    {
+      "member": "sa:deployer",
+      "motivo": "Desplegar Cloud Run",
+      "role": "roles/run.admin",
+      "scope": "project"
+    },
+    {
+      "member": "sa:deployer",
+      "motivo": "Publicar imágenes",
+      "role": "roles/artifactregistry.writer",
+      "scope": "project"
+    },
+    {
+      "member": "sa:deployer",
+      "motivo": "Desplegar revisiones que corren como sa-retail-api",
+      "role": "roles/iam.serviceAccountUser",
+      "scope": "sa:api"
+    },
+    {
+      "member": "compute-default",
+      "motivo": "Cloud Build (ops api) construye la imagen",
+      "role": "roles/cloudbuild.builds.builder",
+      "scope": "project"
+    },
+    {
+      "member": "pubsub-agent",
+      "motivo": "Suscripción BigQuery escribe events_raw",
+      "role": "roles/bigquery.dataEditor",
+      "scope": "dataset:bronze"
+    },
+    {
+      "member": "pubsub-agent",
+      "motivo": "Suscripción BigQuery valida el esquema",
+      "role": "roles/bigquery.metadataViewer",
+      "scope": "dataset:bronze"
+    },
+    {
+      "member": "pubsub-agent",
+      "motivo": "Reenviar mensajes fallidos a la DLQ",
+      "role": "roles/pubsub.publisher",
+      "scope": "topic:dlq"
+    },
+    {
+      "member": "pubsub-agent",
+      "motivo": "Requisito de dead-letter",
+      "role": "roles/pubsub.subscriber",
+      "scope": "subscription:bq"
+    },
+    {
+      "member": "pubsub-agent",
+      "motivo": "Requisito de dead-letter",
+      "role": "roles/pubsub.subscriber",
+      "scope": "subscription:dataflow"
+    }
+  ],
+  "params": {
+    "admin_token_local": "cambia-este-token",
+    "api_cpu": "1",
+    "api_image": "us-docker.pkg.dev/cloudrun/container/hello",
+    "api_max_instances": 3,
+    "api_memory": "512Mi",
+    "api_min_instances": 0,
+    "api_public": true,
+    "artifact_repo": "retail",
+    "assistant_mode": "gemini",
+    "billing_account": "",
+    "billing_export_table": "",
+    "bucket_lake_suffix": "retail-lake",
+    "bucket_raw_suffix": "retail-raw",
+    "bucket_tfstate_suffix": "tfstate",
+    "budget_thresholds": [
+      0.5,
+      0.9,
+      1.0
+    ],
+    "budget_topic": "billing-budget-alerts",
+    "catalog_job": "retail-catalog",
+    "cloudrun_service": "retail-api",
+    "cloudsql_backup_start": "06:00",
+    "cloudsql_db_name": "retail",
+    "cloudsql_deletion_protection": false,
+    "cloudsql_disk_gb": 10,
+    "cloudsql_enabled": true,
+    "cloudsql_ha": false,
+    "cloudsql_instance": "retail-pg",
+    "cloudsql_tier": "db-f1-micro",
+    "cloudsql_user": "retail_app",
+    "cloudsql_version": "POSTGRES_15",
+    "dataflow_job_name": "retail-events",
+    "dataflow_machine_type": "n1-standard-2",
+    "dataflow_max_workers": 3,
+    "dataproc_runtime": "2.2",
+    "dataproc_subnet": "default",
+    "demo_topup_max_cents": 50000,
+    "deployer_sa_key": "deployer",
+    "env": "dev",
+    "force_destroy_buckets": false,
+    "gemini_location": "us-central1",
+    "gemini_model": "gemini-3.1-flash-lite",
+    "github_repo": "",
+    "images_nearline_days": 30,
+    "labels": {
+      "curso": "utec-bigdata",
+      "proyecto": "retail-bigdata"
+    },
+    "local_raw_dir": "data/raw",
+    "monthly_budget_usd": 50,
+    "noncurrent_version_days": 30,
+    "price_demo_factor": 500,
+    "project_id": "tu-proyecto-gcp",
+    "pubsub_bq_subscription": "retail-events-to-bq",
+    "pubsub_bq_table": "bronze.events_raw",
+    "pubsub_dataflow_subscription": "retail-events-dataflow",
+    "pubsub_dlq_subscription": "retail-events-dlq-sub",
+    "pubsub_dlq_topic": "retail-events-dlq",
+    "pubsub_max_delivery_attempts": 5,
+    "pubsub_retention": "86400s",
+    "pubsub_topic": "retail-events",
+    "region": "us-central1",
+    "replay_events_per_sec": 50,
+    "replay_limit": 5000,
+    "replay_target_start": "2026-11-01",
+    "secret_admin_token": "retail-admin-token",
+    "secret_db_url": "retail-db-url",
+    "stock_demo": 50,
+    "tfstate_prefix": "retail",
+    "wif_pool": "github"
+  },
+  "secrets": [
+    {
+      "consumido_por": "Cloud Run API y job de catálogo",
+      "contenido": "URL de conexión a Cloud SQL con contraseña aleatoria",
+      "generado_por": "Terraform (random_password)",
+      "nombre": "retail-db-url",
+      "nota": "Nunca se escribe en el Excel ni en Git"
+    },
+    {
+      "consumido_por": "API /wallet/demo-topups",
+      "contenido": "Token para recargas demo (X-Admin-Token)",
+      "generado_por": "Terraform (random_password)",
+      "nombre": "retail-admin-token",
+      "nota": "Ver con: gcloud secrets versions access latest --secret=retail-admin-token"
+    }
+  ],
+  "tables": [
+    {
+      "cluster": "",
+      "creado_por": "sql/bronze/01_bronze_hm.sql",
+      "dataset": "bronze",
+      "descripcion": "CSV articles.csv en GCS (todo texto)",
+      "motor": "bigquery",
+      "particion": "",
+      "tabla": "ext_articles",
+      "tipo": "EXTERNAL"
+    },
+    {
+      "cluster": "",
+      "creado_por": "sql/bronze/01_bronze_hm.sql",
+      "dataset": "bronze",
+      "descripcion": "CSV customers.csv en GCS (todo texto)",
+      "motor": "bigquery",
+      "particion": "",
+      "tabla": "ext_customers",
+      "tipo": "EXTERNAL"
+    },
+    {
+      "cluster": "",
+      "creado_por": "sql/bronze/01_bronze_hm.sql",
+      "dataset": "bronze",
+      "descripcion": "CSV transactions_train.csv en GCS",
+      "motor": "bigquery",
+      "particion": "",
+      "tabla": "ext_transactions",
+      "tipo": "EXTERNAL"
+    },
+    {
+      "cluster": "customer_id,article_id",
+      "creado_por": "sql/bronze/01_bronze_hm.sql",
+      "dataset": "bronze",
+      "descripcion": "Copia nativa particionada de las transacciones",
+      "motor": "bigquery",
+      "particion": "t_dat",
+      "tabla": "transactions",
+      "tipo": "TABLE"
+    },
+    {
+      "cluster": "",
+      "creado_por": "terraform",
+      "dataset": "bronze",
+      "descripcion": "Eventos tal como llegan por la suscripción Pub/Sub -> BigQuery",
+      "motor": "bigquery",
+      "particion": "publish_time",
+      "tabla": "events_raw",
+      "tipo": "TABLE"
+    },
+    {
+      "cluster": "",
+      "creado_por": "pipelines/batch/silver_hm.py + sql/silver/01_load_silver.sql",
+      "dataset": "silver",
+      "descripcion": "Artículos tipados; detail_desc imputada",
+      "motor": "bigquery",
+      "particion": "",
+      "tabla": "articles",
+      "tipo": "TABLE"
+    },
+    {
+      "cluster": "customer_id",
+      "creado_por": "pipelines/batch/silver_hm.py + sql/silver/01_load_silver.sql",
+      "dataset": "silver",
+      "descripcion": "Clientes con nulos tratados y banda de edad",
+      "motor": "bigquery",
+      "particion": "",
+      "tabla": "customers",
+      "tipo": "TABLE"
+    },
+    {
+      "cluster": "customer_id,article_id",
+      "creado_por": "pipelines/batch/silver_hm.py + sql/silver/01_load_silver.sql",
+      "dataset": "silver",
+      "descripcion": "Transacciones válidas (rechazos en quarantine/)",
+      "motor": "bigquery",
+      "particion": "t_dat",
+      "tabla": "transactions",
+      "tipo": "TABLE"
+    },
+    {
+      "cluster": "",
+      "creado_por": "sql/silver/01_load_silver.sql",
+      "dataset": "silver",
+      "descripcion": "Eventos de events_raw deduplicados por event_id",
+      "motor": "bigquery",
+      "particion": "",
+      "tabla": "v_events",
+      "tipo": "VIEW"
+    },
+    {
+      "cluster": "",
+      "creado_por": "sql/gold/01_gold_model.sql",
+      "dataset": "gold",
+      "descripcion": "Calendario 2018-2027",
+      "motor": "bigquery",
+      "particion": "",
+      "tabla": "dim_date",
+      "tipo": "TABLE"
+    },
+    {
+      "cluster": "",
+      "creado_por": "sql/gold/01_gold_model.sql",
+      "dataset": "gold",
+      "descripcion": "Canales de venta (supuesto 1 tienda, 2 online)",
+      "motor": "bigquery",
+      "particion": "",
+      "tabla": "dim_channel",
+      "tipo": "TABLE"
+    },
+    {
+      "cluster": "article_id",
+      "creado_por": "sql/gold/01_gold_model.sql",
+      "dataset": "gold",
+      "descripcion": "Dimensión producto",
+      "motor": "bigquery",
+      "particion": "",
+      "tabla": "dim_article",
+      "tipo": "TABLE"
+    },
+    {
+      "cluster": "customer_id",
+      "creado_por": "sql/gold/01_gold_model.sql",
+      "dataset": "gold",
+      "descripcion": "Dimensión cliente seudonimizado",
+      "motor": "bigquery",
+      "particion": "",
+      "tabla": "dim_customer",
+      "tipo": "TABLE"
+    },
+    {
+      "cluster": "customer_id,article_id",
+      "creado_por": "sql/gold/01_gold_model.sql",
+      "dataset": "gold",
+      "descripcion": "Línea de venta: histórico H&M + eventos 2026",
+      "motor": "bigquery",
+      "particion": "sale_date",
+      "tabla": "fact_sales",
+      "tipo": "TABLE"
+    },
+    {
+      "cluster": "customer_id",
+      "creado_por": "sql/gold/01_gold_model.sql",
+      "dataset": "gold",
+      "descripcion": "Pedido = cliente + día + fuente",
+      "motor": "bigquery",
+      "particion": "order_date",
+      "tabla": "fact_orders",
+      "tipo": "TABLE"
+    },
+    {
+      "cluster": "",
+      "creado_por": "sql/gold/01_gold_model.sql",
+      "dataset": "gold",
+      "descripcion": "Top por grupo, última semana",
+      "motor": "bigquery",
+      "particion": "",
+      "tabla": "reco_popular",
+      "tipo": "TABLE"
+    },
+    {
+      "cluster": "",
+      "creado_por": "sql/gold/01_gold_model.sql",
+      "dataset": "gold",
+      "descripcion": "Catálogo que se copia a Cloud SQL",
+      "motor": "bigquery",
+      "particion": "",
+      "tabla": "v_catalog_serving",
+      "tipo": "VIEW"
+    },
+    {
+      "cluster": "",
+      "creado_por": "sql/gold/02_kpi_views.sql",
+      "dataset": "gold",
+      "descripcion": "Tablero gerencial",
+      "motor": "bigquery",
+      "particion": "",
+      "tabla": "v_ventas_mensuales",
+      "tipo": "VIEW"
+    },
+    {
+      "cluster": "",
+      "creado_por": "sql/gold/02_kpi_views.sql",
+      "dataset": "gold",
+      "descripcion": "Tablero gerencial",
+      "motor": "bigquery",
+      "particion": "",
+      "tabla": "v_top_articulos",
+      "tipo": "VIEW"
+    },
+    {
+      "cluster": "",
+      "creado_por": "sql/gold/02_kpi_views.sql",
+      "dataset": "gold",
+      "descripcion": "Tablero gerencial",
+      "motor": "bigquery",
+      "particion": "",
+      "tabla": "v_recurrencia_clientes",
+      "tipo": "VIEW"
+    },
+    {
+      "cluster": "",
+      "creado_por": "terraform",
+      "dataset": "ops",
+      "descripcion": "Métricas de Dataflow por minuto",
+      "motor": "bigquery",
+      "particion": "window_start",
+      "tabla": "stream_metrics_1m",
+      "tipo": "TABLE"
+    },
+    {
+      "cluster": "",
+      "creado_por": "terraform",
+      "dataset": "ops",
+      "descripcion": "Mensajes inválidos rechazados por Dataflow",
+      "motor": "bigquery",
+      "particion": "recibido",
+      "tabla": "stream_dlq",
+      "tipo": "TABLE"
+    },
+    {
+      "cluster": "",
+      "creado_por": "sql/gold/02_kpi_views.sql",
+      "dataset": "ops",
+      "descripcion": "Tablero operativo",
+      "motor": "bigquery",
+      "particion": "",
+      "tabla": "v_stream_salud",
+      "tipo": "VIEW"
+    },
+    {
+      "cluster": "",
+      "creado_por": "cost/real_cost_per_order.sql (opcional)",
+      "dataset": "ops",
+      "descripcion": "Costo facturado y USD por pedido",
+      "motor": "bigquery",
+      "particion": "",
+      "tabla": "v_costo_real_mensual",
+      "tipo": "VIEW"
+    },
+    {
+      "cluster": "",
+      "creado_por": "api/schema.sql",
+      "dataset": "retail",
+      "descripcion": "Usuarios de la tienda demo (semilla: hoja Usuarios tipo app)",
+      "motor": "cloudsql",
+      "particion": "",
+      "tabla": "users",
+      "tipo": "TABLE"
+    },
+    {
+      "cluster": "",
+      "creado_por": "api/schema.sql",
+      "dataset": "retail",
+      "descripcion": "Catálogo de servicio (copia de gold.v_catalog_serving)",
+      "motor": "cloudsql",
+      "particion": "",
+      "tabla": "articles",
+      "tipo": "TABLE"
+    },
+    {
+      "cluster": "",
+      "creado_por": "api/schema.sql",
+      "dataset": "retail",
+      "descripcion": "Carrito",
+      "motor": "cloudsql",
+      "particion": "",
+      "tabla": "cart_items",
+      "tipo": "TABLE"
+    },
+    {
+      "cluster": "",
+      "creado_por": "api/schema.sql",
+      "dataset": "retail",
+      "descripcion": "Pedidos",
+      "motor": "cloudsql",
+      "particion": "",
+      "tabla": "orders",
+      "tipo": "TABLE"
+    },
+    {
+      "cluster": "",
+      "creado_por": "api/schema.sql",
+      "dataset": "retail",
+      "descripcion": "Líneas de pedido",
+      "motor": "cloudsql",
+      "particion": "",
+      "tabla": "order_lines",
+      "tipo": "TABLE"
+    },
+    {
+      "cluster": "",
+      "creado_por": "api/schema.sql",
+      "dataset": "retail",
+      "descripcion": "Movimientos de saldo append-only (saldo = suma)",
+      "motor": "cloudsql",
+      "particion": "",
+      "tabla": "wallet_ledger",
+      "tipo": "TABLE"
+    }
+  ],
+  "team": [
+    {
+      "email": "",
+      "id": "estuardo",
+      "nombre": "Estuardo Oliver",
+      "perfil": "ML / Analytics",
+      "roles_gcp": "roles/bigquery.user;roles/bigquery.dataEditor;roles/aiplatform.user;roles/run.developer;roles/logging.viewer"
+    },
+    {
+      "email": "",
+      "id": "winston",
+      "nombre": "Winston Quispe",
+      "perfil": "Cloud Computing",
+      "roles_gcp": "roles/editor;roles/resourcemanager.projectIamAdmin;roles/iam.serviceAccountUser"
+    },
+    {
+      "email": "",
+      "id": "nicole",
+      "nombre": "Nicole Arenas",
+      "perfil": "Datos + API + Modelado",
+      "roles_gcp": "roles/bigquery.admin;roles/storage.admin;roles/dataproc.editor;roles/run.developer;roles/cloudsql.client;roles/iam.serviceAccountUser"
+    },
+    {
+      "email": "",
+      "id": "gianmarco",
+      "nombre": "Gianmarco Mejia",
+      "perfil": "Dashboard / BI",
+      "roles_gcp": "roles/bigquery.dataViewer;roles/bigquery.jobUser;roles/monitoring.viewer"
+    }
+  ],
+  "terraform": {
+    "api_env": {
+      "ASSISTANT_MODE": "gemini",
+      "DEMO_TOPUP_MAX_CENTS": "50000",
+      "GEMINI_LOCATION": "us-central1",
+      "GEMINI_MODEL": "gemini-3.1-flash-lite",
+      "PRICE_DEMO_FACTOR": "500"
+    },
+    "apis": [
+      "aiplatform.googleapis.com",
+      "artifactregistry.googleapis.com",
+      "bigquery.googleapis.com",
+      "billingbudgets.googleapis.com",
+      "cloudbilling.googleapis.com",
+      "cloudbuild.googleapis.com",
+      "cloudresourcemanager.googleapis.com",
+      "compute.googleapis.com",
+      "dataflow.googleapis.com",
+      "dataproc.googleapis.com",
+      "iam.googleapis.com",
+      "iamcredentials.googleapis.com",
+      "logging.googleapis.com",
+      "monitoring.googleapis.com",
+      "pubsub.googleapis.com",
+      "run.googleapis.com",
+      "secretmanager.googleapis.com",
+      "serviceusage.googleapis.com",
+      "sqladmin.googleapis.com",
+      "storage.googleapis.com",
+      "sts.googleapis.com"
+    ],
+    "artifact_repo": "retail",
+    "billing_account": "",
+    "buckets": {
+      "lake": "tu-proyecto-gcp-retail-lake",
+      "raw": "tu-proyecto-gcp-retail-raw"
+    },
+    "budget_thresholds": [
+      0.5,
+      0.9,
+      1.0
+    ],
+    "budget_topic": "billing-budget-alerts",
+    "cloudrun": {
+      "cpu": "1",
+      "enabled": true,
+      "image": "us-docker.pkg.dev/cloudrun/container/hello",
+      "max_instances": 3,
+      "memory": "512Mi",
+      "min_instances": 0,
+      "public": true,
+      "service": "retail-api"
+    },
+    "cloudsql": {
+      "backup_start": "06:00",
+      "db_name": "retail",
+      "deletion_protection": false,
+      "disk_gb": 10,
+      "enabled": true,
+      "ha": false,
+      "instance": "retail-pg",
+      "tier": "db-f1-micro",
+      "user": "retail_app",
+      "version": "POSTGRES_15"
+    },
+    "datasets": {
+      "bronze": {
+        "dataset_id": "retail_bronze",
+        "delete_contents_on_destroy": true,
+        "description": "Datos crudos H&M (tablas externas y nativa) y eventos sin procesar"
+      },
+      "gold": {
+        "dataset_id": "retail_gold",
+        "delete_contents_on_destroy": true,
+        "description": "Modelo estrella, recomendador y vistas para tableros"
+      },
+      "ops": {
+        "dataset_id": "retail_ops",
+        "delete_contents_on_destroy": true,
+        "description": "Operación: métricas de streaming, DLQ y costos"
+      },
+      "silver": {
+        "dataset_id": "retail_silver",
+        "delete_contents_on_destroy": true,
+        "description": "Datos limpios y validados (Parquet cargado) y eventos deduplicados"
+      }
+    },
+    "env": "dev",
+    "force_destroy_buckets": false,
+    "github": {
+      "deployer_key": "deployer",
+      "pool_id": "github-dev",
+      "repo": ""
+    },
+    "iam": [
+      {
+        "member": "sa:ingest",
+        "role": "roles/storage.objectAdmin",
+        "scope": "bucket:raw"
+      },
+      {
+        "member": "sa:ingest",
+        "role": "roles/pubsub.publisher",
+        "scope": "topic:events"
+      },
+      {
+        "member": "sa:pipeline",
+        "role": "roles/dataproc.worker",
+        "scope": "project"
+      },
+      {
+        "member": "sa:pipeline",
+        "role": "roles/dataflow.worker",
+        "scope": "project"
+      },
+      {
+        "member": "sa:pipeline",
+        "role": "roles/bigquery.jobUser",
+        "scope": "project"
+      },
+      {
+        "member": "sa:pipeline",
+        "role": "roles/storage.objectViewer",
+        "scope": "bucket:raw"
+      },
+      {
+        "member": "sa:pipeline",
+        "role": "roles/storage.objectAdmin",
+        "scope": "bucket:lake"
+      },
+      {
+        "member": "sa:pipeline",
+        "role": "roles/bigquery.dataEditor",
+        "scope": "dataset:silver"
+      },
+      {
+        "member": "sa:pipeline",
+        "role": "roles/bigquery.dataEditor",
+        "scope": "dataset:gold"
+      },
+      {
+        "member": "sa:pipeline",
+        "role": "roles/bigquery.dataEditor",
+        "scope": "dataset:ops"
+      },
+      {
+        "member": "sa:pipeline",
+        "role": "roles/pubsub.subscriber",
+        "scope": "subscription:dataflow"
+      },
+      {
+        "member": "sa:pipeline",
+        "role": "roles/pubsub.viewer",
+        "scope": "subscription:dataflow"
+      },
+      {
+        "member": "sa:api",
+        "role": "roles/bigquery.jobUser",
+        "scope": "project"
+      },
+      {
+        "member": "sa:api",
+        "role": "roles/bigquery.dataViewer",
+        "scope": "dataset:gold"
+      },
+      {
+        "member": "sa:api",
+        "role": "roles/aiplatform.user",
+        "scope": "project"
+      },
+      {
+        "member": "sa:api",
+        "role": "roles/cloudsql.client",
+        "scope": "project"
+      },
+      {
+        "member": "sa:api",
+        "role": "roles/secretmanager.secretAccessor",
+        "scope": "project"
+      },
+      {
+        "member": "sa:api",
+        "role": "roles/pubsub.publisher",
+        "scope": "topic:events"
+      },
+      {
+        "member": "sa:api",
+        "role": "roles/storage.objectViewer",
+        "scope": "bucket:raw"
+      },
+      {
+        "member": "sa:deployer",
+        "role": "roles/run.admin",
+        "scope": "project"
+      },
+      {
+        "member": "sa:deployer",
+        "role": "roles/artifactregistry.writer",
+        "scope": "project"
+      },
+      {
+        "member": "sa:deployer",
+        "role": "roles/iam.serviceAccountUser",
+        "scope": "sa:api"
+      },
+      {
+        "member": "compute-default",
+        "role": "roles/cloudbuild.builds.builder",
+        "scope": "project"
+      },
+      {
+        "member": "pubsub-agent",
+        "role": "roles/bigquery.dataEditor",
+        "scope": "dataset:bronze"
+      },
+      {
+        "member": "pubsub-agent",
+        "role": "roles/bigquery.metadataViewer",
+        "scope": "dataset:bronze"
+      },
+      {
+        "member": "pubsub-agent",
+        "role": "roles/pubsub.publisher",
+        "scope": "topic:dlq"
+      },
+      {
+        "member": "pubsub-agent",
+        "role": "roles/pubsub.subscriber",
+        "scope": "subscription:bq"
+      },
+      {
+        "member": "pubsub-agent",
+        "role": "roles/pubsub.subscriber",
+        "scope": "subscription:dataflow"
+      }
+    ],
+    "images_nearline_days": 30,
+    "labels": {
+      "curso": "utec-bigdata",
+      "proyecto": "retail-bigdata"
+    },
+    "monthly_budget_usd": 50,
+    "noncurrent_version_days": 30,
+    "project_id": "tu-proyecto-gcp",
+    "pubsub": {
+      "bq_subscription": "retail-events-to-bq",
+      "bq_table": "bronze.events_raw",
+      "dataflow_subscription": "retail-events-dataflow",
+      "dlq_subscription": "retail-events-dlq-sub",
+      "dlq_topic": "retail-events-dlq",
+      "max_delivery_attempts": 5,
+      "retention": "86400s",
+      "topic": "retail-events"
+    },
+    "region": "us-central1",
+    "secrets": {
+      "admin_token": "retail-admin-token",
+      "db_url": "retail-db-url"
+    },
+    "service_accounts": {
+      "api": {
+        "account_id": "sa-retail-api",
+        "description": "Identidad de Cloud Run (API, web y job de catálogo)",
+        "display_name": "Retail API"
+      },
+      "deployer": {
+        "account_id": "sa-retail-deployer",
+        "description": "GitHub Actions publica imágenes y despliega Cloud Run",
+        "display_name": "Retail deployer"
+      },
+      "ingest": {
+        "account_id": "sa-retail-ingest",
+        "description": "Cargas a Bronze y publicación de eventos desde jobs",
+        "display_name": "Retail ingesta"
+      },
+      "pipeline": {
+        "account_id": "sa-retail-pipeline",
+        "description": "Ejecuta Serverless Spark y Dataflow",
+        "display_name": "Retail pipelines"
+      }
+    },
+    "tables": [
+      {
+        "clustering": [],
+        "dataset": "bronze",
+        "description": "Eventos tal como llegan por la suscripción Pub/Sub -> BigQuery",
+        "partition_field": "publish_time",
+        "schema": "[{\"name\": \"subscription_name\", \"type\": \"STRING\", \"mode\": \"NULLABLE\", \"description\": \"\"}, {\"name\": \"message_id\", \"type\": \"STRING\", \"mode\": \"NULLABLE\", \"description\": \"\"}, {\"name\": \"publish_time\", \"type\": \"TIMESTAMP\", \"mode\": \"NULLABLE\", \"description\": \"\"}, {\"name\": \"data\", \"type\": \"STRING\", \"mode\": \"NULLABLE\", \"description\": \"JSON del evento\"}, {\"name\": \"attributes\", \"type\": \"STRING\", \"mode\": \"NULLABLE\", \"description\": \"\"}]",
+        "table_id": "events_raw"
+      },
+      {
+        "clustering": [],
+        "dataset": "ops",
+        "description": "Métricas de Dataflow por minuto",
+        "partition_field": "window_start",
+        "schema": "[{\"name\": \"window_start\", \"type\": \"TIMESTAMP\", \"mode\": \"NULLABLE\", \"description\": \"\"}, {\"name\": \"window_end\", \"type\": \"TIMESTAMP\", \"mode\": \"NULLABLE\", \"description\": \"\"}, {\"name\": \"eventos\", \"type\": \"INTEGER\", \"mode\": \"NULLABLE\", \"description\": \"\"}, {\"name\": \"compras\", \"type\": \"INTEGER\", \"mode\": \"NULLABLE\", \"description\": \"\"}, {\"name\": \"importe\", \"type\": \"FLOAT\", \"mode\": \"NULLABLE\", \"description\": \"\"}, {\"name\": \"lag_p50_s\", \"type\": \"FLOAT\", \"mode\": \"NULLABLE\", \"description\": \"\"}, {\"name\": \"lag_p95_s\", \"type\": \"FLOAT\", \"mode\": \"NULLABLE\", \"description\": \"\"}, {\"name\": \"emitido\", \"type\": \"TIMESTAMP\", \"mode\": \"NULLABLE\", \"description\": \"\"}]",
+        "table_id": "stream_metrics_1m"
+      },
+      {
+        "clustering": [],
+        "dataset": "ops",
+        "description": "Mensajes inválidos rechazados por Dataflow",
+        "partition_field": "recibido",
+        "schema": "[{\"name\": \"recibido\", \"type\": \"TIMESTAMP\", \"mode\": \"NULLABLE\", \"description\": \"\"}, {\"name\": \"error\", \"type\": \"STRING\", \"mode\": \"NULLABLE\", \"description\": \"\"}, {\"name\": \"payload\", \"type\": \"STRING\", \"mode\": \"NULLABLE\", \"description\": \"\"}]",
+        "table_id": "stream_dlq"
+      }
+    ]
+  }
+}

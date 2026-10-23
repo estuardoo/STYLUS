@@ -34,9 +34,11 @@ def articles(df):
 
 def customers(df):
     age = F.col("age").cast("int")
+    # Spark no distingue mayúsculas: renombrar antes para no pisar FN/Active al crear fn/active
     return (df.dropDuplicates(["customer_id"])
-            .withColumn("fn", F.coalesce(F.col("FN").cast("int"), F.lit(0)))
-            .withColumn("active", F.coalesce(F.col("Active").cast("int"), F.lit(0)))
+            .withColumnRenamed("FN", "_fn").withColumnRenamed("Active", "_active")
+            .withColumn("fn", F.coalesce(F.col("_fn").cast("int"), F.lit(0)))
+            .withColumn("active", F.coalesce(F.col("_active").cast("int"), F.lit(0)))
             .withColumn("club_member_status", F.coalesce("club_member_status", F.lit("NONE")))
             .withColumn("fashion_news_frequency",
                         F.when(F.upper(F.coalesce("fashion_news_frequency", F.lit("NONE"))) == "NONE", "NONE")
@@ -44,7 +46,7 @@ def customers(df):
             .withColumn("age", age)
             .withColumn("age_band", F.when(age.isNull(), "sin_edad").when(age < 25, "16-24").when(age < 35, "25-34")
                         .when(age < 45, "35-44").when(age < 55, "45-54").otherwise("55+"))
-            .drop("FN", "Active")
+            .drop("_fn", "_active")
             .withColumn("_ingested_at", F.current_timestamp()))
 
 
@@ -102,8 +104,7 @@ def main():
     t["conciliado"] = t["entrada"] == t["salida"] + sum(t["rechazadas"].values())
     txt = json.dumps(report, indent=2, ensure_ascii=False)
     print(txt)
-    spark.sparkContext.parallelize([txt], 1).saveAsTextFile(f"{a.out}/_quality_report") if a.out.startswith("gs://") \
-        else open(f"{a.out}/_quality_report.json", "w", encoding="utf-8").write(txt)
+    spark.createDataFrame([(txt,)], ["r"]).coalesce(1).write.mode("overwrite").text(f"{a.out}/_quality_report")
     assert t["conciliado"], "Las filas de salida + rechazadas no cuadran con la entrada"
 
 

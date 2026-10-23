@@ -27,45 +27,47 @@ TAREAS = [
     ("P1-02", 1, "Gestión", "Ordenar carpeta y repositorio", "Estructura por capas; Amazon/zip archivados; secretos fuera", "README.md", "", "", E, W, H, "data/_archive y .secrets/ fuera de Git"),
     ("P1-03", 1, "Seguridad", "Proteger datos y secretos", ".gitignore + regla CI que bloquea CSV/ZIP/tfstate/credenciales", ".gitignore, .github/workflows/ci.yml", "", "", W, "", H, "Regla 'Sin datos ni secretos versionados'"),
     ("P1-04", 1, "Diseño", "Justificar stack GCP", "Decisión por capa con alternativa descartada", "Word §5", "", "", W, E, H, "Tabla de ADR"),
-    ("P1-05", 1, "Diseño", "Diagrama end-to-end", "Fuentes, ingesta, almacenamiento, cómputo, exposición", "docs/architecture/arquitectura.png", "dot -Tpng docs/architecture/arquitectura_vertical.dot", "", G, W, H, "Graphviz regenerable"),
+    ("P1-05", 1, "Diseño", "Diagrama end-to-end", "Fuentes, ingesta, almacenamiento, cómputo, exposición", "docs/architecture/arquitectura.png", "dot -Tpng docs/architecture/arquitectura_vertical.dot -o docs/architecture/arquitectura.png", "", G, W, H, "Graphviz regenerable"),
     ("P1-06", 1, "Diseño", "Integración multifuente", "Batch H&M + replay 2026; doble reloj source_t_dat/event_time", "Word §6", "", "P1-01", N, W, H, ""),
     ("P1-07", 1, "Diseño", "Ingesta y almacenamiento", "GCS medallion + BigQuery + Cloud SQL; formatos y particiones", "Word §7", "", "P1-06", N, W, H, ""),
     ("P1-08", 1, "Diseño", "Escalabilidad Black Friday", "Autoescalado, desacople, degradación controlada", "Word §8", "", "", W, N, H, "Escenario 5x en calculadora"),
-    ("P1-09", 1, "Costos", "Calculadora y costo por pedido", "YAML -> Excel con fórmulas; 4 escenarios; año 1", "docs/entrega1/Calculadora_Costos_GCP.xlsx", "make cost", "", G, W, H, "Año 1 USD 4,058; USD 0.00075/pedido"),
-    ("P1-10", 1, "Costos", "Automatizar control de costos", "Precios vía API, budget con alertas, costo real por pedido", "cost/, infra/terraform/main.tf", "make cost-refresh", "P2-01", W, G, L, "Probado local; activar billing export en consola"),
+    ("P1-09", 1, "Costos", "Calculadora y costo por pedido", "YAML -> Excel con fórmulas; 4 escenarios; año 1", "docs/entrega1/Calculadora_Costos_GCP.xlsx", "python cost/estimate_costs.py", "", G, W, H, "Año 1 USD 5,482; USD 0.00098/pedido (Gemini 3.1 Flash-Lite)"),
+    ("P1-10", 1, "Costos", "Automatizar control de costos", "Precios vía API, budget con alertas, costo real por pedido", "cost/, infra/terraform/main.tf", "python cost/estimate_costs.py --refresh-prices", "P2-01", W, G, L, "Probado local; activar billing export en consola"),
     ("P1-11", 1, "Resiliencia", "DRP / HA", "RPO/RTO por componente y runbook", "Word §10, docs/runbooks/drp.md", "", "", W, N, H, ""),
     ("P1-12", 1, "BI", "Catálogo de KPIs", "Metas de datos, streaming, modelo, API, negocio, costo", "Word §11", "", "", G, E, H, ""),
-    ("P1-13", 1, "Datos", "Ingesta Bronze con manifiesto", "SHA-256 y filas por archivo; rsync idempotente", "ingestion/batch/upload_raw.py", "make manifest", "", N, W, H, "Manifiesto real en data/manifests/"),
-    ("P1-14", 1, "Infra", "Terraform base", "Buckets, BigQuery, Pub/Sub+DLQ, IAM, Artifact Registry, budget", "infra/terraform/", "make tf-check", "", W, "", L, "tofu validate OK (sin credenciales)"),
+    ("P1-13", 1, "Datos", "Ingesta Bronze con manifiesto", "SHA-256 y filas por archivo; rsync idempotente", "ingestion/batch/upload_raw.py", "python ingestion/batch/upload_raw.py --manifest-only", "", N, W, H, "Manifiesto real en data/manifests/"),
+    ("P1-14", 1, "Infra", "Terraform base", "Buckets, BigQuery, Pub/Sub+DLQ, IAM, Artifact Registry, budget (valores desde el Excel de control)", "infra/terraform/", "python ops.py plan", "P1-20", W, "", L, "validate OK; tipos de variables probados con el JSON generado"),
     ("P1-15", 1, "Gestión", "Documento Word Entrega 1", "Examen + P1 profesional", "docs/entrega1/*.docx (+PDF)", "", "P1-01..P1-14", E, T, H, ""),
     ("P1-16", 1, "Gestión", "Matriz de auditoría y roles", "Tareas, pasos, despliegue y variables", "docs/gestion/Matriz_Auditoria_Proyecto.xlsx", "python docs/_generadores/build_matriz.py", "", E, T, H, "Este archivo"),
-    ("P1-17", 1, "Infra", "Crear proyecto GCP", "Proyecto, facturación/créditos, accesos IAM del equipo", "Proyecto GCP", "ver hoja Despliegue D01-D03", "", W, "", P, ""),
+    ("P1-17", 1, "Infra", "Crear proyecto GCP", "Proyecto, facturación/créditos, accesos IAM del equipo", "Proyecto GCP", "ver hoja Despliegue D01-D04", "", W, "", P, ""),
     ("P1-18", 1, "Gestión", "Publicar repositorio GitHub", "Crear repo privado, push y CI en verde", "URL del repo", "git push -u origin main", "P1-17", W, T, P, "Git inicializado localmente"),
+    ("P1-20", 1, "Infra", "Excel de control de la plataforma", "Parámetros, APIs, cuentas, permisos, usuarios, datasets, tablas, columnas y secretos en un solo Excel validado", "config/control_plataforma.xlsx", "python ops.py config", "", W, T, H, "30 tablas, 240 columnas, 28 permisos, 6 usuarios app; CI verifica generados"),
+    ("P1-21", 1, "Infra", "Orquestador de despliegue", "Un comando por paso, multiplataforma, con log matricial de tiempos", "ops.py", "python ops.py todo", "P1-20", W, N, L, "config/estado/local probados; comandos de nube pendientes de GCP"),
     ("P1-19", 1, "Gestión", "Revisión y envío Entrega 1", "Revisión cruzada del Word y envío antes de 23:59", "Word enviado", "", "P1-15", E, T, P, ""),
 
-    ("P2-01", 2, "Infra", "Desplegar infraestructura dev", "Bootstrap de estado, plan y apply", "Recursos en GCP", "make gcp-setup tf-bootstrap tf-init tf-plan tf-apply", "P1-17", W, "", P, ""),
-    ("P2-02", 2, "Datos", "Cargar Bronze (GCS + BigQuery)", "CSV primero, imágenes después; tablas externas y nativa particionada", "retail_bronze.*", "make ingest-raw bq-bronze", "P2-01", N, W, P, "SQL y script listos"),
-    ("P2-03", 2, "Datos", "Silver con Spark", "Tipado, nulos, cuarentena con motivo, Parquet particionado, reporte conciliado", "pipelines/batch/silver_hm.py", "make silver-gcp", "P2-02", N, W, L, "Local: 546,741 filas, 3 rechazos inyectados detectados, conciliado"),
-    ("P2-04", 2, "Datos", "Silver en BigQuery + vista de eventos", "LOAD DATA de Parquet; eventos deduplicados por event_id", "sql/silver/01_load_silver.sql", "make bq-silver", "P2-03", N, "", L, ""),
-    ("P2-05", 2, "Modelado", "Gold: modelo estrella", "fact_sales, fact_orders, dim_article/customer/date/channel", "sql/gold/01_gold_model.sql", "make bq-gold", "P2-04", N, E, L, ""),
-    ("P2-06", 2, "Streaming", "Replay de eventos 2026", "Transacciones reales re-emitidas con event_id idempotente", "ingestion/streaming/replay_publisher.py", "make replay", "P2-01", W, "", L, "Dry-run sobre datos reales OK"),
+    ("P2-01", 2, "Infra", "Desplegar infraestructura dev", "Bootstrap de estado, plan y apply", "Recursos en GCP", "python ops.py bootstrap; python ops.py apply", "P1-17", W, "", P, ""),
+    ("P2-02", 2, "Datos", "Cargar Bronze (GCS + BigQuery)", "CSV primero, imágenes después; tablas externas y nativa particionada", "retail_bronze.*", "python ops.py subir-datos; python ops.py bronze", "P2-01", N, W, P, "SQL y script listos"),
+    ("P2-03", 2, "Datos", "Silver con Spark", "Tipado, nulos, cuarentena con motivo, Parquet particionado, reporte conciliado", "pipelines/batch/silver_hm.py", "python ops.py silver", "P2-02", N, W, L, "Local: 546,741 filas, 3 rechazos inyectados detectados, conciliado; corregido fn/active"),
+    ("P2-04", 2, "Datos", "Silver en BigQuery + vista de eventos", "LOAD DATA de Parquet; eventos deduplicados por event_id", "sql/silver/01_load_silver.sql", "python ops.py silver", "P2-03", N, "", L, ""),
+    ("P2-05", 2, "Modelado", "Gold: modelo estrella", "fact_sales, fact_orders, dim_article/customer/date/channel", "sql/gold/01_gold_model.sql", "python ops.py gold", "P2-04", N, E, L, ""),
+    ("P2-06", 2, "Streaming", "Replay de eventos 2026", "Transacciones reales re-emitidas con event_id idempotente", "ingestion/streaming/replay_publisher.py", "python ops.py replay", "P2-01", W, "", L, "Dry-run sobre datos reales OK"),
     ("P2-07", 2, "Streaming", "Ruta económica Pub/Sub -> BigQuery", "Suscripción BigQuery con DLQ", "infra/terraform/main.tf", "", "P2-01", W, "", L, ""),
-    ("P2-08", 2, "Streaming", "Pipeline Dataflow", "Validación, dedup, ventanas 1 min, datos tardíos, DLQ, lag p50/p95", "pipelines/streaming/dataflow_events.py", "make dataflow-start / dataflow-stop", "P2-06", W, N, L, "DirectRunner: 350 mensajes -> 300 únicos, 2 a DLQ"),
-    ("P2-09", 2, "ML", "Popularidad y catálogo de servicio", "reco_popular y v_catalog_serving en Gold", "sql/gold/01_gold_model.sql", "make bq-gold", "P2-05", E, N, L, ""),
-    ("P2-10", 2, "ML", "Recomendador baseline + evaluación", "Split temporal, MAP@12: popularidad vs recompra", "docs/evaluacion_recomendador.md", "make reco-eval", "", E, "", H, "MAP@12 0.00875 vs 0.02622 (+200%)"),
+    ("P2-08", 2, "Streaming", "Pipeline Dataflow", "Validación, dedup, ventanas 1 min, datos tardíos, DLQ, lag p50/p95", "pipelines/streaming/dataflow_events.py", "python ops.py dataflow-iniciar / dataflow-detener", "P2-06", W, N, L, "DirectRunner: 350 mensajes -> 300 únicos, 2 a DLQ"),
+    ("P2-09", 2, "ML", "Popularidad y catálogo de servicio", "reco_popular y v_catalog_serving en Gold", "sql/gold/01_gold_model.sql", "python ops.py gold", "P2-05", E, N, L, ""),
+    ("P2-10", 2, "ML", "Recomendador baseline + evaluación", "Split temporal, MAP@12: popularidad vs recompra", "docs/evaluacion_recomendador.md", "python pipelines/reco/baseline_eval.py", "", E, "", H, "MAP@12 0.00875 vs 0.02622 (+200%)"),
     ("P2-11", 2, "Datos", "Diccionario de datos", "Columnas, reglas y linaje Silver/Gold/ops/OLTP", "docs/diccionario_datos.md", "", "", N, "", H, ""),
-    ("P2-12", 2, "BI", "Vistas para tableros", "Ventas mensuales, top artículos, recurrencia, salud streaming", "sql/gold/02_kpi_views.sql", "make bq-gold", "P2-05", G, N, L, ""),
+    ("P2-12", 2, "BI", "Vistas para tableros", "Ventas mensuales, top artículos, recurrencia, salud streaming", "sql/gold/02_kpi_views.sql", "python ops.py gold", "P2-05", G, N, L, ""),
     ("P2-13", 2, "BI", "Dashboard borrador", "Primer tablero Looker Studio sobre las vistas Gold", "Enlace Looker Studio", "", "P2-12", G, "", P, ""),
     ("P2-14", 2, "Gestión", "Informe Entrega 2", "Evidencias: conteos, reporte de calidad, capturas", "Word Entrega 2", "", "P2-02..P2-13", E, T, P, ""),
 
-    ("P3-01", 3, "API", "API FastAPI", "Catálogo, recomendaciones, asistente, carrito, checkout, wallet, pedidos, métricas, OpenAPI /docs", "api/main.py", "make api-local", "", N, W, L, "Pruebas automáticas OK"),
-    ("P3-02", 3, "API", "Wallet transaccional", "Ledger append-only, ACID, idempotencia, sin sobregiro, confirmación explícita", "api/schema.sql", "make test", "", N, "", L, "Test: doble clic = 1 cobro; 409 sin saldo"),
-    ("P3-03", 3, "ML", "Asistente Vertex AI Gemini", "Gemini interpreta; backend busca en catálogo real; respaldo por reglas", "api/assistant.py", "ASSISTANT_MODE=gemini", "P2-01", E, N, L, "Reglas probadas con catálogo real; Gemini requiere GCP"),
+    ("P3-01", 3, "API", "API FastAPI", "Catálogo, recomendaciones, asistente, carrito, checkout, wallet, pedidos, métricas, OpenAPI /docs", "api/main.py", "python ops.py local", "", N, W, L, "Pruebas automáticas OK"),
+    ("P3-02", 3, "API", "Wallet transaccional", "Ledger append-only, ACID, idempotencia, sin sobregiro, confirmación explícita", "api/schema.sql", "python -m unittest discover -s tests", "", N, "", L, "Test: doble clic = 1 cobro; 409 sin saldo"),
+    ("P3-03", 3, "ML", "Asistente Vertex AI Gemini", "Gemini 3.1 Flash-Lite interpreta; backend busca en catálogo real; respaldo por reglas", "api/assistant.py", "Excel: assistant_mode = gemini", "P2-01", E, N, L, "Reglas probadas con catálogo real; Gemini requiere GCP"),
     ("P3-04", 3, "ML", "Recomendaciones en API", "Perfil por grupo + popularidad; cold-start explícito", "api/main.py", "", "", E, "", L, ""),
-    ("P3-05", 3, "API", "Web tienda", "Chat, productos con imagen, carrito, confirmación, saldo, pedidos", "api/static/index.html", "make api-local", "", N, G, L, ""),
-    ("P3-06", 3, "Infra", "Cloud SQL + Cloud Run + secretos", "Terraform de base, servicio, secretos y acceso público", "infra/terraform/cloudsql.tf, cloudrun.tf", "make tf-apply", "P2-01", W, "", L, "tofu validate OK"),
-    ("P3-07", 3, "Infra", "CI/CD sin llaves", "Workload Identity Federation + workflow de despliegue", "infra/terraform/cicd.tf, .github/workflows/deploy.yml", "Actions > deploy-api", "P1-18", W, "", L, ""),
-    ("P3-08", 3, "Datos", "Catálogo Gold -> Cloud SQL", "Cargar v_catalog_serving con Cloud SQL Auth Proxy", "Tabla articles en Cloud SQL", "make catalog-gcp", "P2-09, P3-06", N, W, P, "Local: 105,542 artículos cargados"),
+    ("P3-05", 3, "API", "Web tienda", "Chat, productos con imagen, carrito, confirmación, saldo, pedidos", "api/static/index.html", "python ops.py local", "", N, G, L, ""),
+    ("P3-06", 3, "Infra", "Cloud SQL + Cloud Run + secretos", "Terraform de base, servicio, secretos y acceso público", "infra/terraform/cloudsql.tf, cloudrun.tf", "python ops.py apply", "P2-01", W, "", L, "tofu validate OK"),
+    ("P3-07", 3, "Infra", "CI/CD sin llaves", "Workload Identity Federation + workflow de despliegue", "infra/terraform/cicd.tf, .github/workflows/deploy.yml", "python ops.py github; Actions > deploy-api", "P1-18", W, "", L, ""),
+    ("P3-08", 3, "Datos", "Catálogo Gold -> Cloud SQL", "Cargar v_catalog_serving con Cloud SQL Auth Proxy", "Tabla articles en Cloud SQL", "python ops.py catalogo", "P2-09, P3-06", N, W, P, "Local: 105,542 artículos cargados"),
     ("P3-09", 3, "BI", "Dashboard gerencial", "Ventas, ticket medio, top, recurrencia, recomendador", "Looker Studio", "", "P2-12", G, E, P, ""),
     ("P3-10", 3, "BI", "Dashboard operativo y de costos", "Eventos/min, lag, DLQ, costo real y USD/pedido", "Looker Studio", "", "P2-08, P1-10", G, W, P, ""),
     ("P3-11", 3, "Resiliencia", "Prueba de recuperación", "Clonar Cloud SQL por PITR y restaurar objeto GCS; medir RTO", "docs/runbooks/drp.md", "", "P3-06", W, N, P, "Runbook listo"),
@@ -73,79 +75,31 @@ TAREAS = [
     ("P3-13", 3, "Gestión", "Guion de demo end-to-end", "Caso bebé: asistente -> carrito -> compra -> evento -> Gold -> tablero", "docs/demo_script.md", "", "", E, T, H, ""),
     ("P3-14", 3, "Gestión", "Slides (8 puntos del PDF)", "Resumen, situación, KPI, productos, supuestos, arquitectura, calculadora, demo, conclusiones", "docs/slides/", "", "P3-01..P3-12", G, T, P, ""),
     ("P3-15", 3, "Gestión", "Documento final y trazabilidad", "Word final con evidencias y matriz requisito -> evidencia", "docs/", "", "P3-14", E, T, P, ""),
-    ("P3-16", 3, "Costos", "Apagado post-demo", "Detener Dataflow; destruir recursos demo", "Checklist", "make dataflow-stop tf-destroy", "P3-15", W, "", P, ""),
+    ("P3-16", 3, "Costos", "Apagado post-demo", "Detener Dataflow; destruir recursos demo", "Checklist", "python ops.py dataflow-detener; python ops.py destroy", "P3-15", W, "", P, ""),
 ]
 
-# Paso, #, acción, comando, responsable, variables, verificación
+# Paso, #, acción, comando, responsable, insumo del Excel, verificación
 DESPLIEGUE = [
-    (1, "D01", "Instalar herramientas", "gcloud, terraform >= 1.6, python 3.11, git (docker opcional)", W, "", "gcloud --version; terraform -version"),
-    (1, "D02", "Crear proyecto y vincular facturación", "gcloud projects create $GCP_PROJECT_ID && gcloud billing projects link $GCP_PROJECT_ID --billing-account=$BILLING_ACCOUNT", W, "GCP_PROJECT_ID, BILLING_ACCOUNT", "Proyecto visible en consola con facturación"),
-    (1, "D03", "Autenticarse", "gcloud auth login && gcloud auth application-default login", T, "", "gcloud config list"),
-    (1, "D04", "Configurar variables", "cp .env.example .env; cp infra/terraform/terraform.tfvars.example infra/terraform/terraform.tfvars; editar ambos", W, "Hoja Variables", "make -n tf-plan muestra el proyecto correcto"),
-    (1, "D05", "Publicar repo", "git remote add origin https://github.com/OWNER/REPO.git && git push -u origin main", W, "github_repo", "Workflow ci en verde"),
-    (2, "D06", "Habilitar APIs base y acceso privado", "make gcp-setup", W, "GCP_PROJECT_ID, GCP_REGION", "Subred default con Private Google Access"),
-    (2, "D07", "Bucket de estado de Terraform", "make tf-bootstrap", W, "GCP_PROJECT_ID", "gs://$GCP_PROJECT_ID-tfstate versionado"),
-    (2, "D08", "Inicializar y planificar", "make tf-init tf-plan", W, "terraform.tfvars", "Plan sin errores; revisar recursos y costos"),
-    (2, "D09", "Aplicar infraestructura", "make tf-apply && terraform -chdir=infra/terraform output", W, "", "Buckets, datasets, Pub/Sub, Cloud SQL, Cloud Run creados"),
-    (2, "D10", "Cargar Bronze", "make ingest-raw bq-bronze (luego make ingest-images)", N, "GCS_RAW_BUCKET", "COUNT(*) = 31,788,324 en retail_bronze.transactions"),
-    (2, "D11", "Silver con Spark", "make silver-gcp bq-silver", N, "GCS_LAKE_BUCKET", "_quality_report con conciliado=true"),
-    (2, "D12", "Gold y vistas BI", "make bq-gold", N, "PRICE_DEMO_FACTOR", "Tablas fact_/dim_ y vistas v_*"),
-    (2, "D13", "Streaming de prueba", "make dataflow-start; make replay; make dataflow-stop", W, "PUBSUB_TOPIC", "Filas en retail_ops.stream_metrics_1m y retail_silver.v_events"),
-    (3, "D14", "Variables de GitHub", "Settings > Secrets and variables > Actions > Variables", W, "GCP_PROJECT_ID, GCP_REGION, GCP_WIF_PROVIDER, GCP_DEPLOYER_SA", "Variables creadas"),
-    (3, "D15", "Desplegar API/web", "Actions > deploy-api > Run workflow (o make deploy-api)", W, "", "Smoke test /health y /ready en verde"),
-    (3, "D16", "Cargar catálogo a Cloud SQL", "cloud-sql-proxy $(terraform output -raw cloudsql_connection) & ; export DATABASE_URL=postgresql+pg8000://retail_app:CLAVE@127.0.0.1:5432/retail; make catalog-gcp", N, "DATABASE_URL", "/ready devuelve 105,542 artículos"),
-    (3, "D17", "Recarga de saldo demo", "curl -X POST $API_URL/api/v1/wallet/demo-topups -H 'X-Admin-Token: '$(gcloud secrets versions access latest --secret=retail-admin-token) -H 'Content-Type: application/json' -d '{\"amount_cents\":20000}'", E, "API_URL", "Saldo visible en la web"),
-    (3, "D18", "Tableros", "Looker Studio > Agregar datos > BigQuery > retail_gold.v_* y retail_ops.*", G, "", "Tablero gerencial y operativo"),
-    (3, "D19", "Costos reales", "Consola: Facturación > Exportar a BigQuery (dataset retail_ops); ejecutar cost/real_cost_per_order.sql", W, "billing_account", "Vista v_costo_real_mensual con datos"),
-    (3, "D20", "Apagado", "make dataflow-stop; make tf-destroy (o enable_cloudsql=false y api_min_instances=0)", W, "", "Facturación diaria ~0"),
-]
-
-# Variable, dónde, ejemplo, uso, quién
-VARIABLES = [
-    ("GCP_PROJECT_ID", ".env, GitHub (variable)", "retail-hm-utec-2026", "ID único del proyecto (6-30 caracteres)", W),
-    ("GCP_REGION", ".env, GitHub (variable)", "us-central1", "Región única del prototipo", W),
-    ("BILLING_ACCOUNT", "Shell (solo D02)", "012345-6789AB-CDEF01", "Vincular facturación", W),
-    ("GCS_RAW_BUCKET", ".env", "retail-hm-utec-2026-retail-raw", "Bronze (= output raw_bucket)", W),
-    ("GCS_LAKE_BUCKET", ".env", "retail-hm-utec-2026-retail-lake", "Silver/Gold Parquet y tmp de Dataflow (= output lake_bucket)", W),
-    ("PUBSUB_TOPIC", ".env", "retail-events", "Tópico de eventos", W),
-    ("LOCAL_RAW_DIR", ".env", "data/raw", "Datos H&M locales", N),
-    ("DATABASE_URL", ".env (local) / secreto retail-db-url (nube)", "sqlite:///./data/retail_demo.db", "Base transaccional de la API", N),
-    ("ADMIN_TOKEN", ".env (local) / secreto retail-admin-token (nube)", "cambia-este-token", "Autoriza recargas de saldo demo", N),
-    ("ASSISTANT_MODE", ".env / tfvars assistant_mode", "gemini | rules", "Vertex AI o reglas", E),
-    ("GEMINI_MODEL", ".env / tfvars gemini_model", "gemini-2.5-flash-lite", "Modelo del asistente", E),
-    ("PRICE_DEMO_FACTOR", ".env / tfvars price_demo_factor", "500", "Precio demo = precio H&M x factor (sintético)", E),
-    ("IMAGES_DIR / IMAGES_BUCKET", ".env / automático en Cloud Run", "data/raw/images", "Origen de imágenes", N),
-    ("REPLAY_TARGET_START", ".env", "2026-11-01", "Fecha base de los eventos 2026", W),
-    ("REPLAY_EVENTS_PER_SEC", ".env", "50", "Ritmo del replay", W),
-    ("project_id", "terraform.tfvars", "retail-hm-utec-2026", "Igual a GCP_PROJECT_ID", W),
-    ("region", "terraform.tfvars", "us-central1", "Igual a GCP_REGION", W),
-    ("env", "terraform.tfvars", "dev", "Sufijo de recursos (dev/demo/prod)", W),
-    ("billing_account", "terraform.tfvars", "012345-6789AB-CDEF01", "Crea presupuesto con alertas; vacío = no", W),
-    ("monthly_budget_usd", "terraform.tfvars", "50", "Monto del presupuesto", G),
-    ("enable_cloudsql", "terraform.tfvars", "true", "Base transaccional (USD 8-11/mes)", W),
-    ("cloudsql_tier / cloudsql_ha", "terraform.tfvars", "db-f1-micro / false", "Tamaño y alta disponibilidad", W),
-    ("cloudsql_deletion_protection", "terraform.tfvars", "false", "true en producción", W),
-    ("enable_cloud_run / api_public", "terraform.tfvars", "true / true", "Servicio web/API y acceso público", W),
-    ("api_min_instances / api_max_instances", "terraform.tfvars", "0 / 3", "Escalado (min=1 en la demo evita arranque en frío)", W),
-    ("api_image", "terraform.tfvars", "(por defecto hello)", "Imagen inicial; luego la publica GitHub Actions", W),
-    ("assistant_mode / gemini_model / price_demo_factor", "terraform.tfvars", "gemini / gemini-2.5-flash-lite / 500", "Configuración de la API en Cloud Run", E),
-    ("github_repo", "terraform.tfvars", "OWNER/REPO", "Habilita WIF para desplegar desde GitHub", W),
-    ("pubsub_topic", "terraform.tfvars", "retail-events", "Nombre del tópico", W),
-    ("GCP_WIF_PROVIDER", "GitHub (variable)", "terraform output -raw wif_provider", "Autenticación sin llaves", W),
-    ("GCP_DEPLOYER_SA", "GitHub (variable)", "terraform output -raw deployer_sa", "Cuenta que despliega", W),
-    ("API_URL", "Shell", "terraform output -raw api_url", "URL pública de la tienda", W),
-]
-
-RECURSOS = [
-    ("Bucket estado Terraform", "${project}-tfstate", "make tf-bootstrap"), ("Bucket Bronze", "${project}-retail-raw", "main.tf"),
-    ("Bucket Silver/Gold", "${project}-retail-lake", "main.tf"), ("Datasets BigQuery", "retail_bronze, retail_silver, retail_gold, retail_ops", "main.tf"),
-    ("Tópicos Pub/Sub", "retail-events, retail-events-dlq, billing-budget-alerts", "main.tf"),
-    ("Suscripciones", "retail-events-to-bq, retail-events-dataflow", "main.tf"),
-    ("Cuentas de servicio", "sa-retail-ingest, sa-retail-pipeline, sa-retail-api, sa-retail-deployer", "main.tf, cicd.tf"),
-    ("Artifact Registry", "retail", "main.tf"), ("Cloud SQL", "retail-pg-${env} / base retail / usuario retail_app", "cloudsql.tf"),
-    ("Secretos", "retail-db-url, retail-admin-token", "cloudsql.tf"), ("Cloud Run", "retail-api", "cloudrun.tf"),
-    ("Workload Identity", "pool github-${env} / provider github-oidc", "cicd.tf"), ("Presupuesto", "retail-bigdata-${env}", "main.tf"),
-    ("Job Dataflow", "retail-events", "make dataflow-start"), ("Tablas operativas", "retail_ops.stream_metrics_1m, retail_ops.stream_dlq", "Dataflow"),
+    (1, "D01", "Instalar herramientas", "Google Cloud CLI, Terraform >= 1.6, Python 3.10-3.12, git (o usar Cloud Shell, que ya las trae)", W, "", "gcloud --version; terraform -version"),
+    (1, "D02", "Crear proyecto y vincular facturación", "gcloud projects create <project_id>; gcloud billing projects link <project_id> --billing-account=<cuenta>", W, "Parametros: project_id, billing_account", "Proyecto con facturación en consola"),
+    (1, "D03", "Completar el Excel de control", "Editar celdas amarillas de config/control_plataforma.xlsx (mínimo project_id y emails del equipo)", T, "Parametros, Usuarios", "python ops.py config sin errores"),
+    (1, "D04", "Autenticarse", "gcloud auth login; gcloud auth application-default login (en Cloud Shell no hace falta)", T, "", "gcloud config list"),
+    (1, "D05", "Instalar dependencias", "pip install -r requirements.txt", T, "", "python ops.py estado"),
+    (1, "D06", "Publicar repo", "git remote add origin https://github.com/OWNER/REPO.git; git push -u origin main", W, "Parametros: github_repo", "Workflow ci en verde"),
+    (2, "D07", "Preparar proyecto", "python ops.py bootstrap", W, "APIs, Parametros: region, dataproc_subnet, bucket_tfstate_suffix", "APIs activas, bucket de estado, terraform init"),
+    (2, "D08", "Revisar plan", "python ops.py plan", W, "Todas las hojas", "Plan sin errores; recursos esperados"),
+    (2, "D09", "Crear infraestructura", "python ops.py apply", W, "Todas las hojas", "Buckets, datasets, tablas, Pub/Sub, IAM, Cloud SQL, Cloud Run"),
+    (2, "D10", "Subir datos H&M (desde la PC con data/raw)", "python ops.py subir-datos  (imágenes: --con-imagenes)", N, "Parametros: local_raw_dir, bucket_raw_suffix", "gs://<bucket raw>/hm/*.csv"),
+    (2, "D11", "Bronze", "python ops.py bronze", N, "Datasets, Tablas", "31,788,324 filas en bronze.transactions"),
+    (2, "D12", "Silver (Serverless Spark)", "python ops.py silver", N, "Parametros: dataproc_runtime", "_quality_report conciliado=true"),
+    (2, "D13", "Gold y vistas BI", "python ops.py gold", N, "Parametros: price_demo_factor", "Tablas fact_/dim_ y vistas v_*"),
+    (2, "D14", "Streaming de prueba", "python ops.py dataflow-iniciar; python ops.py replay; python ops.py dataflow-detener", W, "Parametros: dataflow_*, replay_*", "Filas en ops.stream_metrics_1m y silver.v_events"),
+    (3, "D15", "API, web y catálogo", "python ops.py api", N, "Parametros: cloudrun_*, assistant_mode, gemini_model; Usuarios (app)", "URL pública; /ready con 105,542 artículos"),
+    (3, "D16", "Verificar contra el Excel", "python ops.py verificar", T, "Tablas, Columnas", "Matriz tabla por tabla: OK / FALTA / DIFERENTE"),
+    (3, "D17", "Despliegue desde GitHub", "python ops.py github -> crear variable GCP_WIF_PROVIDER -> Actions > deploy-api", W, "Parametros: github_repo", "Workflow deploy-api en verde"),
+    (3, "D18", "Tableros", "Looker Studio > Agregar datos > BigQuery > gold.v_* y ops.*", G, "Tablas (vistas)", "Tablero gerencial y operativo"),
+    (3, "D19", "Costos reales", "Consola: exportar facturación a BigQuery (dataset ops) -> Excel billing_export_table -> python ops.py costo-real", W, "Parametros: billing_export_table", "ops.v_costo_real_mensual con datos"),
+    (3, "D20", "Apagado", "python ops.py dataflow-detener; python ops.py destroy", W, "Parametros: force_destroy_buckets", "Facturación diaria ~0"),
 ]
 
 FONT, BOLD = Font(name="Arial", size=10), Font(name="Arial", size=10, bold=True)
@@ -207,10 +161,8 @@ def build_xlsx(out):
         for c in range(4, 9):
             wp.cell(r, c).font, wp.cell(r, c).border = FONT, BRD
 
-    sheet(wb, "Despliegue", ["Paso", "#", "Acción", "Comando", "Responsable", "Variables", "Verificación"],
-          [6, 6, 30, 70, 16, 30, 40], [list(d) for d in DESPLIEGUE])
-    sheet(wb, "Variables", ["Variable", "Dónde se define", "Ejemplo", "Uso", "Quién"], [34, 34, 34, 46, 16], [list(v) for v in VARIABLES])
-    sheet(wb, "Recursos GCP", ["Recurso", "Nombre", "Definido en"], [24, 60, 22], [list(x) for x in RECURSOS])
+    sheet(wb, "Despliegue", ["Paso", "#", "Acción", "Comando", "Responsable", "Insumo del Excel de control", "Verificación"],
+          [6, 6, 30, 70, 16, 34, 40], [list(d) for d in DESPLIEGUE])
 
     wr = wb.create_sheet("Resumen", 0)
     for i, (c, w) in enumerate(zip(["Paso", "Entrega", "Fecha", "Tareas", "Hechas", "Listas p/desplegar", "Pendientes", "% hecho", "% código listo"],
@@ -241,7 +193,7 @@ def build_xlsx(out):
              "Paso 1 = Entrega 1 (24-oct) · Paso 2 = Entrega 2 (07-nov) · Paso 3 = repositorio 20-nov y sustentación 21-nov.",
              "Hecho = terminado con evidencia. Listo para desplegar = código probado localmente; falta ejecutarlo en GCP.",
              "Estado se elige en la hoja Matriz (lista desplegable); '¿Hecho?', perfiles y resumen se recalculan solos.",
-             "Hojas Despliegue, Variables y Recursos GCP: guía para Terraform. Detalle en docs/DEPLOY.md."]
+             "Despliegue: orden de comandos. Parámetros, nombres, tablas, columnas, usuarios y permisos: config/control_plataforma.xlsx."]
     for i, t in enumerate(notas):
         wr.cell(8 + i, 1, t).font = BOLD if i == 0 else FONT
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -254,20 +206,29 @@ def md_table(cols, rows):
 
 
 def build_md(out):
-    txt = ["# Despliegue en GCP con Terraform", "",
-           "Orden de ejecución por paso. Todos los nombres de variables y recursos están fijados aquí y en `infra/terraform`.", "",
-           "## Pasos", "", md_table(["Paso", "#", "Acción", "Comando", "Responsable", "Variables", "Verificación"], DESPLIEGUE), "",
-           "## Variables", "", md_table(["Variable", "Dónde se define", "Ejemplo", "Uso", "Quién"], VARIABLES), "",
-           "## Recursos que crea", "", md_table(["Recurso", "Nombre", "Definido en"], RECURSOS), "",
+    txt = ["# Despliegue en GCP", "",
+           "Todos los inputs (parámetros, nombres, tablas, columnas, usuarios iniciales y permisos) están en "
+           "`config/control_plataforma.xlsx`. `python ops.py config` los valida y genera las variables de Terraform "
+           "(`infra/terraform/plataforma.auto.tfvars.json`), la configuración de ops (`config/generated/plataforma.json`) "
+           "y las semillas de la API (`api/seed.json`).", "",
+           "## Dónde ejecutar", "",
+           "| Paso | Dónde | Por qué |", "|---|---|---|",
+           "| subir-datos, local | PC con `data/raw` | Los 3.9 GB de CSV (y 29 GB de imágenes) están ahí |",
+           "| todo lo demás | Google Cloud Shell (recomendado) o la PC | Cloud Shell ya trae gcloud, Terraform, Python y Docker y está autenticado |", "",
+           "## Pasos", "", md_table(["Paso", "#", "Acción", "Comando", "Responsable", "Insumo del Excel", "Verificación"], DESPLIEGUE), "",
+           "## Atajo", "", "```bash", "python ops.py config", "python ops.py todo     # bootstrap, apply, bronze, silver, gold, api, verificar",
+           "```", "", "Requiere haber subido antes los datos con `python ops.py subir-datos` desde la PC.", "",
            "## Notas", "",
-           "- `plan` antes de `apply`; la CI solo ejecuta `fmt` y `validate`, nunca `apply`.",
-           "- Dataflow cobra mientras corre: encenderlo solo para la demo (`make dataflow-start` / `make dataflow-stop`).",
-           "- El estado de Terraform vive en `gs://$GCP_PROJECT_ID-tfstate` (versionado); nunca en Git.",
-           "- Vertex AI Gemini no es gratuito (~USD 0.0005 por conversación); `assistant_mode = \"rules\"` lo evita."]
+           "- `plan` antes de `apply`; la CI solo ejecuta `config --check`, pruebas, `fmt` y `validate`, nunca `apply`.",
+           "- Dataflow cobra mientras corre: encenderlo solo para la demo.",
+           "- El estado de Terraform vive en `gs://<project_id>-tfstate/retail/<env>` (versionado); nunca en Git.",
+           "- Contraseñas y tokens no van en el Excel: Terraform los genera en Secret Manager.",
+           "- Vertex AI Gemini no es gratuito (~USD 0.0014 por conversación con 3.1 Flash-Lite); `assistant_mode = rules` lo evita.",
+           "- `roles/owner` no se puede otorgar por API: quien crea el proyecto ya lo tiene; al resto se les da roles desde la hoja Usuarios."]
     out.write_text("\n".join(txt) + "\n", encoding="utf-8")
 
 
 if __name__ == "__main__":
     build_xlsx(ROOT / "docs/gestion/Matriz_Auditoria_Proyecto.xlsx")
     build_md(ROOT / "docs/DEPLOY.md")
-    print(len(TAREAS), "tareas,", len(DESPLIEGUE), "pasos de despliegue,", len(VARIABLES), "variables")
+    print(len(TAREAS), "tareas,", len(DESPLIEGUE), "pasos de despliegue,")

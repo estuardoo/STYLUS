@@ -4,8 +4,7 @@ terraform {
     google = { source = "hashicorp/google", version = "~> 6.0" }
     random = { source = "hashicorp/random", version = "~> 3.6" }
   }
-  # Estado remoto en GCS. Bucket creado una vez con: make tf-bootstrap
-  backend "gcs" {}
+  backend "gcs" {} # bucket y prefix: python ops.py bootstrap
 }
 
 provider "google" {
@@ -13,38 +12,33 @@ provider "google" {
   region                = var.region
   billing_project       = var.project_id
   user_project_override = true
-}
-
-locals {
-  labels = { proyecto = "retail-bigdata", entorno = var.env, curso = "utec-bigdata" }
-  apis = [
-    "storage.googleapis.com", "bigquery.googleapis.com", "pubsub.googleapis.com",
-    "dataflow.googleapis.com", "dataproc.googleapis.com", "run.googleapis.com",
-    "aiplatform.googleapis.com", "sqladmin.googleapis.com", "secretmanager.googleapis.com",
-    "artifactregistry.googleapis.com", "billingbudgets.googleapis.com",
-    "cloudbilling.googleapis.com", "monitoring.googleapis.com", "logging.googleapis.com",
-  ]
+  default_labels        = var.labels
 }
 
 resource "google_project_service" "apis" {
-  for_each           = toset(local.apis)
+  for_each           = toset(var.apis)
   service            = each.value
   disable_on_destroy = false
 }
 
-# ---------- Almacenamiento: Data Lake (medallion) ----------
-# raw = Bronze inmutable (copia exacta de H&M); lake = Silver/Gold en Parquet
+data "google_project" "this" {}
+
+data "google_compute_default_service_account" "default" {
+  depends_on = [google_project_service.apis]
+}
+
+# ---------- Data Lake (medallion) ----------
 resource "google_storage_bucket" "raw" {
-  name                        = "${var.project_id}-retail-raw"
+  name                        = var.buckets.raw
   location                    = var.region
   uniform_bucket_level_access = true
   public_access_prevention    = "enforced"
-  labels                      = local.labels
+  force_destroy               = var.force_destroy_buckets
   versioning { enabled = true }
 
-  lifecycle_rule { # imágenes poco consultadas -> Nearline
+  lifecycle_rule {
     condition {
-      age            = 30
+      age            = var.images_nearline_days
       matches_prefix = ["hm/images/"]
     }
     action {
@@ -52,130 +46,182 @@ resource "google_storage_bucket" "raw" {
       storage_class = "NEARLINE"
     }
   }
-  lifecycle_rule { # versiones antiguas se borran a los 30 días
+  lifecycle_rule {
     condition {
-      days_since_noncurrent_time = 30
+      days_since_noncurrent_time = var.noncurrent_version_days
       with_state                 = "ARCHIVED"
     }
     action { type = "Delete" }
   }
+  depends_on = [google_project_service.apis]
 }
 
 resource "google_storage_bucket" "lake" {
-  name                        = "${var.project_id}-retail-lake"
+  name                        = var.buckets.lake
   location                    = var.region
   uniform_bucket_level_access = true
   public_access_prevention    = "enforced"
-  labels                      = local.labels
+  force_destroy               = var.force_destroy_buckets
   versioning { enabled = true }
+
+  lifecycle_rule {
+    condition {
+      days_since_noncurrent_time = var.noncurrent_version_days
+      with_state                 = "ARCHIVED"
+    }
+    action { type = "Delete" }
+  }
+  depends_on = [google_project_service.apis]
 }
 
 # ---------- Data Warehouse ----------
-resource "google_bigquery_dataset" "layers" {
-  for_each   = toset(["bronze", "silver", "gold", "ops"])
-  dataset_id = "retail_${each.value}"
-  location   = var.region
-  labels     = local.labels
+resource "google_bigquery_dataset" "ds" {
+  for_each                   = var.datasets
+  dataset_id                 = each.value.dataset_id
+  description                = each.value.description
+  location                   = var.region
+  delete_contents_on_destroy = each.value.delete_contents_on_destroy
+  depends_on                 = [google_project_service.apis]
 }
 
-# Tabla destino de la suscripción Pub/Sub -> BigQuery (ruta streaming económica)
-resource "google_bigquery_table" "events_raw" {
-  dataset_id          = google_bigquery_dataset.layers["bronze"].dataset_id
-  table_id            = "events_raw"
+# Solo tablas con creado_por = terraform en la hoja Tablas (las demás las crea SQL/Spark)
+resource "google_bigquery_table" "t" {
+  for_each            = { for t in var.tables : "${t.dataset}.${t.table_id}" => t }
+  dataset_id          = google_bigquery_dataset.ds[each.value.dataset].dataset_id
+  table_id            = each.value.table_id
+  description         = each.value.description
+  schema              = each.value.schema
+  clustering          = length(each.value.clustering) > 0 ? each.value.clustering : null
   deletion_protection = false
-  time_partitioning {
-    type  = "DAY"
-    field = "publish_time"
+
+  dynamic "time_partitioning" {
+    for_each = each.value.partition_field == "" ? [] : [each.value.partition_field]
+    content {
+      type  = "DAY"
+      field = time_partitioning.value
+    }
   }
-  schema = jsonencode([
-    { name = "subscription_name", type = "STRING" },
-    { name = "message_id", type = "STRING" },
-    { name = "publish_time", type = "TIMESTAMP" },
-    { name = "data", type = "STRING" },
-    { name = "attributes", type = "STRING" },
-  ])
 }
 
 # ---------- Streaming ----------
 resource "google_pubsub_topic" "events" {
-  name   = var.pubsub_topic
-  labels = local.labels
+  name       = var.pubsub.topic
+  depends_on = [google_project_service.apis]
 }
 
-resource "google_pubsub_topic" "events_dlq" {
-  name   = "${var.pubsub_topic}-dlq"
-  labels = local.labels
+resource "google_pubsub_topic" "dlq" {
+  name       = var.pubsub.dlq_topic
+  depends_on = [google_project_service.apis]
 }
 
-resource "google_pubsub_subscription" "events_to_bq" {
-  name  = "${var.pubsub_topic}-to-bq"
+resource "google_pubsub_subscription" "bq" {
+  name  = var.pubsub.bq_subscription
   topic = google_pubsub_topic.events.id
   bigquery_config {
-    table          = "${var.project_id}.${google_bigquery_table.events_raw.dataset_id}.${google_bigquery_table.events_raw.table_id}"
+    table          = "${var.project_id}.${google_bigquery_table.t[var.pubsub.bq_table].dataset_id}.${google_bigquery_table.t[var.pubsub.bq_table].table_id}"
     write_metadata = true
   }
   dead_letter_policy {
-    dead_letter_topic     = google_pubsub_topic.events_dlq.id
-    max_delivery_attempts = 5
+    dead_letter_topic     = google_pubsub_topic.dlq.id
+    max_delivery_attempts = var.pubsub.max_delivery_attempts
   }
-  depends_on = [google_project_iam_member.pubsub_bq]
+  depends_on = [google_bigquery_dataset_iam_member.iam, google_project_iam_member.iam]
 }
 
-# Suscripción pull para el job Dataflow (enriquecimiento con ventanas) en demo
-resource "google_pubsub_subscription" "events_dataflow" {
-  name                       = "${var.pubsub_topic}-dataflow"
+resource "google_pubsub_subscription" "dataflow" {
+  name                       = var.pubsub.dataflow_subscription
   topic                      = google_pubsub_topic.events.id
   ack_deadline_seconds       = 60
-  message_retention_duration = "86400s"
+  message_retention_duration = var.pubsub.retention
   dead_letter_policy {
-    dead_letter_topic     = google_pubsub_topic.events_dlq.id
-    max_delivery_attempts = 5
+    dead_letter_topic     = google_pubsub_topic.dlq.id
+    max_delivery_attempts = var.pubsub.max_delivery_attempts
   }
 }
 
-data "google_project" "this" {}
-
-# El agente de Pub/Sub necesita escribir en BigQuery
-resource "google_project_iam_member" "pubsub_bq" {
-  for_each = toset(["roles/bigquery.dataEditor", "roles/bigquery.metadataViewer"])
-  project  = var.project_id
-  role     = each.value
-  member   = "serviceAccount:service-${data.google_project.this.number}@gcp-sa-pubsub.iam.gserviceaccount.com"
+# Sin suscripción, los mensajes enviados a la DLQ se perderían
+resource "google_pubsub_subscription" "dlq" {
+  name                       = var.pubsub.dlq_subscription
+  topic                      = google_pubsub_topic.dlq.id
+  message_retention_duration = "604800s"
 }
 
-# ---------- Identidades (mínimo privilegio) ----------
-locals {
-  sa_roles = {
-    ingest   = ["roles/storage.objectAdmin", "roles/bigquery.jobUser", "roles/bigquery.dataEditor", "roles/pubsub.publisher"]
-    pipeline = ["roles/dataflow.worker", "roles/dataproc.worker", "roles/storage.objectAdmin", "roles/bigquery.dataEditor", "roles/bigquery.jobUser", "roles/pubsub.subscriber", "roles/pubsub.viewer"]
-    api      = ["roles/bigquery.dataViewer", "roles/bigquery.jobUser", "roles/aiplatform.user", "roles/cloudsql.client", "roles/secretmanager.secretAccessor", "roles/pubsub.publisher"]
-  }
-  sa_bindings = flatten([for sa, roles in local.sa_roles : [for r in roles : { sa = sa, role = r }]])
-}
-
+# ---------- Identidades y permisos (hoja Permisos y Usuarios) ----------
 resource "google_service_account" "sa" {
-  for_each     = local.sa_roles
-  account_id   = "sa-retail-${each.key}"
-  display_name = "Retail ${each.key}"
+  for_each     = var.service_accounts
+  account_id   = each.value.account_id
+  display_name = each.value.display_name
+  description  = each.value.description
+  depends_on   = [google_project_service.apis]
 }
 
-resource "google_project_iam_member" "sa_roles" {
-  for_each = { for b in local.sa_bindings : "${b.sa}-${b.role}" => b }
+locals {
+  members = merge(
+    { for k, s in google_service_account.sa : "sa:${k}" => s.member },
+    {
+      "compute-default" = "serviceAccount:${data.google_compute_default_service_account.default.email}"
+      "pubsub-agent"    = "serviceAccount:service-${data.google_project.this.number}@gcp-sa-pubsub.iam.gserviceaccount.com"
+    }
+  )
+  iam     = { for b in var.iam : "${b.member}|${b.role}|${b.scope}" => merge(b, { m = lookup(local.members, b.member, b.member) }) }
+  buckets = { raw = google_storage_bucket.raw.name, lake = google_storage_bucket.lake.name }
+  topics  = { events = google_pubsub_topic.events.name, dlq = google_pubsub_topic.dlq.name }
+  subs    = { bq = google_pubsub_subscription.bq.name, dataflow = google_pubsub_subscription.dataflow.name }
+}
+
+resource "google_project_iam_member" "iam" {
+  for_each = { for k, b in local.iam : k => b if b.scope == "project" }
   project  = var.project_id
   role     = each.value.role
-  member   = "serviceAccount:${google_service_account.sa[each.value.sa].email}"
+  member   = each.value.m
+}
+
+resource "google_storage_bucket_iam_member" "iam" {
+  for_each = { for k, b in local.iam : k => b if startswith(b.scope, "bucket:") }
+  bucket   = local.buckets[trimprefix(each.value.scope, "bucket:")]
+  role     = each.value.role
+  member   = each.value.m
+}
+
+resource "google_bigquery_dataset_iam_member" "iam" {
+  for_each   = { for k, b in local.iam : k => b if startswith(b.scope, "dataset:") }
+  dataset_id = google_bigquery_dataset.ds[trimprefix(each.value.scope, "dataset:")].dataset_id
+  role       = each.value.role
+  member     = each.value.m
+}
+
+resource "google_pubsub_topic_iam_member" "iam" {
+  for_each = { for k, b in local.iam : k => b if startswith(b.scope, "topic:") }
+  topic    = local.topics[trimprefix(each.value.scope, "topic:")]
+  role     = each.value.role
+  member   = each.value.m
+}
+
+resource "google_pubsub_subscription_iam_member" "iam" {
+  for_each     = { for k, b in local.iam : k => b if startswith(b.scope, "subscription:") }
+  subscription = local.subs[trimprefix(each.value.scope, "subscription:")]
+  role         = each.value.role
+  member       = each.value.m
+}
+
+resource "google_service_account_iam_member" "iam" {
+  for_each           = { for k, b in local.iam : k => b if startswith(b.scope, "sa:") }
+  service_account_id = google_service_account.sa[trimprefix(each.value.scope, "sa:")].name
+  role               = each.value.role
+  member             = each.value.m
 }
 
 resource "google_artifact_registry_repository" "containers" {
   location      = var.region
-  repository_id = "retail"
+  repository_id = var.artifact_repo
   format        = "DOCKER"
-  labels        = local.labels
+  depends_on    = [google_project_service.apis]
 }
 
-# ---------- Control de costos automatizado ----------
-resource "google_pubsub_topic" "budget_alerts" {
-  name = "billing-budget-alerts"
+# ---------- Control de costos ----------
+resource "google_pubsub_topic" "budget" {
+  name       = var.budget_topic
+  depends_on = [google_project_service.apis]
 }
 
 resource "google_billing_budget" "project" {
@@ -193,7 +239,7 @@ resource "google_billing_budget" "project" {
   }
 
   dynamic "threshold_rules" {
-    for_each = [0.5, 0.9, 1.0]
+    for_each = var.budget_thresholds
     content { threshold_percent = threshold_rules.value }
   }
   threshold_rules {
@@ -202,14 +248,7 @@ resource "google_billing_budget" "project" {
   }
 
   all_updates_rule {
-    pubsub_topic   = google_pubsub_topic.budget_alerts.id
+    pubsub_topic   = google_pubsub_topic.budget.id
     schema_version = "1.0"
   }
-}
-
-# La API lee las imágenes H&M del bucket privado (solo lectura)
-resource "google_storage_bucket_iam_member" "api_images" {
-  bucket = google_storage_bucket.raw.name
-  role   = "roles/storage.objectViewer"
-  member = "serviceAccount:${google_service_account.sa["api"].email}"
 }

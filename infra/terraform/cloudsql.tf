@@ -1,4 +1,8 @@
 # ---------- Base transaccional (carrito, pedidos, wallet) ----------
+resource "random_id" "sql" {
+  byte_length = 2 # los nombres de Cloud SQL no se pueden reutilizar por ~1 semana tras borrar
+}
+
 resource "random_password" "db" {
   length  = 24
   special = false
@@ -10,22 +14,22 @@ resource "random_password" "admin_token" {
 }
 
 resource "google_sql_database_instance" "main" {
-  count               = var.enable_cloudsql ? 1 : 0
-  name                = "retail-pg-${var.env}"
-  database_version    = "POSTGRES_15"
+  count               = var.cloudsql.enabled ? 1 : 0
+  name                = "${var.cloudsql.instance}-${var.env}-${random_id.sql.hex}"
+  database_version    = var.cloudsql.version
   region              = var.region
-  deletion_protection = var.cloudsql_deletion_protection
+  deletion_protection = var.cloudsql.deletion_protection
 
   settings {
-    tier              = var.cloudsql_tier
+    tier              = var.cloudsql.tier
     edition           = "ENTERPRISE"
-    availability_type = var.cloudsql_ha ? "REGIONAL" : "ZONAL"
-    disk_size         = 10
-    user_labels       = local.labels
+    availability_type = var.cloudsql.ha ? "REGIONAL" : "ZONAL"
+    disk_size         = var.cloudsql.disk_gb
+    user_labels       = var.labels
     backup_configuration {
       enabled                        = true
-      point_in_time_recovery_enabled = true # RPO <= 5 min
-      start_time                     = "06:00"
+      point_in_time_recovery_enabled = true
+      start_time                     = var.cloudsql.backup_start
     }
     ip_configuration {
       ipv4_enabled = true # sin redes autorizadas: solo conector Cloud SQL con IAM
@@ -35,29 +39,21 @@ resource "google_sql_database_instance" "main" {
 }
 
 resource "google_sql_database" "app" {
-  count    = var.enable_cloudsql ? 1 : 0
-  name     = "retail"
+  count    = var.cloudsql.enabled ? 1 : 0
+  name     = var.cloudsql.db_name
   instance = google_sql_database_instance.main[0].name
 }
 
 resource "google_sql_user" "app" {
-  count    = var.enable_cloudsql ? 1 : 0
-  name     = "retail_app"
+  count    = var.cloudsql.enabled ? 1 : 0
+  name     = var.cloudsql.user
   instance = google_sql_database_instance.main[0].name
   password = random_password.db.result
 }
 
-locals {
-  db_url = var.enable_cloudsql ? join("", [
-    "postgresql+pg8000://retail_app:", random_password.db.result, "@/retail?unix_sock=/cloudsql/",
-    google_sql_database_instance.main[0].connection_name, "/.s.PGSQL.5432"
-  ]) : ""
-}
-
-resource "google_secret_manager_secret" "app" {
-  for_each  = toset(var.enable_cloudsql ? ["retail-db-url", "retail-admin-token"] : [])
-  secret_id = each.value
-  labels    = local.labels
+resource "google_secret_manager_secret" "db_url" {
+  count     = var.cloudsql.enabled ? 1 : 0
+  secret_id = var.secrets.db_url
   replication {
     auto {}
   }
@@ -65,13 +61,23 @@ resource "google_secret_manager_secret" "app" {
 }
 
 resource "google_secret_manager_secret_version" "db_url" {
-  count       = var.enable_cloudsql ? 1 : 0
-  secret      = google_secret_manager_secret.app["retail-db-url"].id
-  secret_data = local.db_url
+  count  = var.cloudsql.enabled ? 1 : 0
+  secret = google_secret_manager_secret.db_url[0].id
+  secret_data = join("", [
+    "postgresql+pg8000://", var.cloudsql.user, ":", random_password.db.result, "@/", var.cloudsql.db_name,
+    "?unix_sock=/cloudsql/", google_sql_database_instance.main[0].connection_name, "/.s.PGSQL.5432"
+  ])
+}
+
+resource "google_secret_manager_secret" "admin_token" {
+  secret_id = var.secrets.admin_token
+  replication {
+    auto {}
+  }
+  depends_on = [google_project_service.apis]
 }
 
 resource "google_secret_manager_secret_version" "admin_token" {
-  count       = var.enable_cloudsql ? 1 : 0
-  secret      = google_secret_manager_secret.app["retail-admin-token"].id
+  secret      = google_secret_manager_secret.admin_token.id
   secret_data = random_password.admin_token.result
 }

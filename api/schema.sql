@@ -52,7 +52,4 @@ CREATE TABLE IF NOT EXISTS wallet_ledger (     -- append-only: recargas (+) y co
   ref           TEXT,
   created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-CREATE INDEX IF NOT EXISTS ix_ledger_user ON wallet_ledger (user_id);
-
-INSERT INTO users (user_id, nombre) VALUES ('demo', 'Usuario demo') ON CONFLICT DO NOTHING;
-INSERT INTO users (user_id, nombre) VALUES ('demo2', 'Usuario demo 2') ON CONFLICT DO NOTHING
+CREATE INDEX IF NOT EXISTS ix_ledger_user ON wallet_ledger (user_id)

@@ -20,6 +20,7 @@ HERE = Path(__file__).parent
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./data/retail_demo.db")
 ADMIN_TOKEN = os.getenv("ADMIN_TOKEN", "")
 TOPUP_MAX = int(os.getenv("DEMO_TOPUP_MAX_CENTS", "50000"))
+SEED_FILE = Path(os.getenv("SEED_FILE", HERE / "seed.json"))  # generado desde el Excel de control
 PRICE_DEMO_FACTOR = float(os.getenv("PRICE_DEMO_FACTOR", "500"))
 log = logging.getLogger("api")
 
@@ -35,6 +36,14 @@ def init_db():
         for f in files:
             for stmt in filter(str.strip, (HERE / f).read_text(encoding="utf-8").split(";")):
                 c.execute(text(stmt))
+        users = json.loads(SEED_FILE.read_text(encoding="utf-8"))["users"] if SEED_FILE.exists() else []
+        for u in users:  # idempotente: no duplica usuarios ni saldo inicial
+            c.execute(text("INSERT INTO users (user_id, nombre) VALUES (:u, :n) ON CONFLICT DO NOTHING"),
+                      {"u": u["user_id"], "n": u["nombre"]})
+            if u.get("saldo_inicial_cents"):
+                c.execute(text("INSERT INTO wallet_ledger (entry_id, user_id, amount_cents, kind, ref) "
+                               "VALUES (:e, :u, :m, 'demo_topup', 'seed') ON CONFLICT DO NOTHING"),
+                          {"e": f"seed-{u['user_id']}", "u": u["user_id"], "m": int(u["saldo_inicial_cents"])})
 
 
 @app.on_event("startup")
@@ -84,15 +93,21 @@ def tipos_validos():
         return [r[0] for r in c.execute(text("SELECT DISTINCT product_type FROM articles WHERE product_type IS NOT NULL"))]
 
 
+_PUBLISHER = None
+
+
 def publish_purchase_events(order_id, uid, lines):
     """Cierra el ciclo E2E: cada compra viaja por Pub/Sub -> BigQuery como en el replay."""
+    global _PUBLISHER
     topic, project = os.getenv("PUBSUB_TOPIC"), os.getenv("GCP_PROJECT_ID")
     if not (topic and project):
         return
     try:
         from google.cloud import pubsub_v1
-        pub = pubsub_v1.PublisherClient()
+        _PUBLISHER = _PUBLISHER or pubsub_v1.PublisherClient()
+        pub = _PUBLISHER
         path = pub.topic_path(project, topic)
+        futures = []
         now = dt.datetime.now(dt.timezone.utc).isoformat()
         for i, l in enumerate(lines):
             ev = {"event_id": f"{order_id}-{i}", "event_type": "purchase", "event_time": now,
@@ -100,7 +115,9 @@ def publish_purchase_events(order_id, uid, lines):
                   "price": round(l["price_cents"] / 100 / PRICE_DEMO_FACTOR, 6), "sales_channel_id": 2,
                   "qty": l["qty"], "order_id": order_id, "source_system": "web_demo", "schema_version": 1,
                   "is_synthetic": True, "simulation_run_id": "web", "simulated_at": now}
-            pub.publish(path, json.dumps(ev).encode(), event_type="purchase", event_id=ev["event_id"])
+            futures.append(pub.publish(path, json.dumps(ev).encode(), event_type="purchase", event_id=ev["event_id"]))
+        for f in futures:  # esperar: Cloud Run limita CPU tras responder y el mensaje se perdería
+            f.result(timeout=10)
     except Exception:  # la compra ya está confirmada en la base; el evento no debe romperla
         log.exception("no se pudo publicar el evento de compra %s", order_id)
 

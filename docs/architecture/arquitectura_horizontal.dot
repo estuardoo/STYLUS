@@ -27,7 +27,7 @@ digraph G {
   }
   subgraph cluster_exp { label="5. EXPOSICIÓN"; style="rounded,filled"; fillcolor="#F4ECF8"; color="#D9C6E6";
     api  [label="FastAPI · Cloud Run\n/catalog /recommendations\n/assistant /cart /checkout"];
-    gem  [label="Vertex AI\nGemini 2.5 Flash-Lite\n(asistente)", fillcolor="#EADCF3"];
+    gem  [label="Vertex AI\nGemini 3.1 Flash-Lite\n(asistente)", fillcolor="#EADCF3"];
     web  [label="Web tienda\n(Cloud Run)"];
     lk   [label="Looker Studio\ngerencial + operativo"];
   }

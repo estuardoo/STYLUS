@@ -1,11 +1,11 @@
 name: deploy-api
-# Publica la API/web en Cloud Run. Requiere las variables del repositorio (Settings > Variables):
-# GCP_PROJECT_ID, GCP_REGION, GCP_WIF_PROVIDER, GCP_DEPLOYER_SA (salidas de terraform output).
+# Publica la API/web en Cloud Run. Proyecto, región y nombres salen de config/generated/plataforma.json
+# (Excel de control). Única variable de GitHub: GCP_WIF_PROVIDER (python ops.py github la muestra).
 on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ["api/**"]
+    paths: ["api/**", "config/**"]
 
 permissions:
   contents: read
@@ -13,17 +13,23 @@ permissions:
 
 jobs:
   deploy:
-    if: ${{ vars.GCP_PROJECT_ID != '' }}
+    if: ${{ vars.GCP_WIF_PROVIDER != '' }}
     runs-on: ubuntu-latest
-    env:
-      REGION: ${{ vars.GCP_REGION }}
-      IMAGE: ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/retail/retail-api:${{ github.sha }}
     steps:
       - uses: actions/checkout@v4
+      - name: Leer configuración
+        run: |
+          python - <<'PY' >> "$GITHUB_ENV"
+          import json
+          c = json.load(open("config/generated/plataforma.json", encoding="utf-8"))
+          p, d = c["params"], c["derived"]
+          print(f"PROJECT={p['project_id']}\nREGION={p['region']}\nSERVICE={p['cloudrun_service']}")
+          print(f"IMAGE={d['image_repo']}:${{ github.sha }}\nDEPLOYER={d['sa_emails'][p['deployer_sa_key']]}")
+          PY
       - uses: google-github-actions/auth@v2
         with:
           workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
-          service_account: ${{ vars.GCP_DEPLOYER_SA }}
+          service_account: ${{ env.DEPLOYER }}
       - uses: google-github-actions/setup-gcloud@v2
       - name: Construir y publicar imagen
         run: |
@@ -31,8 +37,8 @@ jobs:
           docker build -t "$IMAGE" api
           docker push "$IMAGE"
       - name: Desplegar revisión
-        run: gcloud run deploy retail-api --image "$IMAGE" --region "$REGION" --quiet
+        run: gcloud run deploy "$SERVICE" --image "$IMAGE" --region "$REGION" --project "$PROJECT" --quiet
       - name: Smoke test
         run: |
-          URL=$(gcloud run services describe retail-api --region "$REGION" --format 'value(status.url)')
+          URL=$(gcloud run services describe "$SERVICE" --region "$REGION" --project "$PROJECT" --format 'value(status.url)')
           curl -fsS "$URL/health" && curl -fsS "$URL/ready"

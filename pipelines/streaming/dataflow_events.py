@@ -2,10 +2,7 @@
 ventanas de 1 minuto con datos tardíos -> métricas en BigQuery (retail_ops) + DLQ.
 
 GCP:
-  python pipelines/streaming/dataflow_events.py --runner DataflowRunner --project P --region us-central1 \
-    --temp_location gs://P-retail-lake/tmp --subscription projects/P/subscriptions/retail-events-dataflow \
-    --service_account_email sa-retail-pipeline@P.iam.gserviceaccount.com --max_num_workers 3 \
-    --streaming --enable_streaming_engine
+  python ops.py dataflow-iniciar   (arma todos los argumentos desde el Excel de control)
 Local (prueba con archivo JSONL del replay):
   python ingestion/streaming/replay_publisher.py --limit 500 --dry-run > /tmp/ev.jsonl
   python pipelines/streaming/dataflow_events.py --input_file /tmp/ev.jsonl --output_dir /tmp/stream_out
@@ -96,8 +93,8 @@ def build(p, a):
     else:
         bq = dict(create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED,
                   write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND)
-        metrics | "Métricas a BQ" >> beam.io.WriteToBigQuery(f"{a.project}:retail_ops.stream_metrics_1m", schema=METRICS_SCHEMA, **bq)
-        parsed.dlq | "DLQ a BQ" >> beam.io.WriteToBigQuery(f"{a.project}:retail_ops.stream_dlq", schema=DLQ_SCHEMA, **bq)
+        metrics | "Métricas a BQ" >> beam.io.WriteToBigQuery(a.metrics_table, schema=METRICS_SCHEMA, **bq)
+        parsed.dlq | "DLQ a BQ" >> beam.io.WriteToBigQuery(a.dlq_table, schema=DLQ_SCHEMA, **bq)
 
 
 def main(argv=None):
@@ -106,6 +103,8 @@ def main(argv=None):
     ap.add_argument("--input_file")
     ap.add_argument("--output_dir")
     ap.add_argument("--project")
+    ap.add_argument("--metrics_table", help="proyecto:dataset.stream_metrics_1m")
+    ap.add_argument("--dlq_table", help="proyecto:dataset.stream_dlq")
     a, beam_args = ap.parse_known_args(argv)
     opts = PipelineOptions(beam_args + ([f"--project={a.project}"] if a.project else []), save_main_session=True)
     opts.view_as(StandardOptions).streaming = bool(a.subscription)

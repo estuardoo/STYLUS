@@ -11,6 +11,7 @@ import datetime as dt
 import hashlib
 import json
 import os
+import shutil
 import subprocess
 from pathlib import Path
 
@@ -73,8 +74,11 @@ def main():
         raise SystemExit("Falta --bucket o GCS_RAW_BUCKET")
     dst = f"gs://{a.bucket}/hm/"
     extra = ["--exclude", r"images/.*"] if a.skip_images else []
-    subprocess.run(["gcloud", "storage", "rsync", "--recursive", *extra, str(raw), dst], check=True)
-    subprocess.run(["gcloud", "storage", "cp", str(out / "hm_raw_manifest.json"),
+    gcloud = shutil.which("gcloud")  # en Windows resuelve gcloud.cmd
+    if not gcloud:
+        raise SystemExit("Instalar Google Cloud CLI (gcloud)")
+    subprocess.run([gcloud, "storage", "rsync", "--recursive", *extra, str(raw), dst], check=True)
+    subprocess.run([gcloud, "storage", "cp", str(out / "hm_raw_manifest.json"),
                     f"gs://{a.bucket}/_manifests/hm_raw_manifest.json"], check=True)
     print("OK ->", dst)
 

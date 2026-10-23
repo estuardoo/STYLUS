@@ -1,8 +1,11 @@
-import os, sys, tempfile, unittest
+import json, os, sys, tempfile, unittest
 from pathlib import Path
 
-DB = Path(tempfile.mkdtemp()) / "t.db"
-os.environ.update(DATABASE_URL=f"sqlite:///{DB}", ADMIN_TOKEN="secreto", ASSISTANT_MODE="rules")
+TMP = Path(tempfile.mkdtemp())
+DB = TMP / "t.db"
+(TMP / "seed.json").write_text(json.dumps({"users": [{"user_id": "demo", "nombre": "Demo", "saldo_inicial_cents": 0},
+                                                    {"user_id": "demo2", "nombre": "Demo 2", "saldo_inicial_cents": 700}]}))
+os.environ.update(DATABASE_URL=f"sqlite:///{DB}", ADMIN_TOKEN="secreto", ASSISTANT_MODE="rules", SEED_FILE=str(TMP / "seed.json"))
 os.environ.pop("PUBSUB_TOPIC", None)
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "api"))
 from fastapi.testclient import TestClient  # noqa: E402
@@ -49,6 +52,8 @@ class TestAPI(unittest.TestCase):
         r = self.c.post("/api/v1/recommendations", json={"k": 2}, headers={"X-User-Id": "demo2"}).json()
         self.assertEqual(len(r["items"]), 2)
         self.assertEqual(self.c.get("/api/v1/wallet", headers={"X-User-Id": "nadie"}).status_code, 401)
+        main.init_db()  # reinicio: la semilla no duplica el saldo inicial
+        self.assertEqual(self.c.get("/api/v1/wallet", headers={"X-User-Id": "demo2"}).json()["saldo_cents"], 700)
 
 
 if __name__ == "__main__":

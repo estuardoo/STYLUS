@@ -63,7 +63,7 @@ def main():
         publisher = pubsub_v1.PublisherClient()
         topic_path = publisher.topic_path(a.project, a.topic)
 
-    sent, t0 = 0, time.time()
+    sent, t0, futures = 0, time.time(), []
     with open(a.file, newline="", encoding="utf-8") as f:
         for i, row in enumerate(csv.DictReader(f)):
             if i < a.skip:
@@ -75,11 +75,18 @@ def main():
             if a.dry_run:
                 print(data.decode())
             else:
-                publisher.publish(topic_path, data, event_type=ev["event_type"], event_id=ev["event_id"])
+                futures.append(publisher.publish(topic_path, data, event_type=ev["event_type"], event_id=ev["event_id"]))
             sent += 1
             if a.rate > 0:  # ponytail: ritmo fijo; usar flow control de Pub/Sub si se necesita > 1k ev/s
                 time.sleep(max(0.0, sent / a.rate - (time.time() - t0)))
-    print(f"run={run_id} enviados={sent} seg={time.time() - t0:.1f}", flush=True)
+    errores = 0
+    for f in futures:  # sin esperar, los últimos mensajes se pierden al terminar el proceso
+        try:
+            f.result(timeout=60)
+        except Exception:
+            errores += 1
+    print(f"run={run_id} enviados={sent} confirmados={sent - errores if futures else 0} errores={errores} "
+          f"seg={time.time() - t0:.1f}", flush=True)
 
 
 if __name__ == "__main__":

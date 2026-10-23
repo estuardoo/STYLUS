@@ -21,8 +21,8 @@ precios:
   cloudsql_micro_h:       {servicio: Cloud SQL, unidad: hora db-f1-micro, precio: 0.015, gratis: 0, sku_regex: "Micro instance in Americas", fuente: "https://cloud.google.com/sql/pricing (verificar; shared-core sin SLA)"}
   cloudsql_small_h:       {servicio: Cloud SQL, unidad: hora db-g1-small, precio: 0.035, gratis: 0, sku_regex: "Small instance in Americas", fuente: "https://cloud.google.com/sql/pricing"}
   cloudsql_ssd_gb_mes:    {servicio: Cloud SQL, unidad: GB-mes SSD, precio: 0.17, gratis: 0, sku_regex: "Storage PD SSD in Americas", fuente: "https://cloud.google.com/sql/pricing"}
-  gemini_in_mtok:         {servicio: Vertex AI Gemini 2.5 Flash-Lite, unidad: millón tokens entrada, precio: 0.10, gratis: 0, sku_regex: "Gemini 2.5 Flash Lite.*Input.*Text", fuente: "https://cloud.google.com/vertex-ai/generative-ai/pricing"}
-  gemini_out_mtok:        {servicio: Vertex AI Gemini 2.5 Flash-Lite, unidad: millón tokens salida, precio: 0.40, gratis: 0, sku_regex: "Gemini 2.5 Flash Lite.*Output.*Text", fuente: "https://cloud.google.com/vertex-ai/generative-ai/pricing"}
+  gemini_in_mtok:         {servicio: Vertex AI Gemini 3.1 Flash-Lite, unidad: millón tokens entrada, precio: 0.25, gratis: 0, sku_regex: "Gemini 3.1 Flash Lite.*Input.*Text", fuente: "https://cloud.google.com/vertex-ai/generative-ai/pricing"}
+  gemini_out_mtok:        {servicio: Vertex AI Gemini 3.1 Flash-Lite, unidad: millón tokens salida, precio: 1.50, gratis: 0, sku_regex: "Gemini 3.1 Flash Lite.*Output.*Text", fuente: "https://cloud.google.com/vertex-ai/generative-ai/pricing"}
   artifact_gb_mes:        {servicio: Artifact Registry, unidad: GB-mes, precio: 0.10, gratis: 0.5, sku_regex: "^Artifact Registry Storage", fuente: "https://cloud.google.com/artifact-registry/pricing"}
 
 # Uso mensual por escenario. Volúmenes de negocio medidos en data/raw (H&M):

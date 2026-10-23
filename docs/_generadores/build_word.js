@@ -142,7 +142,7 @@ const control = [
 const s1 = [
   H1("1. Resumen ejecutivo"),
   P("Proponemos una plataforma analítica integral para un retailer de moda, construida sobre Google Cloud Platform (GCP) y alimentada con el dataset público de H&M: 31.8 millones de líneas de venta de dos años, 1.37 millones de clientes y 105,542 artículos con sus imágenes. La plataforma convierte ese histórico en tres productos de valor: analítica de ventas para gerencia, recomendaciones personalizadas y un asistente de compras conversacional que propone productos reales del catálogo."),
-  P("La arquitectura sigue el patrón lakehouse medallion. Cloud Storage guarda los datos originales intactos (Bronze) y sus versiones limpias en Parquet (Silver/Gold); BigQuery actúa como data warehouse; Pub/Sub y Dataflow procesan eventos en tiempo real; Cloud Run expone la API y la web; Cloud SQL mantiene el estado transaccional del carrito y los pedidos; y Vertex AI Gemini 2.5 Flash-Lite impulsa el asistente. Todo se declara con Terraform y se despliega desde GitHub."),
+  P("La arquitectura sigue el patrón lakehouse medallion. Cloud Storage guarda los datos originales intactos (Bronze) y sus versiones limpias en Parquet (Silver/Gold); BigQuery actúa como data warehouse; Pub/Sub y Dataflow procesan eventos en tiempo real; Cloud Run expone la API y la web; Cloud SQL mantiene el estado transaccional del carrito y los pedidos; y Vertex AI Gemini 3.1 Flash-Lite impulsa el asistente. Todo se declara con Terraform y se despliega desde GitHub."),
   callout("Resultados clave del diseño",
     `Costo estimado de producción a escala H&M: ${usd(c.produccion.total)} al mes, equivalente a USD ${c.produccion.por_pedido.toFixed(5)} por pedido procesado. ` +
     `Año 1 (11 meses normales + 1 mes pico Black Friday): ${usd(c.anio1, 0)}. Costo de desarrollo y demo del curso: ${usd(c.curso)}. ` +
@@ -235,14 +235,14 @@ const s5 = [
     ["Procesamiento batch", "Serverless for Apache Spark (Dataproc) + BigQuery SQL", "Spark sin clúster para limpieza a Parquet; SQL para Gold", "Clúster Dataproc permanente"],
     ["OLTP", "Cloud SQL PostgreSQL", "ACID para carrito, pedidos y ledger del saldo", "BigQuery: no es transaccional"],
     ["API y web", "Cloud Run", "Contenedores que escalan a cero; 2M requests gratis/mes", "GKE: sobredimensionado para el caso"],
-    ["IA generativa", "Vertex AI Gemini 2.5 Flash-Lite", "Modelo más económico de Gemini (USD 0.10/0.40 por millón de tokens), function calling", "LLM propio en GPU: costo fijo alto"],
+    ["IA generativa", "Vertex AI Gemini 3.1 Flash-Lite", "Gemini más económico vigente en Vertex AI (USD 0.25/1.50 por millón de tokens); salida estructurada", "LLM propio en GPU: costo fijo alto"],
     ["BI", "Looker Studio", "Sin licencia, conector nativo a BigQuery", "Tableau/Power BI: licencias"],
     ["IaC y CI/CD", "Terraform + GitHub Actions (WIF)", "Infraestructura reproducible; sin llaves permanentes", "Configuración manual en consola"],
   ], [1.6, 2.2, 3.6, 2.6], { boldFirst: true }),
   caption("Tabla 3. Decisiones tecnológicas (ADR resumidos)."),
   callout("Sobre el costo de Vertex AI Gemini",
-    "Gemini en Vertex AI no es gratuito, pero su costo es marginal: una conversación típica (≈3,000 tokens de entrada y 400 de salida) cuesta alrededor de USD 0.0005. " +
-    "Mil conversaciones de prueba cuestan menos de USD 1, y los créditos de bienvenida de GCP (USD 300 para cuentas nuevas) cubren holgadamente el proyecto. " +
+    "Gemini en Vertex AI no es gratuito, pero su costo es marginal: una conversación típica (≈3,000 tokens de entrada y 400 de salida) cuesta alrededor de USD 0.0014. " +
+    "Mil conversaciones de prueba cuestan unos USD 1.40, y los créditos de bienvenida de GCP (USD 300 para cuentas nuevas) cubren holgadamente el proyecto. " +
     "Se limita además con cuotas por minuto y con el presupuesto con alertas descrito en §9.3."),
 ];
 
@@ -335,13 +335,13 @@ const s9 = [
   B([bold("Ruta streaming sin job permanente: "), run("la suscripción Pub/Sub → BigQuery cuesta USD 50/TiB sin cargos de ingesta; Dataflow se enciende solo cuando se necesita enriquecimiento con ventanas.")]),
   B([bold("Menos bytes escaneados: "), run("particionado por fecha, clustering y filtro de partición obligatorio; Parquet columnar en Silver.")]),
   B([bold("Ciclo de vida del almacenamiento: "), run("las 105,100 imágenes (29 GB) pasan a Nearline a los 30 días, a la mitad del precio.")]),
-  B([bold("Modelo de IA más barato: "), run("Gemini 2.5 Flash-Lite y caché de respuestas frecuentes.")]),
+  B([bold("Modelo de IA más barato: "), run("Gemini 3.1 Flash-Lite (el modelo se cambia desde el Excel de control) y caché de respuestas frecuentes.")]),
   B([bold("Región de nivel 1: "), run("us-central1 tiene las tarifas más bajas para Cloud Run y Dataflow.")]),
   H2("9.3 Automatización de costos"),
   P("El control de costos no depende de revisiones manuales. Implementamos tres mecanismos que se refuerzan entre sí:"),
   table([
     ["Mecanismo", "Qué hace", "Dónde"],
-    ["1. Estimador automatizado", "Supuestos en un único YAML; un script genera el Excel con fórmulas y el resumen. Con --refresh-prices consulta la API Cloud Billing Catalog y actualiza las tarifas con fecha. Corre en cada push (CI).", "cost/estimate_costs.py, make cost, make cost-refresh"],
+    ["1. Estimador automatizado", "Supuestos en un único YAML; un script genera el Excel con fórmulas y el resumen. Con --refresh-prices consulta la API Cloud Billing Catalog y actualiza las tarifas con fecha. Corre en cada push (CI).", "cost/estimate_costs.py (--refresh-prices)"],
     ["2. Presupuesto con alertas", "Budget por proyecto con umbrales del 50%, 90% y 100% (real) y 100% (pronosticado); publica en un tópico Pub/Sub para notificar o apagar recursos de demo.", "infra/terraform/main.tf (google_billing_budget)"],
     ["3. Costo real por pedido", "Billing export a BigQuery + vista que cruza costo diario por servicio con pedidos procesados en Gold; alimenta el tablero de costos.", "cost/real_cost_per_order.sql"],
   ], [2, 5, 3], { boldFirst: true }),
@@ -418,10 +418,14 @@ const anexo = [
   H1("Anexo A. Repositorio y reproducibilidad"),
   P("El repositorio se publica en GitHub sin datos ni secretos. Estructura:"),
   ...[
+    "config/                 Excel de control: parámetros, tablas, columnas, usuarios y permisos",
+    "ops.py                  Orquestador de despliegue (Windows, Linux, Cloud Shell)",
     "infra/terraform/        Infraestructura GCP (estado remoto en GCS)",
     "ingestion/batch/        Carga de H&M a Bronze con manifiesto",
     "ingestion/streaming/    Publicador replay de eventos 2026",
-    "sql/bronze/             Tablas Bronze en BigQuery",
+    "pipelines/              Spark (Silver), Dataflow (streaming), recomendador",
+    "sql/                    Bronze, Silver, Gold y vistas BI en BigQuery",
+    "api/                    FastAPI, web, asistente Gemini y wallet",
     "cost/                   Calculadora y automatización de costos",
     "docs/architecture/      Diagramas regenerables (Graphviz)",
     "docs/entrega1/          Este documento",
@@ -431,7 +435,8 @@ const anexo = [
     "data/                   Solo local; excluido de Git",
   ].map(l => new Paragraph({ spacing: { after: 0 }, children: [run(l, { font: "Consolas", size: 18 })] })),
   sp(),
-  P("Comandos principales: make setup · make cost · make manifest · make tf-bootstrap · make tf-init · make tf-plan · make ingest-raw · make bq-bronze · make replay-dry · make test."),
+  P("Todos los nombres, parámetros, tablas, columnas, usuarios iniciales y permisos se controlan desde config/control_plataforma.xlsx; python ops.py config los convierte en variables de Terraform y semillas de la API, y python ops.py verificar compara lo desplegado contra el Excel."),
+  P("Comandos principales: python ops.py config · bootstrap · plan · apply · subir-datos · bronze · silver · gold · api · verificar · todo. Guía completa en docs/DEPLOY.md."),
   H1("Referencias"),
   ...[
     "UTEC. Entregables del Proyecto Final: Taller de Arquitectura Big Data. Sección 1, 2026.",

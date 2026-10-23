@@ -57,8 +57,11 @@ def from_local(raw):
 
 def from_bigquery():
     from google.cloud import bigquery
-    q = f"SELECT * FROM `{os.environ['GCP_PROJECT_ID']}.retail_gold.v_catalog_serving`"
-    return [dict(r) | {"stock": STOCK_DEMO} for r in bigquery.Client().query(q).result()]
+    view = os.environ["CATALOG_VIEW"]  # proyecto.dataset.v_catalog_serving (lo pasa ops.py)
+    rows = bigquery.Client(project=os.environ["GCP_PROJECT_ID"]).query(f"SELECT * FROM `{view}`").result()
+    out = [dict(r.items()) | {"stock": STOCK_DEMO} for r in rows]
+    print(f"leídos {len(out):,} artículos de {view}")
+    return out
 
 
 def main():
