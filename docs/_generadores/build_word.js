@@ -102,8 +102,9 @@ costRows.push(["Costo por pedido", ...esc.map(e => "USD " + c[e].por_pedido.toFi
 const portada = [
   new Paragraph({ spacing: { before: 600, after: 0 }, children: [run("UTEC · TALLER DE ARQUITECTURA BIG DATA · SECCIÓN 1", { size: 20, color: GREY, bold: true })] }),
   new Paragraph({ border: { bottom: { style: BorderStyle.SINGLE, size: 12, color: ACCENT, space: 4 } }, spacing: { after: 600 }, children: [] }),
-  new Paragraph({ spacing: { after: 200 }, children: [run("Retail Intelligence & Personal Shopping Assistant", { size: 52, bold: true, color: NAVY })] }),
-  new Paragraph({ spacing: { after: 600 }, children: [run("Plataforma Big Data de retail en Google Cloud: ingesta batch y streaming, lakehouse medallion, analítica, recomendaciones y asistente con Vertex AI Gemini", { size: 26, color: GREY })] }),
+  new Paragraph({ spacing: { after: 120 }, children: [run("STYLUS", { size: 72, bold: true, color: NAVY })] }),
+  new Paragraph({ spacing: { after: 200 }, children: [run("Retail de moda con compras inteligentes asistidas por IA en tiempo real", { size: 34, bold: true, color: ACCENT })] }),
+  new Paragraph({ spacing: { after: 600 }, children: [run("Plataforma Big Data en Google Cloud sobre el dataset público H&M (Kaggle): ingesta batch y streaming, lakehouse medallion, analítica, recomendaciones y asistente con Vertex AI Gemini", { size: 24, color: GREY })] }),
   new Paragraph({ spacing: { after: 120 }, children: [run("ENTREGA 1", { size: 24, bold: true, color: ACCENT })] }),
   new Paragraph({ spacing: { after: 60 }, children: [run("Examen (E): Caso de estudio y sustentación técnica, económica y de resiliencia", { size: 22 })] }),
   new Paragraph({ spacing: { after: 600 }, children: [run("Proyecto Parte 1 (P1): Blueprint, diseño de ingesta y almacenamiento", { size: 22 })] }),
@@ -114,7 +115,8 @@ const portada = [
     ["Nicole Arenas", "Datos + API + Modelado: capas medallion, modelo dimensional y API"],
     ["Gianmarco Mejia", "Dashboard / BI: KPIs, tableros y visualización"],
   ], [3, 7], { boldFirst: true }),
-  new Paragraph({ spacing: { before: 400 }, children: [run("Fecha de entrega: 24 de octubre de 2026 · Versión 1.0", { size: 20, color: GREY })] }),
+  new Paragraph({ spacing: { before: 400 }, children: [run("Fecha de entrega: 24 de octubre de 2026 · Versión 1.1", { size: 20, color: GREY })] }),
+  new Paragraph({ spacing: { before: 60 }, children: [run("Repositorio: github.com/estuardoo/STYLUS · Proyecto GCP: tranquil-leaf-512618-b9", { size: 20, color: GREY })] }),
   brk(),
 ];
 
@@ -123,7 +125,7 @@ const control = [
   table([
     ["Campo", "Detalle"],
     ["Documento", "Entrega 1: Examen (E) + Proyecto Parte 1 (P1)"],
-    ["Versión", "1.0 (22-oct-2026): primera versión completa para revisión del equipo"],
+    ["Versión", "1.1 (24-oct-2026): nombre STYLUS, configuración en JSON + panel web, repositorio y proyecto GCP reales"],
     ["Fuente de requisitos", "UTEC, “Entregables del Proyecto Final: Taller de Arquitectura Big Data” (PDF, 3 páginas)"],
     ["Repositorio", "Estructura y código de soporte en el repositorio del proyecto (ver Anexo A)"],
     ["Datos", "H&M Personalized Fashion Recommendations (Kaggle). Única fuente de datos del proyecto"],
@@ -335,7 +337,7 @@ const s9 = [
   B([bold("Ruta streaming sin job permanente: "), run("la suscripción Pub/Sub → BigQuery cuesta USD 50/TiB sin cargos de ingesta; Dataflow se enciende solo cuando se necesita enriquecimiento con ventanas.")]),
   B([bold("Menos bytes escaneados: "), run("particionado por fecha, clustering y filtro de partición obligatorio; Parquet columnar en Silver.")]),
   B([bold("Ciclo de vida del almacenamiento: "), run("las 105,100 imágenes (29 GB) pasan a Nearline a los 30 días, a la mitad del precio.")]),
-  B([bold("Modelo de IA más barato: "), run("Gemini 3.1 Flash-Lite (el modelo se cambia desde el Excel de control) y caché de respuestas frecuentes.")]),
+  B([bold("Modelo de IA más barato: "), run("Gemini 3.1 Flash-Lite (el modelo se cambia desde config/control_plataforma.json) y caché de respuestas frecuentes.")]),
   B([bold("Región de nivel 1: "), run("us-central1 tiene las tarifas más bajas para Cloud Run y Dataflow.")]),
   H2("9.3 Automatización de costos"),
   P("El control de costos no depende de revisiones manuales. Implementamos tres mecanismos que se refuerzan entre sí:"),
@@ -388,7 +390,7 @@ const s11 = [
 const s12 = [
   H1("12. Seguridad y gobierno"),
   B("Buckets privados con acceso uniforme y prevención de acceso público forzada; cifrado en reposo y TLS en tránsito por defecto."),
-  B("Tres cuentas de servicio con mínimo privilegio (ingesta, pipelines, API); GitHub Actions usa Workload Identity Federation, sin llaves JSON."),
+  B("Cuatro cuentas de servicio con mínimo privilegio (ingesta, pipelines, API y despliegue); GitHub Actions usa Workload Identity Federation, sin llaves JSON."),
   B("Secretos en Secret Manager; .gitignore y una regla de CI impiden versionar datos, credenciales o estado de Terraform."),
   B("Datos de clientes ya seudonimizados; los eventos sintéticos se identifican con is_synthetic y simulation_run_id."),
   B("El asistente solo puede proponer artículos existentes y requiere confirmación explícita del usuario antes del checkout."),
@@ -416,9 +418,10 @@ const s13 = [
 
 const anexo = [
   H1("Anexo A. Repositorio y reproducibilidad"),
-  P("El repositorio se publica en GitHub sin datos ni secretos. Estructura:"),
+  P("El repositorio github.com/estuardoo/STYLUS (privado) se publica sin datos ni secretos. Estructura:"),
   ...[
-    "config/                 Excel de control: parámetros, tablas, columnas, usuarios y permisos",
+    "config/                 JSON de control: parámetros, tablas, columnas, usuarios y permisos",
+    "panel/                  Panel web local para editar la configuración y desplegar",
     "ops.py                  Orquestador de despliegue (Windows, Linux, Cloud Shell)",
     "infra/terraform/        Infraestructura GCP (estado remoto en GCS)",
     "ingestion/batch/        Carga de H&M a Bronze con manifiesto",
@@ -435,8 +438,8 @@ const anexo = [
     "data/                   Solo local; excluido de Git",
   ].map(l => new Paragraph({ spacing: { after: 0 }, children: [run(l, { font: "Consolas", size: 18 })] })),
   sp(),
-  P("Todos los nombres, parámetros, tablas, columnas, usuarios iniciales y permisos se controlan desde config/control_plataforma.xlsx; python ops.py config los convierte en variables de Terraform y semillas de la API, y python ops.py verificar compara lo desplegado contra el Excel."),
-  P("Comandos principales: python ops.py config · bootstrap · plan · apply · subir-datos · bronze · silver · gold · api · verificar · todo. Guía completa en docs/DEPLOY.md."),
+  P("Todos los nombres, parámetros, tablas, columnas, usuarios iniciales y permisos se controlan desde config/control_plataforma.json (editable con python ops.py panel); python ops.py config los convierte en variables de Terraform y semillas de la API, y python ops.py verificar compara lo desplegado contra ese archivo."),
+  P("Comandos principales: python ops.py config · bootstrap · plan · apply · subir-datos · bronze · silver · gold · api · verificar · todo. Guía de despliegue en docs/DEPLOY.md y guía técnica completa en docs/entrega1/Guia_Tecnica_STYLUS.pdf."),
   H1("Referencias"),
   ...[
     "UTEC. Entregables del Proyecto Final: Taller de Arquitectura Big Data. Sección 1, 2026.",
@@ -486,7 +489,7 @@ const doc = new Document({
       children: portada },
     { properties: { page: { size: { width: 11906, height: 16838 }, margin: { top: 1440, bottom: 1440, left: 1440, right: 1440 } } },
       headers: { default: new Header({ children: [new Paragraph({ tabStops: [{ type: d.TabStopType.RIGHT, position: W }], border: { bottom: { style: BorderStyle.SINGLE, size: 4, color: "BFBFBF", space: 2 } },
-        children: [run("Retail Intelligence & Personal Shopping Assistant", { size: 16, color: GREY }),
+        children: [run("STYLUS · Retail con compras inteligentes asistidas por IA", { size: 16, color: GREY }),
           run("\tEntrega 1 · Examen + P1", { size: 16, color: GREY })] })] }) },
       footers: { default: new Footer({ children: [new Paragraph({ alignment: AlignmentType.CENTER,
         children: [run("Página ", { size: 16, color: GREY }), new TextRun({ children: [PageNumber.CURRENT], font: "Arial", size: 16, color: GREY })] })] }) },
