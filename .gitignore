@@ -40,3 +40,7 @@ docs/_generadores/*.toc.json
 *.db-journal
 data/silver/
 tfplan
+
+# Tokens
+token*.txt
+*token*.txt
