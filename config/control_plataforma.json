@@ -552,7 +552,7 @@
     },
     {
       "clave": "github_repo",
-      "valor": "",
+      "valor": "estuardoo/STYLUS",
       "tipo": "texto",
       "descripcion": "owner/repo para desplegar desde GitHub Actions sin llaves. Vacío = sin WIF",
       "usado_en": "terraform, github",

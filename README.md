@@ -38,6 +38,7 @@ excluido de Git).
 | `ops.py` | Orquestador: `python ops.py <comando>` (ver `python ops.py -h`) |
 | `docs/gestion/Matriz_Auditoria_Proyecto.xlsx` | Tareas, perfiles, pasos 1-2-3 y orden de despliegue |
 | [`docs/DEPLOY.md`](docs/DEPLOY.md) | Guía de despliegue |
+| `docs/entrega1/Guia_Tecnica_STYLUS.docx` / `.pdf` | Guía técnica completa (arquitectura, pipelines, roles, costos, anexos de esquemas). Se regenera con `python docs/_generadores/build_guia_data.py` y `node docs/_generadores/build_guia.js` |
 
 ## Estructura
 

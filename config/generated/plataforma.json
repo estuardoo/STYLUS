@@ -2426,7 +2426,7 @@
     "force_destroy_buckets": false,
     "gemini_location": "us-central1",
     "gemini_model": "gemini-3.1-flash-lite",
-    "github_repo": "",
+    "github_repo": "estuardoo/STYLUS",
     "images_nearline_days": 30,
     "labels": {
       "curso": "utec-bigdata",
@@ -2895,7 +2895,7 @@
     "github": {
       "deployer_key": "deployer",
       "pool_id": "github-dev",
-      "repo": ""
+      "repo": "estuardoo/STYLUS"
     },
     "iam": [
       {

@@ -45,3 +45,6 @@ tfplan
 token*.txt
 *token*.txt
 gcp*.txt
+
+# Índices temporales de los generadores de documentos
+*.toc.json
