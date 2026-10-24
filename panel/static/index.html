@@ -10,8 +10,8 @@
   header{background:var(--navy);color:#fff;padding:14px 24px;}
   header h1{margin:0;font-size:18px;}
   header p{margin:2px 0 0;font-size:12px;opacity:.8;}
-  main{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:16px;align-items:start;}
-  @media (max-width:900px){main{grid-template-columns:1fr;}}
+  main{display:grid;grid-template-columns:1.3fr 1fr;gap:16px;padding:16px;align-items:start;}
+  @media (max-width:950px){main{grid-template-columns:1fr;}}
   section{background:#fff;border-radius:8px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.1);}
   h2{margin:0 0 10px;font-size:15px;color:var(--navy);border-bottom:2px solid var(--accent);padding-bottom:6px;}
   .seccion-titulo{font-size:12px;font-weight:600;color:var(--grey);text-transform:uppercase;margin:14px 0 4px;}
@@ -24,30 +24,35 @@
   .btn:hover{opacity:.9;}
   .btn.peligro{background:var(--err);}
   .btn.secundario{background:#eee;color:#333;}
+  .btn.chico{padding:3px 8px;font-size:12px;}
   .btn:disabled{opacity:.5;cursor:not-allowed;}
   .comando{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px solid #eee;font-size:13px;}
-  #log{background:#0d1117;color:#c9d1d9;font-family:ui-monospace,Consolas,monospace;font-size:12px;height:300px;overflow-y:auto;padding:10px;border-radius:6px;white-space:pre-wrap;}
+  #log{background:#0d1117;color:#c9d1d9;font-family:ui-monospace,Consolas,monospace;font-size:12px;height:260px;overflow-y:auto;padding:10px;border-radius:6px;white-space:pre-wrap;}
   #estado{font-size:12px;margin-left:8px;}
   .msg{font-size:12px;padding:6px 10px;border-radius:5px;margin-bottom:8px;}
   .msg.ok{background:#e8f5e9;color:var(--ok);}
   .msg.err{background:#ffebee;color:var(--err);}
-  .toolbar{display:flex;gap:8px;margin-top:12px;}
+  .msg.warn{background:#fff3e0;color:var(--warn);}
+  .toolbar{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+  .tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px;}
+  .tab{padding:6px 10px;border-radius:5px;background:#eee;font-size:12px;cursor:pointer;border:none;}
+  .tab.activa{background:var(--navy);color:#fff;}
+  table.datos{width:100%;border-collapse:collapse;font-size:12px;}
+  table.datos th{background:#eef2f7;text-align:left;padding:5px 6px;position:sticky;top:0;}
+  table.datos td{padding:3px 4px;border-bottom:1px solid #eee;}
+  table.datos input{width:100%;border:1px solid #ddd;border-radius:3px;padding:3px 4px;font-size:12px;}
+  .tabla-scroll{max-height:380px;overflow:auto;border:1px solid #eee;border-radius:6px;}
 </style>
 </head>
 <body>
 <header>
   <h1>Panel de control — STYLUS</h1>
-  <p>Edita config/control_plataforma.xlsx y ejecuta ops.py desde aquí. Solo funciona en esta computadora (127.0.0.1).</p>
+  <p>Edita config/control_plataforma.json y ejecuta ops.py desde aquí. Solo funciona en esta computadora (127.0.0.1).</p>
 </header>
 <main>
   <section>
-    <h2>Parámetros</h2>
-    <div id="msg-params"></div>
-    <div id="params"></div>
-    <div class="toolbar">
-      <button class="btn" onclick="guardar()">Guardar cambios</button>
-      <button class="btn secundario" onclick="cargarParametros()">Recargar del Excel</button>
-    </div>
+    <div class="tabs" id="tabs"></div>
+    <div id="panel-contenido"></div>
   </section>
   <section>
     <h2>Despliegue</h2>
@@ -59,14 +64,32 @@
 </main>
 <script>
 const api = (p, opt) => fetch(p, opt).then(r => r.json());
+let SECCIONES = [];
+let TAB_ACTIVA = 'parametros';
+
+async function init() {
+  SECCIONES = await api('/api/secciones');
+  const tabs = document.getElementById('tabs');
+  tabs.innerHTML = `<button class="tab" data-t="parametros">Parámetros</button>` +
+    SECCIONES.map(s => `<button class="tab" data-t="${s.clave}">${s.etiqueta.split(' (')[0]}</button>`).join('');
+  tabs.querySelectorAll('.tab').forEach(b => b.onclick = () => mostrarTab(b.dataset.t));
+  mostrarTab('parametros');
+  cargarComandos();
+}
+
+function mostrarTab(t) {
+  TAB_ACTIVA = t;
+  document.querySelectorAll('.tab').forEach(b => b.classList.toggle('activa', b.dataset.t === t));
+  if (t === 'parametros') cargarParametros();
+  else cargarSeccion(t);
+}
 
 async function cargarParametros() {
-  const box = document.getElementById('params');
-  const msg = document.getElementById('msg-params');
-  box.innerHTML = 'Cargando...'; msg.innerHTML = '';
+  const box = document.getElementById('panel-contenido');
+  box.innerHTML = 'Cargando...';
   const r = await api('/api/parametros');
-  if (!r.ok) { box.innerHTML = ''; msg.innerHTML = `<div class="msg err">${r.error}</div>`; return; }
-  let html = '', seccion = '';
+  if (!r.ok) { box.innerHTML = `<div class="msg err">${r.error}</div>`; return; }
+  let html = `<div id="msg-params"></div>`, seccion = '';
   for (const p of r.items) {
     if (p.seccion !== seccion) { seccion = p.seccion; html += `<div class="seccion-titulo">${seccion}</div>`; }
     const dis = p.editable ? '' : 'disabled';
@@ -75,15 +98,67 @@ async function cargarParametros() {
       <input data-clave="${p.clave}" value="${p.valor ?? ''}" ${dis} title="${p.editable ? 'editable' : 'fijo en código / calculado'}">
     </div>`;
   }
+  html += `<div class="toolbar">
+      <button class="btn" onclick="guardarParametros()">Guardar cambios</button>
+      <button class="btn secundario" onclick="cargarParametros()">Recargar</button>
+    </div>`;
   box.innerHTML = html;
 }
 
-async function guardar() {
-  const msg = document.getElementById('msg-params');
-  const inputs = document.querySelectorAll('#params input:not([disabled])');
+async function guardarParametros() {
+  const inputs = document.querySelectorAll('#panel-contenido input:not([disabled])');
   const valores = {};
   inputs.forEach(i => valores[i.dataset.clave] = i.value);
   const r = await api('/api/parametros', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({valores})});
+  const msg = document.getElementById('msg-params');
+  if (!r.ok) { msg.innerHTML = `<div class="msg err">${r.error}</div>`; return; }
+  msg.innerHTML = `<div class="msg ok">Guardado. Ejecuta "Validar / generar configuración" para aplicar los cambios.</div>`;
+}
+
+async function cargarSeccion(clave) {
+  const box = document.getElementById('panel-contenido');
+  box.innerHTML = 'Cargando...';
+  const r = await api(`/api/seccion/${clave}`);
+  if (!r.ok) { box.innerHTML = `<div class="msg err">${r.error}</div>`; return; }
+  const info = SECCIONES.find(s => s.clave === clave);
+  let html = `<div id="msg-sec"></div>`;
+  if (!info.editable) html += `<div class="msg warn">Esta tabla es un contrato con SQL/Spark/Terraform: se puede ver aquí, pero cambiarla sin editar también el código puede romper el despliegue.</div>`;
+  html += `<div class="tabla-scroll"><table class="datos" id="tabla-sec"><thead><tr>` +
+    r.columnas.map(c => `<th>${c}</th>`).join('') + (info.editable ? '<th></th>' : '') + `</tr></thead><tbody>` +
+    r.filas.map((fila, i) => filaHtml(r.columnas, fila, i, info.editable)).join('') + `</tbody></table></div>`;
+  if (info.editable) {
+    html += `<div class="toolbar">
+      <button class="btn secundario" onclick="agregarFila(${JSON.stringify(r.columnas)})">+ Agregar fila</button>
+      <button class="btn" onclick="guardarSeccion('${clave}', ${JSON.stringify(r.columnas)})">Guardar tabla</button>
+      <button class="btn secundario" onclick="cargarSeccion('${clave}')">Recargar</button>
+    </div>`;
+  }
+  box.innerHTML = html;
+}
+
+function filaHtml(columnas, fila, i, editable) {
+  return `<tr data-fila="${i}">` +
+    columnas.map(c => `<td><input data-col="${c}" value="${fila[c] ?? ''}" ${editable ? '' : 'disabled'}></td>`).join('') +
+    (editable ? `<td><button class="btn peligro chico" onclick="this.closest('tr').remove()">x</button></td>` : '') +
+    `</tr>`;
+}
+
+function agregarFila(columnas) {
+  const tbody = document.querySelector('#tabla-sec tbody');
+  const tr = document.createElement('tr');
+  tr.innerHTML = columnas.map(c => `<td><input data-col="${c}" value=""></td>`).join('') +
+    `<td><button class="btn peligro chico" onclick="this.closest('tr').remove()">x</button></td>`;
+  tbody.appendChild(tr);
+}
+
+async function guardarSeccion(clave, columnas) {
+  const filas = [...document.querySelectorAll('#tabla-sec tbody tr')].map(tr => {
+    const obj = {};
+    tr.querySelectorAll('input').forEach(i => obj[i.dataset.col] = i.value);
+    return obj;
+  });
+  const r = await api(`/api/seccion/${clave}`, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({filas})});
+  const msg = document.getElementById('msg-sec');
   if (!r.ok) { msg.innerHTML = `<div class="msg err">${r.error}</div>`; return; }
   msg.innerHTML = `<div class="msg ok">Guardado. Ejecuta "Validar / generar configuración" para aplicar los cambios.</div>`;
 }
@@ -107,6 +182,7 @@ async function ejecutar(comando, peligroso, boton) {
   const estado = document.getElementById('estado');
   log.textContent = '';
   estado.textContent = `Ejecutando: ${comando}...`;
+  estado.style.color = '';
   const r = await api(`/api/ejecutar/${comando}`, {method: 'POST'});
   if (!r.ok) { log.textContent = r.error; estado.textContent = ''; document.querySelectorAll('.comando button').forEach(b => b.disabled = false); return; }
   const es = new EventSource(`/api/log/${r.job_id}`);
@@ -122,8 +198,7 @@ async function ejecutar(comando, peligroso, boton) {
   };
 }
 
-cargarParametros();
-cargarComandos();
+init();
 </script>
 </body>
 </html>

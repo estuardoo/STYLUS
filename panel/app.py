@@ -1,4 +1,4 @@
-"""Panel de control local: edita config/control_plataforma.xlsx y ejecuta ops.py desde el navegador.
+"""Panel de control local: edita config/control_plataforma.json y ejecuta ops.py desde el navegador.
 Uso: python panel/app.py   (o python ops.py panel)   -> http://127.0.0.1:8765
 Solo escucha en 127.0.0.1: no lo expongas a la red. No sustituye revisar `python ops.py plan` antes de aplicar.
 """
@@ -16,10 +16,23 @@ from fastapi.responses import HTMLResponse, StreamingResponse
 from pydantic import BaseModel
 
 ROOT = Path(__file__).resolve().parent.parent
-XLSX = ROOT / "config/control_plataforma.xlsx"
+CONFIG_JSON = ROOT / "config/control_plataforma.json"
 
 app = FastAPI(title="Panel STYLUS")
-JOBS: dict[str, dict] = {}  # id -> {proc, lines: [], done: bool, comando}
+JOBS: dict[str, dict] = {}  # id -> {lines: [], done: bool, comando, codigo}
+
+# Secciones del JSON de control que se muestran como tabla editable en el panel.
+# (clave en el JSON, etiqueta, columnas a mostrar en ese orden, ¿se puede agregar/quitar fila?)
+SECCIONES = [
+    ("usuarios", "Usuarios (equipo + tienda)", ["tipo", "id", "nombre", "email", "perfil", "roles_gcp", "saldo_inicial_cents"], True),
+    ("permisos", "Permisos IAM", ["principal", "rol", "alcance", "motivo", "gestion"], True),
+    ("cuentas_servicio", "Cuentas de servicio", ["clave", "account_id", "nombre", "descripcion"], True),
+    ("datasets", "Datasets BigQuery", ["clave", "dataset_id", "descripcion", "borrar_contenido_en_destroy"], False),
+    ("apis", "APIs de GCP a activar", None, True),
+    ("secretos", "Secretos (solo nombres; el valor lo crea Terraform)", None, False),
+    ("tablas", "Tablas (contrato con SQL/Spark; cambiar el nombre aquí no cambia el SQL)", None, False),
+    ("columnas", "Columnas (contrato con SQL/Spark)", None, False),
+]
 
 # Comandos del orquestador expuestos en el panel: (clave, etiqueta, flags, peligroso)
 COMANDOS = [
@@ -40,57 +53,20 @@ COMANDOS = [
 ]
 
 
-EDITABLE_FILL = "FFF2CC"  # mismo amarillo claro usado al construir config/control_plataforma.xlsx
+def leer_config():
+    return json.loads(CONFIG_JSON.read_text(encoding="utf-8"))
 
 
-def _cell_style(ws, row):
-    fill = ws.cell(row=row, column=2).fill
-    rgb = fill.fgColor.rgb if fill and fill.fgColor else None
-    return isinstance(rgb, str) and rgb.upper().endswith(EDITABLE_FILL)
+def guardar_config(data):
+    CONFIG_JSON.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
-def leer_parametros():
-    from openpyxl import load_workbook
-    wb = load_workbook(XLSX, data_only=True)
-    ws = wb["Parametros"]
-    head = [c.value for c in ws[1]]
-    i_clave, i_valor, i_tipo, i_desc = (head.index(h) for h in ("clave", "valor", "tipo", "descripcion"))
-    out, seccion = [], "General"
-    for row in range(2, ws.max_row + 1):
-        vals = [ws.cell(row=row, column=c + 1).value for c in range(len(head))]
-        clave = vals[i_clave]
-        if clave is None:
-            continue
-        if isinstance(clave, str) and clave.startswith("#"):
-            seccion = clave.lstrip("# ").strip()
-            continue
-        out.append({
-            "clave": clave, "valor": vals[i_valor], "tipo": vals[i_tipo] or "texto",
-            "descripcion": vals[i_desc] or "", "seccion": seccion,
-            "editable": _cell_style(ws, row), "fila": row,
-        })
-    wb.close()
-    return out
+class CambiosParametros(BaseModel):
+    valores: dict  # {clave: valor_nuevo}
 
 
-def escribir_parametros(cambios: dict):
-    """cambios: {clave: valor_nuevo}. Solo toca celdas de valor marcadas editable; conserva fórmulas y formato."""
-    from openpyxl import load_workbook
-    params = {p["clave"]: p for p in leer_parametros()}
-    rechazados = [k for k in cambios if k not in params or not params[k]["editable"]]
-    wb = load_workbook(XLSX)
-    ws = wb["Parametros"]
-    for clave, valor in cambios.items():
-        if clave in rechazados:
-            continue
-        ws.cell(row=params[clave]["fila"], column=2).value = valor
-    wb.save(XLSX)
-    wb.close()
-    return rechazados
-
-
-class Cambios(BaseModel):
-    valores: dict
+class CambiosSeccion(BaseModel):
+    filas: list  # reemplaza por completo la sección (editar/agregar/quitar filas desde la tabla)
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -103,23 +79,59 @@ def comandos():
     return [{"comando": c, "etiqueta": e, "peligroso": d} for c, e, _, d in COMANDOS]
 
 
+@app.get("/api/secciones")
+def secciones():
+    return [{"clave": c, "etiqueta": e, "editable": ed} for c, e, _, ed in SECCIONES]
+
+
 @app.get("/api/parametros")
 def parametros():
     try:
-        return {"ok": True, "items": leer_parametros()}
-    except PermissionError:
-        return {"ok": False, "error": "No se pudo abrir el Excel: cierra config/control_plataforma.xlsx en Excel e inténtalo de nuevo."}
+        data = leer_config()
+        return {"ok": True, "items": data["parametros"]}
     except Exception as e:
         return {"ok": False, "error": str(e)}
 
 
 @app.post("/api/parametros")
-def guardar(cambios: Cambios):
+def guardar_parametros(cambios: CambiosParametros):
     try:
-        rechazados = escribir_parametros(cambios.valores)
+        data = leer_config()
+        by_clave = {p["clave"]: p for p in data["parametros"]}
+        rechazados = [k for k in cambios.valores if k not in by_clave or not by_clave[k].get("editable", True)]
+        for clave, valor in cambios.valores.items():
+            if clave not in rechazados:
+                by_clave[clave]["valor"] = valor
+        guardar_config(data)
         return {"ok": True, "rechazados": rechazados}
-    except PermissionError:
-        return {"ok": False, "error": "El Excel está abierto en otro programa (Excel). Cierralo e inténtalo de nuevo."}
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
+
+@app.get("/api/seccion/{clave}")
+def seccion_get(clave: str):
+    cfg = {c: (c, e, cols, ed) for c, e, cols, ed in SECCIONES}.get(clave)
+    if not cfg:
+        return {"ok": False, "error": "sección desconocida"}
+    try:
+        data = leer_config()
+        filas = data.get(clave, [])
+        columnas = cfg[2] or (list(filas[0].keys()) if filas else [])
+        return {"ok": True, "filas": filas, "columnas": columnas, "editable": cfg[3]}
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
+
+@app.post("/api/seccion/{clave}")
+def seccion_set(clave: str, cambios: CambiosSeccion):
+    cfg = {c: (c, e, cols, ed) for c, e, cols, ed in SECCIONES}.get(clave)
+    if not cfg or not cfg[3]:
+        return {"ok": False, "error": "sección no editable desde el panel"}
+    try:
+        data = leer_config()
+        data[clave] = cambios.filas
+        guardar_config(data)
+        return {"ok": True}
     except Exception as e:
         return {"ok": False, "error": str(e)}
 
@@ -129,7 +141,6 @@ def _run_job(job_id, comando, flags):
         [sys.executable, str(ROOT / "ops.py"), comando, *flags],
         cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1,
     )
-    JOBS[job_id]["proc"] = proc
     for line in proc.stdout:
         JOBS[job_id]["lines"].append(line.rstrip())
     proc.wait()

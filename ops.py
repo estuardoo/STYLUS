@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Orquestador de la plataforma (Windows, Linux, Mac y Cloud Shell).
-Fuente única de configuración: config/control_plataforma.xlsx
+Fuente única de configuración: config/control_plataforma.json (editable con 'python ops.py panel')
 
   python ops.py config [--check]   Excel -> archivos generados (Terraform, ops, API)
   python ops.py estado             nombres y valores efectivos
@@ -17,7 +17,7 @@ Fuente única de configuración: config/control_plataforma.xlsx
   python ops.py github             valor de GCP_WIF_PROVIDER para GitHub Actions
   python ops.py costo-real         vista de costo real por pedido (requiere billing export)
   python ops.py todo [--yes]       bootstrap, apply, bronze, silver, gold, api, verificar
-  python ops.py panel              panel web local (editar Excel + desplegar con botones)
+  python ops.py panel              panel web local (editar JSON de control + desplegar con botones)
 """
 import argparse
 import datetime as dt
@@ -33,7 +33,7 @@ import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-XLSX = ROOT / "config/control_plataforma.xlsx"
+CONFIG_JSON = ROOT / "config/control_plataforma.json"
 GEN = ROOT / "config/generated/plataforma.json"
 TFVARS = ROOT / "infra/terraform/plataforma.auto.tfvars.json"
 SEED = ROOT / "api/seed.json"
@@ -49,18 +49,7 @@ class ConfigError(Exception):
     pass
 
 
-# ======================= Excel -> configuración =======================
-def _rows(ws):
-    head = [str(c.value).strip() for c in ws[1] if c.value is not None]
-    out = []
-    for r in ws.iter_rows(min_row=2, values_only=True):
-        vals = list(r[: len(head)])
-        if all(v in (None, "") for v in vals) or (isinstance(vals[0], str) and vals[0].startswith("#")):
-            continue
-        out.append({h: ("" if v is None else v.strip() if isinstance(v, str) else v) for h, v in zip(head, vals)})
-    return out
-
-
+# ======================= JSON -> configuración =======================
 def _cast(clave, valor, tipo):
     try:
         if tipo == "numero":
@@ -77,14 +66,20 @@ def _cast(clave, valor, tipo):
         raise ConfigError(f"Parametros/{clave}: valor '{valor}' no es {tipo} ({e})")
 
 
-def read_excel():
-    from openpyxl import load_workbook
-    wb = load_workbook(XLSX, data_only=True, read_only=True)
-    need = ["Parametros", "APIs", "Cuentas_Servicio", "Permisos", "Usuarios", "Datasets", "Tablas", "Columnas", "Secretos"]
-    falta = [s for s in need if s not in wb.sheetnames]
+def read_config():
+    need = ["parametros", "apis", "cuentas_servicio", "permisos", "usuarios", "datasets", "tablas", "columnas", "secretos"]
+    try:
+        data = json.loads(CONFIG_JSON.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        raise ConfigError(f"No existe {CONFIG_JSON}. Editar con 'python ops.py panel' o copiar config/control_plataforma.json.example.")
+    falta = [s for s in need if s not in data]
     if falta:
-        raise ConfigError(f"Faltan hojas en el Excel: {falta}")
-    return {s: _rows(wb[s]) for s in need}
+        raise ConfigError(f"Faltan secciones en {CONFIG_JSON.name}: {falta}")
+    # las claves de build_config() siguen en mayúscula/capitalizado histórico (Parametros, APIs, ...)
+    alias = {"parametros": "Parametros", "apis": "APIs", "cuentas_servicio": "Cuentas_Servicio",
+              "permisos": "Permisos", "usuarios": "Usuarios", "datasets": "Datasets",
+              "tablas": "Tablas", "columnas": "Columnas", "secretos": "Secretos"}
+    return {alias[k]: data[k] for k in need}
 
 
 def build_config(x):
@@ -218,7 +213,7 @@ def _dump(o):
 
 
 def cmd_config(a):
-    full, tfvars, seed = build_config(read_excel())
+    full, tfvars, seed = build_config(read_config())
     files = {GEN: _dump(full), TFVARS: _dump(tfvars), SEED: _dump(seed)}
     stale = [str(f.relative_to(ROOT)) for f, txt in files.items() if not f.exists() or f.read_text(encoding="utf-8") != txt]
     if a.check:
@@ -232,18 +227,18 @@ def cmd_config(a):
     print(f"config OK · {len(full['iam'])} permisos · {len(tfvars['tables'])} tablas Terraform · {len(seed['users'])} usuarios app")
     print("actualizados:", stale or "ninguno (sin cambios)")
     if full["params"]["project_id"] == "tu-proyecto-gcp":
-        print("AVISO: project_id sigue en 'tu-proyecto-gcp'. Editar config/control_plataforma.xlsx antes de desplegar.")
+        print("AVISO: project_id sigue en 'tu-proyecto-gcp'. Editar config/control_plataforma.json (o 'python ops.py panel') antes de desplegar.")
 
 
 def cfg(cloud=True):
     if not GEN.exists():
         raise ConfigError("Falta config/generated/plataforma.json. Ejecutar: python ops.py config")
-    if XLSX.exists() and XLSX.stat().st_mtime > GEN.stat().st_mtime + 1:
-        print("AVISO: el Excel es más reciente que los generados; se regeneran.")
+    if CONFIG_JSON.exists() and CONFIG_JSON.stat().st_mtime > GEN.stat().st_mtime + 1:
+        print("AVISO: config/control_plataforma.json es más reciente que los generados; se regeneran.")
         cmd_config(argparse.Namespace(check=False))
     c = json.loads(GEN.read_text(encoding="utf-8"))
     if cloud and c["params"]["project_id"] == "tu-proyecto-gcp":
-        raise ConfigError("project_id = 'tu-proyecto-gcp'. Definirlo en config/control_plataforma.xlsx (hoja Parametros).")
+        raise ConfigError("project_id = 'tu-proyecto-gcp'. Definirlo en config/control_plataforma.json (sección parametros) o con 'python ops.py panel'.")
     return c
 
 
@@ -585,7 +580,7 @@ def cmd_local(a):
 
 
 def cmd_panel(a):
-    """Panel web local: edita el Excel de control y ejecuta estos mismos comandos con botones."""
+    """Panel web local: edita config/control_plataforma.json y ejecuta estos mismos comandos con botones."""
     subprocess.run([sys.executable, str(ROOT / "panel/app.py")])
 
 

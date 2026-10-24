@@ -1,6 +1,6 @@
 """Genera docs/gestion/Matriz_Auditoria_Proyecto.xlsx y docs/DEPLOY.md desde una sola fuente.
 Uso: python docs/_generadores/build_matriz.py   (desde la raíz del repo)
-Ojo: sobrescribe los estados editados a mano en el Excel; actualizar aquí primero."""
+Ojo: sobrescribe los estados editados a mano en la Matriz de auditoría; actualizar aquí primero."""
 from pathlib import Path
 
 from openpyxl import Workbook
@@ -36,12 +36,12 @@ TAREAS = [
     ("P1-11", 1, "Resiliencia", "DRP / HA", "RPO/RTO por componente y runbook", "Word §10, docs/runbooks/drp.md", "", "", W, N, H, ""),
     ("P1-12", 1, "BI", "Catálogo de KPIs", "Metas de datos, streaming, modelo, API, negocio, costo", "Word §11", "", "", G, E, H, ""),
     ("P1-13", 1, "Datos", "Ingesta Bronze con manifiesto", "SHA-256 y filas por archivo; rsync idempotente", "ingestion/batch/upload_raw.py", "python ingestion/batch/upload_raw.py --manifest-only", "", N, W, H, "Manifiesto real en data/manifests/"),
-    ("P1-14", 1, "Infra", "Terraform base", "Buckets, BigQuery, Pub/Sub+DLQ, IAM, Artifact Registry, budget (valores desde el Excel de control)", "infra/terraform/", "python ops.py plan", "P1-20", W, "", L, "validate OK; tipos de variables probados con el JSON generado"),
+    ("P1-14", 1, "Infra", "Terraform base", "Buckets, BigQuery, Pub/Sub+DLQ, IAM, Artifact Registry, budget (valores desde el JSON de control)", "infra/terraform/", "python ops.py plan", "P1-20", W, "", L, "validate OK; tipos de variables probados con el JSON generado"),
     ("P1-15", 1, "Gestión", "Documento Word Entrega 1", "Examen + P1 profesional", "docs/entrega1/*.docx (+PDF)", "", "P1-01..P1-14", E, T, H, ""),
     ("P1-16", 1, "Gestión", "Matriz de auditoría y roles", "Tareas, pasos, despliegue y variables", "docs/gestion/Matriz_Auditoria_Proyecto.xlsx", "python docs/_generadores/build_matriz.py", "", E, T, H, "Este archivo"),
     ("P1-17", 1, "Infra", "Crear proyecto GCP", "Proyecto, facturación/créditos, accesos IAM del equipo", "Proyecto GCP", "ver hoja Despliegue D01-D04", "", W, "", P, ""),
     ("P1-18", 1, "Gestión", "Publicar repositorio GitHub", "Crear repo privado, push y CI en verde", "URL del repo", "git push -u origin main", "P1-17", W, T, P, "Git inicializado localmente"),
-    ("P1-20", 1, "Infra", "Excel de control de la plataforma", "Parámetros, APIs, cuentas, permisos, usuarios, datasets, tablas, columnas y secretos en un solo Excel validado", "config/control_plataforma.xlsx", "python ops.py config", "", W, T, H, "30 tablas, 240 columnas, 28 permisos, 6 usuarios app; CI verifica generados"),
+    ("P1-20", 1, "Infra", "JSON de control de la plataforma", "Parámetros, APIs, cuentas, permisos, usuarios, datasets, tablas, columnas y secretos en un solo JSON validado, editable con el panel web", "config/control_plataforma.json", "python ops.py config", "", W, T, H, "30 tablas, 240 columnas, 28 permisos, 6 usuarios app; CI verifica generados"),
     ("P1-21", 1, "Infra", "Orquestador de despliegue", "Un comando por paso, multiplataforma, con log matricial de tiempos", "ops.py", "python ops.py todo", "P1-20", W, N, L, "config/estado/local probados; comandos de nube pendientes de GCP"),
     ("P1-19", 1, "Gestión", "Revisión y envío Entrega 1", "Revisión cruzada del Word y envío antes de 23:59", "Word enviado", "", "P1-15", E, T, P, ""),
 
@@ -62,7 +62,7 @@ TAREAS = [
 
     ("P3-01", 3, "API", "API FastAPI", "Catálogo, recomendaciones, asistente, carrito, checkout, wallet, pedidos, métricas, OpenAPI /docs", "api/main.py", "python ops.py local", "", N, W, L, "Pruebas automáticas OK"),
     ("P3-02", 3, "API", "Wallet transaccional", "Ledger append-only, ACID, idempotencia, sin sobregiro, confirmación explícita", "api/schema.sql", "python -m unittest discover -s tests", "", N, "", L, "Test: doble clic = 1 cobro; 409 sin saldo"),
-    ("P3-03", 3, "ML", "Asistente Vertex AI Gemini", "Gemini 3.1 Flash-Lite interpreta; backend busca en catálogo real; respaldo por reglas", "api/assistant.py", "Excel: assistant_mode = gemini", "P2-01", E, N, L, "Reglas probadas con catálogo real; Gemini requiere GCP"),
+    ("P3-03", 3, "ML", "Asistente Vertex AI Gemini", "Gemini 3.1 Flash-Lite interpreta; backend busca en catálogo real; respaldo por reglas", "api/assistant.py", "config/control_plataforma.json: assistant_mode = gemini", "P2-01", E, N, L, "Reglas probadas con catálogo real; Gemini requiere GCP"),
     ("P3-04", 3, "ML", "Recomendaciones en API", "Perfil por grupo + popularidad; cold-start explícito", "api/main.py", "", "", E, "", L, ""),
     ("P3-05", 3, "API", "Web tienda", "Chat, productos con imagen, carrito, confirmación, saldo, pedidos", "api/static/index.html", "python ops.py local", "", N, G, L, ""),
     ("P3-06", 3, "Infra", "Cloud SQL + Cloud Run + secretos", "Terraform de base, servicio, secretos y acceso público", "infra/terraform/cloudsql.tf, cloudrun.tf", "python ops.py apply", "P2-01", W, "", L, "tofu validate OK"),
@@ -78,11 +78,11 @@ TAREAS = [
     ("P3-16", 3, "Costos", "Apagado post-demo", "Detener Dataflow; destruir recursos demo", "Checklist", "python ops.py dataflow-detener; python ops.py destroy", "P3-15", W, "", P, ""),
 ]
 
-# Paso, #, acción, comando, responsable, insumo del Excel, verificación
+# Paso, #, acción, comando, responsable, insumo del JSON de control, verificación
 DESPLIEGUE = [
     (1, "D01", "Instalar herramientas", "Google Cloud CLI, Terraform >= 1.6, Python 3.10-3.12, git (o usar Cloud Shell, que ya las trae)", W, "", "gcloud --version; terraform -version"),
     (1, "D02", "Crear proyecto y vincular facturación", "gcloud projects create <project_id>; gcloud billing projects link <project_id> --billing-account=<cuenta>", W, "Parametros: project_id, billing_account", "Proyecto con facturación en consola"),
-    (1, "D03", "Completar el Excel de control", "Editar celdas amarillas de config/control_plataforma.xlsx (mínimo project_id y emails del equipo)", T, "Parametros, Usuarios", "python ops.py config sin errores"),
+    (1, "D03", "Completar el JSON de control", "Editar con `python ops.py panel` (o a mano) los campos marcados editables de config/control_plataforma.json: mínimo project_id y emails del equipo", T, "Parametros, Usuarios", "python ops.py config sin errores"),
     (1, "D04", "Autenticarse", "gcloud auth login; gcloud auth application-default login (en Cloud Shell no hace falta)", T, "", "gcloud config list"),
     (1, "D05", "Instalar dependencias", "pip install -r requirements.txt", T, "", "python ops.py estado"),
     (1, "D06", "Publicar repo", "git remote add origin https://github.com/OWNER/REPO.git; git push -u origin main", W, "Parametros: github_repo", "Workflow ci en verde"),
@@ -95,10 +95,10 @@ DESPLIEGUE = [
     (2, "D13", "Gold y vistas BI", "python ops.py gold", N, "Parametros: price_demo_factor", "Tablas fact_/dim_ y vistas v_*"),
     (2, "D14", "Streaming de prueba", "python ops.py dataflow-iniciar; python ops.py replay; python ops.py dataflow-detener", W, "Parametros: dataflow_*, replay_*", "Filas en ops.stream_metrics_1m y silver.v_events"),
     (3, "D15", "API, web y catálogo", "python ops.py api", N, "Parametros: cloudrun_*, assistant_mode, gemini_model; Usuarios (app)", "URL pública; /ready con 105,542 artículos"),
-    (3, "D16", "Verificar contra el Excel", "python ops.py verificar", T, "Tablas, Columnas", "Matriz tabla por tabla: OK / FALTA / DIFERENTE"),
+    (3, "D16", "Verificar contra el JSON de control", "python ops.py verificar", T, "Tablas, Columnas", "Matriz tabla por tabla: OK / FALTA / DIFERENTE"),
     (3, "D17", "Despliegue desde GitHub", "python ops.py github -> crear variable GCP_WIF_PROVIDER -> Actions > deploy-api", W, "Parametros: github_repo", "Workflow deploy-api en verde"),
     (3, "D18", "Tableros", "Looker Studio > Agregar datos > BigQuery > gold.v_* y ops.*", G, "Tablas (vistas)", "Tablero gerencial y operativo"),
-    (3, "D19", "Costos reales", "Consola: exportar facturación a BigQuery (dataset ops) -> Excel billing_export_table -> python ops.py costo-real", W, "Parametros: billing_export_table", "ops.v_costo_real_mensual con datos"),
+    (3, "D19", "Costos reales", "Consola: exportar facturación a BigQuery (dataset ops) -> parámetro billing_export_table -> python ops.py costo-real", W, "Parametros: billing_export_table", "ops.v_costo_real_mensual con datos"),
     (3, "D20", "Apagado", "python ops.py dataflow-detener; python ops.py destroy", W, "Parametros: force_destroy_buckets", "Facturación diaria ~0"),
 ]
 
@@ -161,7 +161,7 @@ def build_xlsx(out):
         for c in range(4, 9):
             wp.cell(r, c).font, wp.cell(r, c).border = FONT, BRD
 
-    sheet(wb, "Despliegue", ["Paso", "#", "Acción", "Comando", "Responsable", "Insumo del Excel de control", "Verificación"],
+    sheet(wb, "Despliegue", ["Paso", "#", "Acción", "Comando", "Responsable", "Insumo del JSON de control", "Verificación"],
           [6, 6, 30, 70, 16, 34, 40], [list(d) for d in DESPLIEGUE])
 
     wr = wb.create_sheet("Resumen", 0)
@@ -193,7 +193,7 @@ def build_xlsx(out):
              "Paso 1 = Entrega 1 (24-oct) · Paso 2 = Entrega 2 (07-nov) · Paso 3 = repositorio 20-nov y sustentación 21-nov.",
              "Hecho = terminado con evidencia. Listo para desplegar = código probado localmente; falta ejecutarlo en GCP.",
              "Estado se elige en la hoja Matriz (lista desplegable); '¿Hecho?', perfiles y resumen se recalculan solos.",
-             "Despliegue: orden de comandos. Parámetros, nombres, tablas, columnas, usuarios y permisos: config/control_plataforma.xlsx."]
+             "Despliegue: orden de comandos. Parámetros, nombres, tablas, columnas, usuarios y permisos: config/control_plataforma.json (editable con `python ops.py panel`)."]
     for i, t in enumerate(notas):
         wr.cell(8 + i, 1, t).font = BOLD if i == 0 else FONT
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -208,21 +208,21 @@ def md_table(cols, rows):
 def build_md(out):
     txt = ["# Despliegue en GCP", "",
            "Todos los inputs (parámetros, nombres, tablas, columnas, usuarios iniciales y permisos) están en "
-           "`config/control_plataforma.xlsx`. `python ops.py config` los valida y genera las variables de Terraform "
+           "`config/control_plataforma.json`. `python ops.py config` los valida y genera las variables de Terraform "
            "(`infra/terraform/plataforma.auto.tfvars.json`), la configuración de ops (`config/generated/plataforma.json`) "
            "y las semillas de la API (`api/seed.json`).", "",
            "## Dónde ejecutar", "",
            "| Paso | Dónde | Por qué |", "|---|---|---|",
            "| subir-datos, local | PC con `data/raw` | Los 3.9 GB de CSV (y 29 GB de imágenes) están ahí |",
            "| todo lo demás | Google Cloud Shell (recomendado) o la PC | Cloud Shell ya trae gcloud, Terraform, Python y Docker y está autenticado |", "",
-           "## Pasos", "", md_table(["Paso", "#", "Acción", "Comando", "Responsable", "Insumo del Excel", "Verificación"], DESPLIEGUE), "",
+           "## Pasos", "", md_table(["Paso", "#", "Acción", "Comando", "Responsable", "Insumo del JSON", "Verificación"], DESPLIEGUE), "",
            "## Atajo", "", "```bash", "python ops.py config", "python ops.py todo     # bootstrap, apply, bronze, silver, gold, api, verificar",
            "```", "", "Requiere haber subido antes los datos con `python ops.py subir-datos` desde la PC.", "",
            "## Notas", "",
            "- `plan` antes de `apply`; la CI solo ejecuta `config --check`, pruebas, `fmt` y `validate`, nunca `apply`.",
            "- Dataflow cobra mientras corre: encenderlo solo para la demo.",
            "- El estado de Terraform vive en `gs://<project_id>-tfstate/retail/<env>` (versionado); nunca en Git.",
-           "- Contraseñas y tokens no van en el Excel: Terraform los genera en Secret Manager.",
+           "- Contraseñas y tokens no van en config/control_plataforma.json: Terraform los genera en Secret Manager.",
            "- Vertex AI Gemini no es gratuito (~USD 0.0014 por conversación con 3.1 Flash-Lite); `assistant_mode = rules` lo evita.",
            "- `roles/owner` no se puede otorgar por API: quien crea el proyecto ya lo tiene; al resto se les da roles desde la hoja Usuarios."]
     out.write_text("\n".join(txt) + "\n", encoding="utf-8")

@@ -1,4 +1,4 @@
-"""El Excel de control es válido, los generados están al día y el contrato de Cloud SQL coincide con api/schema.sql."""
+"""El JSON de control es válido, los generados están al día y el contrato de Cloud SQL coincide con api/schema.sql."""
 import importlib.util
 import json
 import sqlite3
@@ -13,12 +13,12 @@ spec.loader.exec_module(ops)
 
 class TestConfig(unittest.TestCase):
     def test_generados_al_dia(self):
-        full, tfvars, seed = ops.build_config(ops.read_excel())
+        full, tfvars, seed = ops.build_config(ops.read_config())
         self.assertEqual(ops.TFVARS.read_text(encoding="utf-8"), ops._dump(tfvars))
         self.assertEqual(ops.SEED.read_text(encoding="utf-8"), ops._dump(seed))
 
     def test_validacion_detecta_errores(self):
-        x = ops.read_excel()
+        x = ops.read_config()
         x["Permisos"].append({"principal": "sa:inexistente", "rol": "editor", "alcance": "proyecto", "motivo": "", "gestion": "excel"})
         with self.assertRaises(ops.ConfigError) as e:
             ops.build_config(x)
