@@ -164,10 +164,10 @@ const cover = [
   ...table(["Campo", "Detalle"], [
     ["Curso", "UTEC · Taller de Arquitectura Big Data · Proyecto final"],
     ["Documento", "Guía técnica de la plataforma (versión consultoría)"],
-    ["Versión / fecha", "v1.0 · 24 de octubre de 2026"],
+    ["Versión / fecha", "v1.1 · 24 de octubre de 2026"],
     ["Fuente de datos", "Dataset público **H&M Personalized Fashion Recommendations** (Kaggle)"],
     ["Proyecto GCP", `\`${P_.project_id}\` · región \`${P_.region}\` · ambiente \`${P_.env}\``],
-    ["Repositorio", "`github.com/estuardoo/STYLUS` (privado)"],
+    ["Repositorio", "`github.com/estuardoo/STYLUS` (público)"],
     ["Clasificación", "Uso académico · no contiene credenciales ni datos de clientes"],
   ], [2200, 7400], { boldFirst: true, size: 18 }),
   ...table(["Integrante", "Rol en el proyecto"], DATA.perfiles.map(p => [p[0], `**${p[1]}** · ${p[2]}`]), [2200, 7400], { boldFirst: true, size: 18, headFill: ACCENT }),
@@ -181,6 +181,7 @@ const control = [
   ...table(["Versión", "Fecha", "Autor", "Cambios"], [
     ["v0.1", "23-oct-2026", "Estuardo Oliver", "Guía resumida (7 páginas) generada desde Markdown"],
     ["v1.0", "24-oct-2026", "Estuardo Oliver", "Reescritura en formato consultoría: diagramas por pipeline, RACI, riesgos, costos, rutas reales y anexos de esquemas"],
+    ["v1.1", "24-oct-2026", "Estuardo Oliver", "Costos mensual y anual por escenario y servicio; gráfico de dona; repositorio público"],
   ], [1000, 1400, 2000, 5200], { size: 17 }),
   ...callout("Cómo leer esta guía", [
     "Los capítulos **1 a 10** explican cada tema (qué se construyó, por qué y quién lo hizo). Los **anexos A a H** contienen el detalle completo: rutas, tablas, columnas, esquemas estrella, permisos y parámetros.",
@@ -479,11 +480,14 @@ const serv = Object.entries(DATA.costos.por_servicio).sort((a, b) => b[1][2] - a
 const s9 = [
   H1("9. Costos y FinOps"),
   P("`cost/assumptions.yaml` es la única fuente de supuestos; `python cost/estimate_costs.py` genera la calculadora con fórmulas (`docs/entrega1/Calculadora_Costos_GCP.xlsx`) y `--refresh-prices` actualiza las tarifas desde la API de Cloud Billing Catalog."),
-  ...table(["Escenario", "USD / mes", "Pedidos / mes", "USD / pedido"], [["Desarrollo", 0], ["Demo", 1], ["Producción", 2], ["Pico Black Friday", 3]].map(([n, i]) => [
-    `**${n}**`, usd(costo["TOTAL MENSUAL"][i]), Number(costo["Pedidos/mes"][i]).toLocaleString("en-US"), usd(costo["Costo por pedido"][i], 5)]), [3000, 2200, 2200, 2200], { size: 17, right: [1, 2, 3] }),
-  ...img("costo_escenarios.png", 560, "Costo mensual por escenario (escala logarítmica)."),
-  ...img("costo_servicios.png", 560, "Producción: distribución del costo por servicio."),
-  ...table(["Servicio", "Desarrollo", "Demo", "Producción", "Pico"], serv.map(([k, v]) => [k, ...v.map(x => usd(x))]), [3200, 1600, 1600, 1600, 1600], { boldFirst: true, size: 16, right: [1, 2, 3, 4] }),
+  ...table(["Escenario", "USD / mes", "USD / año", "Pedidos / mes", "USD / pedido"], [["Desarrollo", 0], ["Demo", 1], ["Producción", 2], ["Pico Black Friday", 3]].map(([n, i]) => [
+    `**${n}**`, usd(costo["TOTAL MENSUAL"][i]), `**${usd(costo["TOTAL MENSUAL"][i] * 12)}**`, Number(costo["Pedidos/mes"][i]).toLocaleString("en-US"), usd(costo["Costo por pedido"][i], 5)])
+    .concat([["**Año 1 realista**", "11 meses prod. + 1 pico", `**${usd(costo["TOTAL MENSUAL"][2] * 11 + costo["TOTAL MENSUAL"][3])}**`, "—", "—"]]),
+    [2400, 1800, 2000, 1700, 1700], { size: 17, right: [1, 2, 3, 4] }),
+  ...img("costo_mes_anio.png", 640, "Costo por escenario: mensual y anual (escala logarítmica)."),
+  ...img("costo_donut.png", 560, "Producción: distribución del costo por servicio."),
+  ...table(["Servicio", "Desarrollo", "Demo", "Producción", "Prod. / año", "Pico"], serv.map(([k, v]) => [k, usd(v[0]), usd(v[1]), usd(v[2]), `**${usd(v[2] * 12)}**`, usd(v[3])]),
+    [2800, 1350, 1350, 1400, 1500, 1350], { boldFirst: true, size: 15, right: [1, 2, 3, 4, 5] }),
   H2("9.1 Palancas de ahorro"),
   B("**Gemini** y **Dataflow** explican el 69% del costo de producción: `assistant_mode = rules` y apagar Dataflow fuera de la demo son las dos palancas mayores."),
   B("Cloud Run con **0 instancias mínimas**; Cloud SQL `" + P_.cloudsql_tier + "` en desarrollo."),
@@ -631,7 +635,7 @@ const doc = new Document({
     { properties: pageProps,
       headers: { default: new Header({ children: [new Paragraph({ tabStops: [{ type: TabStopType.RIGHT, position: W }],
         border: { bottom: { style: BorderStyle.SINGLE, size: 6, color: ACCENT, space: 4 } },
-        children: [run("STYLUS", { size: 16, bold: true, color: NAVY }), grey("  ·  Guía Técnica de la Plataforma"), grey("\tv1.0 · 24-oct-2026")] })] }) },
+        children: [run("STYLUS", { size: 16, bold: true, color: NAVY }), grey("  ·  Guía Técnica de la Plataforma"), grey("\tv1.1 · 24-oct-2026")] })] }) },
       footers: { default: new Footer({ children: [new Paragraph({ tabStops: [{ type: TabStopType.RIGHT, position: W }],
         border: { top: { style: BorderStyle.SINGLE, size: 4, color: "C9D1DC", space: 4 } },
         children: [grey("UTEC · Taller de Arquitectura Big Data · Uso académico"), grey("\tPágina "),

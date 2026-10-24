@@ -202,6 +202,61 @@ ax.set_title("Cronograma de entregas")
 save(fig, "cronograma.png")
 
 
+# 9. Costo mensual vs anual por escenario (dos paneles)
+fig, axs = plt.subplots(1, 2, figsize=(9.6, 3.4), sharey=True)
+mens = totales["TOTAL MENSUAL"]
+anual = [x * 12 for x in mens]
+cols = [ACCENT, TEAL, NAVY, ORANGE]
+for ax, vals_, tit in ((axs[0], mens, "USD / mes"), (axs[1], anual, "USD / año (× 12)")):
+    b = ax.barh(lbl, vals_, color=cols, height=0.6)
+    ax.set_xscale("log")
+    ax.set_xlim(1, max(vals_) * 12)
+    ax.set_title(tit)
+    for bb, v in zip(b, vals_):
+        ax.text(v * 1.15, bb.get_y() + bb.get_height() / 2, f"USD {v:,.2f}", va="center", fontsize=9, fontweight="bold", color=NAVY)
+    ax.tick_params(axis="x", labelsize=8)
+axs[0].invert_yaxis()
+fig.suptitle("Costo por escenario: mensual y anual", fontweight="bold", color=NAVY, fontsize=12)
+save(fig, "costo_mes_anio.png")
+
+# 10. Dona: distribución del costo de producción
+serv_items = sorted(((k, v[2]) for k, v in por_servicio.items()), key=lambda kv: -kv[1])
+grandes = [(k, v) for k, v in serv_items if v >= 5]
+otros = sum(v for k, v in serv_items if v < 5)
+etq = [k.replace("Vertex AI Gemini 3.1 Flash-Lite", "Vertex AI Gemini") for k, _ in grandes] + ["Otros (Spark, Pub/Sub, GCS, AR)"]
+val = [v for _, v in grandes] + [otros]
+fig, ax = plt.subplots(figsize=(7.2, 3.6))
+w, _ = ax.pie(val, colors=[PURPLE, ACCENT, NAVY, ORANGE, TEAL, GREY][: len(val)], startangle=90, counterclock=False,
+              wedgeprops=dict(width=0.38, edgecolor="white", linewidth=2))
+tot = sum(val)
+ax.text(0, 0.08, f"USD {tot:,.0f}", ha="center", fontsize=15, fontweight="bold", color=NAVY)
+ax.text(0, -0.16, "al mes en producción", ha="center", fontsize=8.5, color=GREY)
+ax.legend(w, [f"{e}  ·  USD {v:,.2f}  ({v / tot:.0%})" for e, v in zip(etq, val)], loc="center left", bbox_to_anchor=(1.0, 0.5), frameon=False, fontsize=9)
+fig.suptitle("¿En qué se va el costo de producción?", fontweight="bold", color=NAVY, fontsize=12)
+ax.axis("equal")
+save(fig, "costo_donut.png")
+
+# 11. Banner del README
+fig = plt.figure(figsize=(12, 3.0))
+fig.patch.set_facecolor(NAVY)
+ax = fig.add_axes([0, 0, 1, 1])
+ax.set_xlim(0, 12)
+ax.set_ylim(0, 3)
+ax.axis("off")
+ax.add_patch(plt.Rectangle((0, 0), 12, 0.09, color=GOLD))
+ax.text(0.45, 2.45, "STYLUS", fontsize=40, fontweight="bold", color="white", va="center")
+ax.text(0.47, 1.85, "Retail de moda con compras inteligentes asistidas por IA en tiempo real", fontsize=13, color="#DCE6F4", va="center")
+ax.text(0.47, 1.47, "Google Cloud · BigQuery · Spark · Dataflow · Cloud Run · Vertex AI Gemini · dataset público H&M", fontsize=9.5, color="#9FB4D3", va="center")
+tiles = [("31.8 M", "transacciones reales", NAVY), ("+200%", "MAP@12 vs. popularidad", PURPLE), ("USD 0.00098", "costo por pedido", TEAL), ("51", "tareas · 4 personas", ORANGE)]
+for i, (v, l, c) in enumerate(tiles):
+    x = 0.47 + i * 2.85
+    ax.add_patch(matplotlib.patches.FancyBboxPatch((x, 0.25), 2.6, 0.85, boxstyle="round,pad=0.02,rounding_size=0.08", color=c if c != NAVY else "#2B4C82"))
+    ax.text(x + 1.3, 0.8, v, fontsize=16, fontweight="bold", color="white", va="center", ha="center")
+    ax.text(x + 1.3, 0.45, l, fontsize=9, color="white", va="center", ha="center")
+fig.savefig(IMG / "banner.png", dpi=150, facecolor=NAVY)
+plt.close(fig)
+
+
 # ---------------- diagramas Graphviz ----------------
 def dot(name, src):
     (IMG / f"{name}.dot").write_text(src, encoding="utf-8")

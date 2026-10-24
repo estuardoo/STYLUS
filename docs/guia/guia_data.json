@@ -4623,11 +4623,11 @@
   },
   {
    "ruta": ".gitignore",
-   "lineas": 47
+   "lineas": 50
   },
   {
    "ruta": "README.md",
-   "lineas": 188
+   "lineas": 189
   },
   {
    "ruta": "api/.dockerignore",
@@ -4698,12 +4698,24 @@
    "lineas": 14
   },
   {
+   "ruta": "docs/_generadores/build_guia.js",
+   "lineas": 643
+  },
+  {
+   "ruta": "docs/_generadores/build_guia_data.py",
+   "lineas": 389
+  },
+  {
    "ruta": "docs/_generadores/build_matriz.py",
    "lineas": 234
   },
   {
    "ruta": "docs/_generadores/build_word.js",
-   "lineas": 496
+   "lineas": 499
+  },
+  {
+   "ruta": "docs/_generadores/guia_paginas.py",
+   "lineas": 15
   },
   {
    "ruta": "docs/_generadores/toc_embed.py",
@@ -4743,19 +4755,19 @@
   },
   {
    "ruta": "docs/entrega1/Entrega1_Arquitectura_BigData_Retail.docx",
-   "lineas": 3006
+   "lineas": 2986
   },
   {
    "ruta": "docs/entrega1/Entrega1_Arquitectura_BigData_Retail.pdf",
-   "lineas": 20184
+   "lineas": 20241
   },
   {
    "ruta": "docs/entrega1/Guia_Tecnica_STYLUS.docx",
-   "lineas": 8849
+   "lineas": 8976
   },
   {
    "ruta": "docs/entrega1/Guia_Tecnica_STYLUS.pdf",
-   "lineas": 8148
+   "lineas": 102266
   },
   {
    "ruta": "docs/evaluacion_recomendador.json",
@@ -4768,6 +4780,66 @@
   {
    "ruta": "docs/gestion/Matriz_Auditoria_Proyecto.xlsx",
    "lineas": 160
+  },
+  {
+   "ruta": "docs/guia/guia_data.json",
+   "lineas": 4963
+  },
+  {
+   "ruta": "docs/guia/img/arquitectura.png",
+   "lineas": 1230
+  },
+  {
+   "ruta": "docs/guia/img/avance_pasos.png",
+   "lineas": 235
+  },
+  {
+   "ruta": "docs/guia/img/codigo_tipo.png",
+   "lineas": 249
+  },
+  {
+   "ruta": "docs/guia/img/control_cicd.png",
+   "lineas": 506
+  },
+  {
+   "ruta": "docs/guia/img/costo_escenarios.png",
+   "lineas": 229
+  },
+  {
+   "ruta": "docs/guia/img/costo_servicios.png",
+   "lineas": 551
+  },
+  {
+   "ruta": "docs/guia/img/cronograma.png",
+   "lineas": 176
+  },
+  {
+   "ruta": "docs/guia/img/estrella.png",
+   "lineas": 1249
+  },
+  {
+   "ruta": "docs/guia/img/map12.png",
+   "lineas": 277
+  },
+  {
+   "ruta": "docs/guia/img/pipeline_batch.png",
+   "lineas": 759
+  },
+  {
+   "ruta": "docs/guia/img/pipeline_serving.png",
+   "lineas": 708
+  },
+  {
+   "ruta": "docs/guia/img/pipeline_streaming.png",
+   "lineas": 603
+  },
+  {
+   "ruta": "docs/guia/img/tareas_persona.png",
+   "lineas": 307
+  },
+  {
+   "ruta": "docs/guia/img/volumen_datos.png",
+   "lineas": 292
   },
   {
    "ruta": "docs/referencia/Proyecto.pdf",
@@ -4880,12 +4952,12 @@
  ],
  "loc": {
   ".yml": 73,
-  ".md": 358,
-  ".py": 2398,
+  ".md": 359,
+  ".py": 2802,
   ".sql": 280,
   ".html": 349,
-  ".json": 3853,
-  ".js": 496,
+  ".json": 8816,
+  ".js": 1142,
   ".tf": 515
  }
 }
