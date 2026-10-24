@@ -3,7 +3,7 @@
   "parametros": [
     {
       "clave": "project_id",
-      "valor": "tu-proyecto-gcp",
+      "valor": "tranquil-leaf-512618-b9",
       "tipo": "texto",
       "descripcion": "ID único del proyecto GCP (6-30 caracteres, minúsculas). OBLIGATORIO cambiar",
       "usado_en": "todo",
@@ -39,7 +39,7 @@
     },
     {
       "clave": "billing_account",
-      "valor": "",
+      "valor": "013564-3E664C-2B3FED",
       "tipo": "texto",
       "descripcion": "Cuenta de facturación XXXXXX-XXXXXX-XXXXXX. Vacío = no crea presupuesto",
       "usado_en": "terraform",

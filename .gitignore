@@ -44,3 +44,4 @@ tfplan
 # Tokens
 token*.txt
 *token*.txt
+gcp*.txt

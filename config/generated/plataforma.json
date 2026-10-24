@@ -2194,21 +2194,21 @@
     }
   ],
   "derived": {
-    "bucket_lake": "tu-proyecto-gcp-retail-lake",
-    "bucket_raw": "tu-proyecto-gcp-retail-raw",
-    "bucket_tfstate": "tu-proyecto-gcp-tfstate",
+    "bucket_lake": "tranquil-leaf-512618-b9-retail-lake",
+    "bucket_raw": "tranquil-leaf-512618-b9-retail-raw",
+    "bucket_tfstate": "tranquil-leaf-512618-b9-tfstate",
     "datasets": {
       "bronze": "retail_bronze",
       "gold": "retail_gold",
       "ops": "retail_ops",
       "silver": "retail_silver"
     },
-    "image_repo": "us-central1-docker.pkg.dev/tu-proyecto-gcp/retail/retail-api",
+    "image_repo": "us-central1-docker.pkg.dev/tranquil-leaf-512618-b9/retail/retail-api",
     "sa_emails": {
-      "api": "sa-retail-api@tu-proyecto-gcp.iam.gserviceaccount.com",
-      "deployer": "sa-retail-deployer@tu-proyecto-gcp.iam.gserviceaccount.com",
-      "ingest": "sa-retail-ingest@tu-proyecto-gcp.iam.gserviceaccount.com",
-      "pipeline": "sa-retail-pipeline@tu-proyecto-gcp.iam.gserviceaccount.com"
+      "api": "sa-retail-api@tranquil-leaf-512618-b9.iam.gserviceaccount.com",
+      "deployer": "sa-retail-deployer@tranquil-leaf-512618-b9.iam.gserviceaccount.com",
+      "ingest": "sa-retail-ingest@tranquil-leaf-512618-b9.iam.gserviceaccount.com",
+      "pipeline": "sa-retail-pipeline@tranquil-leaf-512618-b9.iam.gserviceaccount.com"
     },
     "tfstate_prefix": "retail/dev"
   },
@@ -2392,7 +2392,7 @@
     "api_public": true,
     "artifact_repo": "retail",
     "assistant_mode": "gemini",
-    "billing_account": "",
+    "billing_account": "013564-3E664C-2B3FED",
     "billing_export_table": "",
     "bucket_lake_suffix": "retail-lake",
     "bucket_raw_suffix": "retail-raw",
@@ -2436,7 +2436,7 @@
     "monthly_budget_usd": 50,
     "noncurrent_version_days": 30,
     "price_demo_factor": 500,
-    "project_id": "tu-proyecto-gcp",
+    "project_id": "tranquil-leaf-512618-b9",
     "pubsub_bq_subscription": "retail-events-to-bq",
     "pubsub_bq_table": "bronze.events_raw",
     "pubsub_dataflow_subscription": "retail-events-dataflow",
@@ -2835,10 +2835,10 @@
       "sts.googleapis.com"
     ],
     "artifact_repo": "retail",
-    "billing_account": "",
+    "billing_account": "013564-3E664C-2B3FED",
     "buckets": {
-      "lake": "tu-proyecto-gcp-retail-lake",
-      "raw": "tu-proyecto-gcp-retail-raw"
+      "lake": "tranquil-leaf-512618-b9-retail-lake",
+      "raw": "tranquil-leaf-512618-b9-retail-raw"
     },
     "budget_thresholds": [
       0.5,
@@ -3046,7 +3046,7 @@
     },
     "monthly_budget_usd": 50,
     "noncurrent_version_days": 30,
-    "project_id": "tu-proyecto-gcp",
+    "project_id": "tranquil-leaf-512618-b9",
     "pubsub": {
       "bq_subscription": "retail-events-to-bq",
       "bq_table": "bronze.events_raw",
