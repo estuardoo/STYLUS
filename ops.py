@@ -17,6 +17,7 @@ Fuente única de configuración: config/control_plataforma.xlsx
   python ops.py github             valor de GCP_WIF_PROVIDER para GitHub Actions
   python ops.py costo-real         vista de costo real por pedido (requiere billing export)
   python ops.py todo [--yes]       bootstrap, apply, bronze, silver, gold, api, verificar
+  python ops.py panel              panel web local (editar Excel + desplegar con botones)
 """
 import argparse
 import datetime as dt
@@ -583,6 +584,11 @@ def cmd_local(a):
     subprocess.run([sys.executable, "-m", "uvicorn", "main:app", "--port", "8080"], cwd=ROOT / "api", env={**os.environ, **env})
 
 
+def cmd_panel(a):
+    """Panel web local: edita el Excel de control y ejecuta estos mismos comandos con botones."""
+    subprocess.run([sys.executable, str(ROOT / "panel/app.py")])
+
+
 def cmd_todo(a):
     cmd_bootstrap(a)
     cmd_apply(a)
@@ -598,7 +604,7 @@ COMMANDS = {
     "plan": cmd_plan, "apply": cmd_apply, "destroy": cmd_destroy, "subir-datos": cmd_subir,
     "bronze": cmd_bronze, "silver": cmd_silver, "gold": cmd_gold, "api": cmd_api, "catalogo": cmd_catalogo,
     "replay": cmd_replay, "dataflow-iniciar": cmd_dataflow_start, "dataflow-detener": cmd_dataflow_stop,
-    "verificar": cmd_verificar, "github": cmd_github, "costo-real": cmd_costo_real, "todo": cmd_todo,
+    "verificar": cmd_verificar, "github": cmd_github, "costo-real": cmd_costo_real, "panel": cmd_panel, "todo": cmd_todo,
 }
 
 

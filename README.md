@@ -39,6 +39,13 @@ tests/                    Pruebas unitarias (costos, replay, API)
 data/                     SOLO LOCAL (excluido de Git)
 ```
 
+## Panel de control (opcional, recomendado)
+
+`python ops.py panel` abre http://127.0.0.1:8765 en tu navegador: edita los parámetros del Excel
+(solo las celdas amarillas) y ejecuta cada paso de `ops.py` con un botón, viendo el registro en vivo.
+Corre solo en tu máquina (127.0.0.1); no lo expongas a la red. Cierra el Excel en Excel antes de guardar
+desde el panel, porque el archivo queda bloqueado mientras está abierto.
+
 ## Inicio rápido (local, sin GCP)
 
 ```bash
