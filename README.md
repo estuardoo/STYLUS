@@ -5,6 +5,24 @@ ingesta batch y streaming, lakehouse medallion (GCS + BigQuery), recomendaciones
 **Vertex AI Gemini**, tienda web con saldo simulado y control de costos automatizado.
 Proyecto final · UTEC Taller de Arquitectura Big Data.
 
+## Fuente de datos
+
+Todo el proyecto corre sobre **datos públicos reales**: el dataset de Kaggle
+[H&M Personalized Fashion Recommendations](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations)
+(competencia de H&M Group, 2022). No se usan datos propios, sintéticos de origen ni de ninguna otra fuente para las
+entidades base (clientes, artículos, transacciones); lo único generado por el proyecto son los eventos de streaming,
+que son **re-emisiones** de esas mismas transacciones reales con fecha de 2026 (marcadas `is_synthetic=true`, ver Reglas).
+
+| Archivo original | Filas | Contenido |
+|---|---:|---|
+| `articles.csv` | 105,542 | Catálogo de productos (tipo, color, sección, descripción) |
+| `customers.csv` | 1,371,980 | Clientes (edad, estado de membresía, frecuencia de noticias) |
+| `transactions_train.csv` | 31,788,324 | Compras históricas (cliente, artículo, fecha, precio, canal) |
+| `images/` | 105,100 | Fotos de producto (no se usan en este proyecto; excluidas por defecto de la subida) |
+
+Uso sujeto a las reglas de la competencia Kaggle; no se redistribuyen los archivos originales (están en `data/raw`,
+excluido de Git).
+
 ## Equipo
 
 | Integrante | Perfil | Foco |
@@ -38,6 +56,88 @@ docs/                     Entregas, arquitectura, despliegue, runbooks, demo, di
 tests/                    Pruebas unitarias (costos, replay, API)
 data/                     SOLO LOCAL (excluido de Git)
 ```
+
+## Modelo de datos
+
+Bronze conserva los 3 CSV tal cual (una tabla externa por archivo). Silver limpia tipos y agrega los eventos de
+streaming. Gold es un **modelo estrella** listo para BI y para la API:
+
+```mermaid
+erDiagram
+    DIM_CUSTOMER {
+        string customer_id PK
+        int age
+        string age_band
+        string club_member_status
+        string fashion_news_frequency
+    }
+    DIM_ARTICLE {
+        string article_id PK
+        string product_type_name
+        string product_group_name
+        string colour_group_name
+        string department_name
+        string index_group_name
+        string garment_group_name
+    }
+    DIM_DATE {
+        date date_key PK
+        int anio
+        int mes
+        string anio_mes
+        string dia_semana
+        bool fin_de_semana
+    }
+    DIM_CHANNEL {
+        int sales_channel_id PK
+        string canal
+    }
+    FACT_SALES {
+        date sale_date FK
+        string customer_id FK
+        string article_id FK
+        int sales_channel_id FK
+        int qty
+        numeric price
+        string source
+        bool is_synthetic
+        string order_id
+    }
+    FACT_ORDERS {
+        string order_id PK
+        date order_date FK
+        string customer_id FK
+        int lineas
+        int unidades
+        numeric importe
+    }
+    RECO_POPULAR {
+        string index_group_name
+        string article_id FK
+        int ventas_7d
+        int rank_grupo
+    }
+
+    DIM_CUSTOMER  ||--o{ FACT_SALES   : compra
+    DIM_ARTICLE   ||--o{ FACT_SALES   : "es vendido en"
+    DIM_DATE      ||--o{ FACT_SALES   : ocurre
+    DIM_CHANNEL   ||--o{ FACT_SALES   : "por canal"
+    FACT_SALES    }o--|| FACT_ORDERS  : agrupa
+    DIM_ARTICLE   ||--o{ RECO_POPULAR : "ranquea en"
+```
+
+| Tabla (`retail_gold.*`) | Grano | De dónde sale |
+|---|---|---|
+| `dim_customer` | 1 cliente | `silver.customers` (de `customers.csv`) |
+| `dim_article` | 1 artículo | `silver.articles` (de `articles.csv`) |
+| `dim_date` | 1 día (2018-2027) | Calendario generado |
+| `dim_channel` | 1 canal (Tienda física / Online) | Supuesto propio: H&M no documenta los canales |
+| `fact_sales` | 1 línea de venta | `silver.transactions` (histórico, de `transactions_train.csv`) + `silver.v_events` (streaming, re-emisión del mismo histórico) |
+| `fact_orders` | 1 pedido (cliente + día + fuente; H&M no trae `order_id`) | Agregado de `fact_sales` |
+| `reco_popular` | 1 artículo por grupo | Popularidad de los últimos 7 días, insumo del recomendador baseline |
+
+El esquema completo con tipos de columna está en `config/control_plataforma.json` (sección `tablas`/`columnas`) y se
+valida automáticamente contra el SQL real con `python ops.py verificar`. Detalle de cada campo: `docs/diccionario_datos.md`.
 
 ## Panel de control (opcional, recomendado)
 

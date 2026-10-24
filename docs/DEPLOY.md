@@ -18,7 +18,7 @@ Todos los inputs (parámetros, nombres, tablas, columnas, usuarios iniciales y p
 | 1 | D03 | Completar el JSON de control | Editar con `python ops.py panel` (o a mano) los campos marcados editables de config/control_plataforma.json: mínimo project_id y emails del equipo | Todo el equipo | Parametros, Usuarios | python ops.py config sin errores |
 | 1 | D04 | Autenticarse | gcloud auth login; gcloud auth application-default login (en Cloud Shell no hace falta) | Todo el equipo |  | gcloud config list |
 | 1 | D05 | Instalar dependencias | pip install -r requirements.txt | Todo el equipo |  | python ops.py estado |
-| 1 | D06 | Publicar repo | git remote add origin https://github.com/OWNER/REPO.git; git push -u origin main | Winston Quispe | Parametros: github_repo | Workflow ci en verde |
+| 1 | D06 | Publicar repo | git remote add origin https://github.com/OWNER/REPO.git; git push -u origin main | Estuardo Oliver | Parametros: github_repo | Workflow ci en verde |
 | 2 | D07 | Preparar proyecto | python ops.py bootstrap | Winston Quispe | APIs, Parametros: region, dataproc_subnet, bucket_tfstate_suffix | APIs activas, bucket de estado, terraform init |
 | 2 | D08 | Revisar plan | python ops.py plan | Winston Quispe | Todas las hojas | Plan sin errores; recursos esperados |
 | 2 | D09 | Crear infraestructura | python ops.py apply | Winston Quispe | Todas las hojas | Buckets, datasets, tablas, Pub/Sub, IAM, Cloud SQL, Cloud Run |
@@ -31,7 +31,7 @@ Todos los inputs (parámetros, nombres, tablas, columnas, usuarios iniciales y p
 | 3 | D16 | Verificar contra el JSON de control | python ops.py verificar | Todo el equipo | Tablas, Columnas | Matriz tabla por tabla: OK / FALTA / DIFERENTE |
 | 3 | D17 | Despliegue desde GitHub | python ops.py github -> crear variable GCP_WIF_PROVIDER -> Actions > deploy-api | Winston Quispe | Parametros: github_repo | Workflow deploy-api en verde |
 | 3 | D18 | Tableros | Looker Studio > Agregar datos > BigQuery > gold.v_* y ops.* | Gianmarco Mejia | Tablas (vistas) | Tablero gerencial y operativo |
-| 3 | D19 | Costos reales | Consola: exportar facturación a BigQuery (dataset ops) -> parámetro billing_export_table -> python ops.py costo-real | Winston Quispe | Parametros: billing_export_table | ops.v_costo_real_mensual con datos |
+| 3 | D19 | Costos reales | Consola: exportar facturación a BigQuery (dataset ops) -> parámetro billing_export_table -> python ops.py costo-real | Estuardo Oliver | Parametros: billing_export_table | ops.v_costo_real_mensual con datos |
 | 3 | D20 | Apagado | python ops.py dataflow-detener; python ops.py destroy | Winston Quispe | Parametros: force_destroy_buckets | Facturación diaria ~0 |
 
 ## Atajo
