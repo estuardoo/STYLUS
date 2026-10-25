@@ -48,3 +48,6 @@ gcp*.txt
 
 # Índices temporales de los generadores de documentos
 *.toc.json
+
+# Temporales de herramientas locales (duckdb, etc.)
+.tmp/

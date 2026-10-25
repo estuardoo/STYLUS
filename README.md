@@ -222,6 +222,8 @@ flowchart LR
 
 ## 🧬 Modelo de datos
 
+<p align="center"><img src="docs/guia/img/modelo_medallion.png" alt="Modelo medallion con volumen por tabla" width="100%"></p>
+
 30 tablas y vistas: Bronze (5), Silver (4), Gold (11), OPS (4) y Cloud SQL (6). Gold es un **modelo estrella**:
 
 ```mermaid

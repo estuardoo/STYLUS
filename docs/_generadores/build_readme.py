@@ -273,6 +273,8 @@ flowchart LR
 
 ## 🧬 Modelo de datos
 
+<p align="center"><img src="docs/guia/img/modelo_medallion.png" alt="Modelo medallion con volumen por tabla" width="100%"></p>
+
 {len(d['tablas'])} tablas y vistas: Bronze ({tablas['bronze']}), Silver ({tablas['silver']}), Gold ({tablas['gold']}), OPS ({tablas['ops']}) y Cloud SQL ({tablas['retail']}). Gold es un **modelo estrella**:
 
 ```mermaid
