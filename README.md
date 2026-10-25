@@ -288,6 +288,8 @@ erDiagram
 | `dim_date` / `dim_channel` | 1 día / 1 canal | Calendario / supuesto documentado |
 | `reco_popular` | 1 artículo por grupo | Popularidad de la última semana |
 
+<p align="center"><img src="docs/guia/img/modelo_estrella.png" alt="Modelo estrella Gold" width="100%"></p>
+
 <details><summary>⭐ Diagrama completo con todas las columnas</summary>
 <p align="center"><img src="docs/guia/img/estrella.png" width="85%"></p>
 </details>
@@ -296,6 +298,10 @@ erDiagram
 <p align="center"><img src="docs/guia/img/map12.png" width="70%"></p>
 
 Split temporal real (entrenamiento hasta 2020-09-16, prueba de una semana), 68,984 clientes evaluados. Detalle: [`docs/evaluacion_recomendador.md`](docs/evaluacion_recomendador.md).
+</details>
+
+<details><summary>🗃️ Esquema original de los 3 CSV de H&M</summary>
+<p align="center"><img src="docs/guia/img/schema_hm.png" width="100%"></p>
 </details>
 
 > Esquema columna por columna: `config/control_plataforma.json` y el **Anexo C** de la [guía técnica](docs/entrega1/Guia_Tecnica_STYLUS.pdf).
